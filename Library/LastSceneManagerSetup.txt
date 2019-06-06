@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/PolygonSciFiCity/_Scenes/Demo_Characters.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
