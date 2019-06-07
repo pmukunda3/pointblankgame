@@ -8,13 +8,19 @@ public class PrototypePlayerController : MonoBehaviour {
     private Rigidbody rigidbody;
     private Animator animator;
 
+    private float aimPitch = 0f;
+
     void Start() {
         rigidbody = gameObject.GetComponent<Rigidbody>();
         animator = gameObject.GetComponent<Animator>();
 
         //animator.SetFloat("velLocalZ", 0.2f);
         animator.SetBool("idle", false);
-        animator.SetInteger("moveMode", 2);
+        animator.SetInteger("moveMode", 0);
+    }
+
+    public Quaternion AimDirection() {
+        return Quaternion.Euler(aimPitch, transform.eulerAngles.y, 0f);
     }
 
     void Update() {
