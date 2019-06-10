@@ -17,21 +17,32 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     public float mouseSensitivity = 1.0f;
     public float screenMouseRatio = 1.777f;
 
-    public Vector3 maxCharVelocityRun;
-
     [System.Serializable]
     public struct MovementCharacteristics {
-        public AnimationCurve forwardAccelVelocityCurve;
-        public AnimationCurve forwardDecelVelocityCurve;
-        public AnimationCurve reverseAccelVelocityCurve;
-        public AnimationCurve reverseDecelVelocityCurve;
-        public AnimationCurve lateralAccelVelocityCurve;
-        public AnimationCurve lateralDecelVelocityCurve;
+        public AnimationCurve accelerationCurve;
+        public AnimationCurve decelerationCurve;
+        public float maxSpeed;
+        public float accelerationScalar;
+
+        public float Acceleration(float velocity) {
+            return accelerationScalar * accelerationCurve.Evaluate(velocity / maxSpeed);
+        }
+
+        public float Deceleration(float velocity) {
+            return accelerationScalar * decelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+        }
+    }
+
+    [System.Serializable]
+    public struct CharacterMovementCharacteristics {
+        public MovementCharacteristics forward;
+        public MovementCharacteristics reverse;
+        public MovementCharacteristics lateral;
     }
 
     public float velocityCurveTraverseSpeed = 1f;
 
-    public MovementCharacteristics runningCharacteristics;
+    public CharacterMovementCharacteristics runningCharacteristics;
 
     private float aimPitch = 0f;
 
@@ -124,10 +135,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private Vector3 velocity = Vector3.zero;
     private Vector2 input = Vector2.zero;
 
-    private float velCurveTargetX = 0f;
-    private float velCurveCurrentX = 0f;
-    private float velCurveX = 0f;
-
     private float forwardAcceleration = 0f;
     private float lateralAcceleration = 0f;
 
@@ -135,85 +142,72 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
     void FixedUpdate() {
 
-        AnimationCurve forwardVelCurve = null;
-        AnimationCurve lateralVelCurve = null;
-
-        /*float*/ forwardAcceleration = 0f;
-        /*float*/ lateralAcceleration = 0f;
+        /*float*/
+        forwardAcceleration = 0f;
+        /*float*/
+        lateralAcceleration = 0f;
 
         if (velocity.x > EPSILON) {
-            if (input.x * maxCharVelocityRun.x >= velocity.x) {
+            if (input.x * runningCharacteristics.lateral.maxSpeed >= velocity.x) {
                 Debug.Log("1");
-                Debug.Break();
-                lateralVelCurve = runningCharacteristics.lateralAccelVelocityCurve;
-                velCurveTargetX = lateralInverseVelCurve.Evaluate(input.x);
-
-                //lateralAcceleration = Mathf.Sign(input.x - velocity.x / maxCharVelocityRun.x);
+                lateralAcceleration = runningCharacteristics.lateral.Acceleration(velocity.x);
             }
-            else if (input.x * maxCharVelocityRun.x < velocity.x) {
+            else if (input.x * runningCharacteristics.lateral.maxSpeed < velocity.x) {
                 Debug.Log("2");
-                lateralVelCurve = runningCharacteristics.lateralDecelVelocityCurve;
-                velCurveTargetX = lateralInverseVelCurve.Evaluate(input.x);
-                //lateralAcceleration = Mathf.Sign(input.x - velocity.x / maxCharVelocityRun.x);
+                lateralAcceleration = -runningCharacteristics.lateral.Deceleration(velocity.x);
             }
         }
         else if (velocity.x < -EPSILON) {
-            if (input.x * maxCharVelocityRun.x <= velocity.x) {
+            if (input.x * runningCharacteristics.lateral.maxSpeed <= velocity.x) {
                 Debug.Log("3");
-                lateralInverseVelCurve = runningCharacteristics.lateralAccelVelocityCurve;
-                lateralVelCurve = runningCharacteristics.lateralAccelVelocityCurve;
-                lateralAcceleration = Mathf.Sign(input.x - velocity.x / maxCharVelocityRun.x);
+                lateralAcceleration = -runningCharacteristics.lateral.Acceleration(-velocity.x);
             }
-            else if (input.x * maxCharVelocityRun.x > velocity.x) {
+            else if (input.x * runningCharacteristics.lateral.maxSpeed > velocity.x) {
                 Debug.Log("4");
-                lateralInverseVelCurve = runningCharacteristics.lateralDecelVelocityCurve;
-                lateralVelCurve = runningCharacteristics.lateralDecelVelocityCurve;
-                lateralAcceleration = Mathf.Sign(input.x - velocity.x / maxCharVelocityRun.x);
+                lateralAcceleration = runningCharacteristics.lateral.Deceleration(-velocity.x);
             }
         }
         else {
-            lateralInverseVelCurve = runningCharacteristics.lateralAccelVelocityCurve;
-            lateralVelCurve = runningCharacteristics.lateralAccelVelocityCurve;
-            if (Mathf.Abs(input.x * maxCharVelocityRun.x - velocity.x) > EPSILON) {
+            if (Mathf.Abs(input.x * runningCharacteristics.lateral.maxSpeed - velocity.x) > EPSILON) {
                 Debug.Log("5");
-                Debug.Break();
-                velCurveTargetX = lateralInverseVelCurve.Evaluate(input.x);
+                lateralAcceleration = Mathf.Sign(input.x) * runningCharacteristics.lateral.Acceleration(Mathf.Abs(velocity.x));
+            }
+            else {
+                lateralAcceleration = 0f;
+                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
+                velocity.x = 0f;
             }
         }
 
         if (velocity.z > EPSILON) {
-            if (input.y * maxCharVelocityRun.z >= velocity.z) {
-                forwardVelCurve = runningCharacteristics.forwardAccelVelocityCurve;
+            if (input.y * runningCharacteristics.forward.maxSpeed >= velocity.z) {
+                forwardAcceleration = runningCharacteristics.forward.Acceleration(velocity.z);
             }
-            else if (input.y * maxCharVelocityRun.z < velocity.z) {
-                forwardVelCurve = runningCharacteristics.forwardDecelVelocityCurve;
+            else if (input.y * runningCharacteristics.forward.maxSpeed < velocity.z) {
+                forwardAcceleration = -runningCharacteristics.forward.Deceleration(velocity.z);
             }
         }
         else if (velocity.z < -EPSILON) {
-            if (input.y * maxCharVelocityRun.z <= velocity.z) {
-                forwardVelCurve = runningCharacteristics.forwardAccelVelocityCurve;
+            if (input.y * runningCharacteristics.reverse.maxSpeed <= velocity.z) {
+                forwardAcceleration = -runningCharacteristics.reverse.Acceleration(-velocity.z);
             }
-            else if (input.y * maxCharVelocityRun.z > velocity.z) {
-                forwardVelCurve = runningCharacteristics.forwardDecelVelocityCurve;
+            else if (input.y * runningCharacteristics.reverse.maxSpeed > velocity.z) {
+                forwardAcceleration = runningCharacteristics.reverse.Deceleration(-velocity.z);
             }
         }
         else {
-            forwardVelCurve = runningCharacteristics.forwardAccelVelocityCurve;
-        }
-
-        velCurveCurrentX = lateralInverseVelCurve.Evaluate(velocity.x / maxCharVelocityRun.x);
-
-        if (velCurveTargetX > velCurveCurrentX + velocityCurveTraverseSpeed) {
-            velCurveX = velCurveCurrentX + velocityCurveTraverseSpeed;
-        }
-        else {
-            velCurveX = velCurveTargetX;
+            if (Mathf.Abs(input.y * runningCharacteristics.forward.maxSpeed - velocity.z) > EPSILON) {
+                forwardAcceleration = Mathf.Sign(input.y) * runningCharacteristics.forward.Acceleration(Mathf.Abs(velocity.z));
+            }
+            else {
+                forwardAcceleration = 0f;
+            }
         }
 
         velocity = new Vector3(
-            maxCharVelocityRun.x * lateralVelCurve.Evaluate(velCurveX),
+            velocity.x + lateralAcceleration * Time.fixedDeltaTime,
             velocity.y,
-            velocity.z + maxCharVelocityRun.z * (forwardAcceleration) * Time.fixedDeltaTime
+            velocity.z + forwardAcceleration * Time.fixedDeltaTime
         );
 
         //if (velocity.x > maxCharVelocityRun.x) velocity.x = maxCharVelocityRun.x;
