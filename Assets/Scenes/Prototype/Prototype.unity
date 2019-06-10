@@ -33260,8 +33260,9 @@ MonoBehaviour:
   mouseSensitivity: 100
   screenMouseRatio: 1.777
   maxCharVelocityRun: {x: 2.5, y: 0, z: 3.5}
+  velocityCurveTraverseSpeed: 1
   runningCharacteristics:
-    forwardAccel:
+    forwardAccelVelocityCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -33312,75 +33313,36 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    forwardDecel:
+    forwardDecelVelocityCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.12836176
+        outSlope: -0.12836176
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.6978438
       - serializedVersion: 3
-        time: 0.5163291
-        value: 0.4132601
-        inSlope: -3.23552
-        outSlope: -3.23552
+        time: 0.43278408
+        value: 0.3792331
+        inSlope: -4.149726
+        outSlope: -4.149726
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.06390457
-        outWeight: 0.06729648
+        inWeight: 0.046875488
+        outWeight: 0.086141884
       - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: -0.22843851
-        outSlope: -0.22843851
+        time: 0.6632883
+        value: 0.012714308
+        inSlope: -0.19124617
+        outSlope: -0.19124617
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.44796294
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    reverseAccel:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    reverseDecel:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 0
@@ -33393,7 +33355,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    lateralAccel:
+    reverseAccelVelocityCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -33417,7 +33379,55 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    lateralDecel:
+    reverseDecelVelocityCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    lateralAccelVelocityCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    lateralDecelVelocityCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
