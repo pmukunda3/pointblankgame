@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
-public class PrototypePlayerController : MonoBehaviour {
+public class PrototypePlayerController : MonoBehaviour, IPlayerAim {
 
     private Rigidbody rigidbody;
     private Animator animator;

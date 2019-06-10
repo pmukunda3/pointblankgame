@@ -15,11 +15,11 @@ public class ThirdPersonCamera : MonoBehaviour {
 
     public float cameraMovementScalar;
 
-    private PrototypePlayerController playerController;
+    private IPlayerAim playerController;
 
     void Start() {
         camera = gameObject.GetComponent<Camera>();
-        playerController = player.GetComponent<PrototypePlayerController>();
+        playerController = player.GetComponent<IPlayerAim>();
 
         previousPosition = transform.position;
         previousRotation = playerController.AimDirection();
