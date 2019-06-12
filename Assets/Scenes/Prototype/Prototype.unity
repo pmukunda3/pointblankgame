@@ -33360,12 +33360,12 @@ MonoBehaviour:
           outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: -3.2656019
-          outSlope: -3.2656019
+          value: 0.1
+          inSlope: -2.8270395
+          outSlope: -2.8270395
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.054166675
+          inWeight: 0.09583336
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -33411,18 +33411,19 @@ MonoBehaviour:
           outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: -2.943395
-          outSlope: -2.943395
+          value: 0.5
+          inSlope: -1.4983356
+          outSlope: -1.4983356
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.041666687
+          inWeight: 0.070833325
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       maxSpeed: 2.5
       accelerationScalar: 10
+  deadzone: {x: 0.01, y: 0.01}
 --- !u!54 &1745082261
 Rigidbody:
   m_ObjectHideFlags: 0
