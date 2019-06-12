@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     [System.Serializable]
     public struct MovementCharacteristics {
         public AnimationCurve accelerationCurve;
-        public AnimationCurve decelerationCurve;
+        public AnimationCurve passiveDecelerationCurve;
+        public AnimationCurve activeDecelerationCurve;
         public float maxSpeed;
         public float accelerationScalar;
 
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
 
         public float Deceleration(float velocity) {
-            return accelerationScalar * decelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+            return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
         }
     }
 
@@ -139,93 +140,150 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
     private const float EPSILON = 1e-6f;
 
+    private void CalculateAcceleration() {
+
+        if (Mathf.Abs(input.x) > deadzone.x) {
+            if (localVelocity.x > EPSILON) {
+                if (InputToTargetSpeedX(input.x) >= localVelocity.x) {
+                    lateralAcceleration = runningCharacteristics.lateral.Acceleration(localVelocity.x);
+                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) + EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    }
+                }
+                else if (InputToTargetSpeedX(input.x) < localVelocity.x) {
+                    lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x);
+                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) + EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    }
+                }
+            }
+            else if (localVelocity.x < -EPSILON) {
+                if (InputToTargetSpeedX(input.x) <= localVelocity.x) {
+                    lateralAcceleration = -runningCharacteristics.lateral.Acceleration(-localVelocity.x);
+                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) - EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    }
+                }
+                else if (InputToTargetSpeedX(input.x) > localVelocity.x) {
+                    lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x);
+                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) - EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    }
+                }
+            }
+            else {
+                if (Mathf.Abs(InputToTargetSpeedX(input.x) - localVelocity.x) > EPSILON) {
+                    lateralAcceleration = Mathf.Sign(input.x) * runningCharacteristics.lateral.Acceleration(Mathf.Abs(localVelocity.x));
+                }
+                else {
+                    Debug.Log("This code should be impossible to reach. The input deadzone should be significantly (orders of magnitude) larger than EPSILON");
+                    Debug.Break();
+                    lateralAcceleration = 0f;
+                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
+                    //   You need to be able to maintain velocity
+                    localVelocity.x = 0f;
+                }
+            }
+        }
+        else {
+            if (Mathf.Abs(localVelocity.x) < EPSILON) {
+                lateralAcceleration = 0f;
+                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
+                    //   You need to be able to maintain velocity
+                localVelocity.x = 0f;
+            }
+            else {
+                lateralAcceleration = Mathf.Sign(-localVelocity.x) * runningCharacteristics.lateral.Deceleration(Mathf.Abs(localVelocity.x));
+                if (Mathf.Sign(localVelocity.x) * (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime) < InputToTargetSpeedX(input.x) + EPSILON) {
+                    lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                }
+            }
+        }
+
+        if (Mathf.Abs(input.y) > deadzone.y) {
+            if (localVelocity.z > EPSILON) {
+                if (InputToTargetSpeedY(input.y) >= localVelocity.z) {
+                    forwardAcceleration = runningCharacteristics.forward.Acceleration(localVelocity.z);
+                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) + EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    }
+                }
+                else if (InputToTargetSpeedY(input.y) < localVelocity.z) {
+                    forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z);
+                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    }
+                }
+            }
+            else if (localVelocity.z < -EPSILON) {
+                if (InputToTargetSpeedY(input.y) <= localVelocity.z) {
+                    forwardAcceleration = -runningCharacteristics.reverse.Acceleration(-localVelocity.z);
+                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) - EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    }
+                }
+                else if (InputToTargetSpeedY(input.y) > localVelocity.z) {
+                    forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z);
+                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    }
+                }
+            }
+            else {
+                if (Mathf.Abs(InputToTargetSpeedY(input.y) - localVelocity.z) > EPSILON) {
+                    forwardAcceleration = Mathf.Sign(input.y) * runningCharacteristics.forward.Acceleration(Mathf.Abs(localVelocity.z));
+                }
+                else {
+                    Debug.Log("This code should be impossible to reach. The input deadzone should be significantly (orders of magnitude) larger than EPSILON");
+                    Debug.Break();
+                    forwardAcceleration = 0f;
+                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
+                    //   You need to be able to maintain velocity
+                    localVelocity.z = 0f;
+                }
+            }
+        }
+        else {
+            if (localVelocity.z < -EPSILON) {
+                forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z);
+                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - EPSILON) {
+                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                }
+            }
+            else if (localVelocity.z > EPSILON) {
+                forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z);
+                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + EPSILON) {
+                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                }
+            }
+            else {
+                forwardAcceleration = 0f;
+                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
+                    //   You need to be able to maintain velocity
+                localVelocity.z = 0f;
+            }
+        }
+    }
+
+    private float InputToTargetSpeedY(float y) {
+        if (y > 0) {
+            return y * runningCharacteristics.forward.maxSpeed;
+        }
+        else {
+            return y * runningCharacteristics.reverse.maxSpeed;
+        }
+    }
+
+    private float InputToTargetSpeedX(float x) {
+        return x * runningCharacteristics.lateral.maxSpeed;
+    }
+
     void FixedUpdate() {
 
         /*float*/ forwardAcceleration = 0f;
         /*float*/ lateralAcceleration = 0f;
 
-        if (localVelocity.x > EPSILON) {
-            if (input.x * runningCharacteristics.lateral.maxSpeed >= localVelocity.x) {
-                Debug.Log("1");
-                lateralAcceleration = runningCharacteristics.lateral.Acceleration(localVelocity.x);
-                if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > input.x * runningCharacteristics.lateral.maxSpeed + EPSILON) {
-                    lateralAcceleration = (input.x * runningCharacteristics.lateral.maxSpeed - localVelocity.x) / Time.fixedDeltaTime;
-                }
-            }
-            else if (input.x * runningCharacteristics.lateral.maxSpeed < localVelocity.x) {
-                Debug.Log("2");
-                lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x);
-                if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < input.x * runningCharacteristics.lateral.maxSpeed + EPSILON) {
-                    lateralAcceleration = (input.x * runningCharacteristics.lateral.maxSpeed - localVelocity.x) / Time.fixedDeltaTime;
-                }
-            }
-        }
-        else if (localVelocity.x < -EPSILON) {
-            if (input.x * runningCharacteristics.lateral.maxSpeed <= localVelocity.x) {
-                Debug.Log("3");
-                lateralAcceleration = -runningCharacteristics.lateral.Acceleration(-localVelocity.x);
-                if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < input.x * runningCharacteristics.lateral.maxSpeed - EPSILON) {
-                    lateralAcceleration = (input.x * runningCharacteristics.lateral.maxSpeed - localVelocity.x) / Time.fixedDeltaTime;
-                }
-            }
-            else if (input.x * runningCharacteristics.lateral.maxSpeed > localVelocity.x) {
-                Debug.Log("4");
-                lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x);
-                if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > input.x * runningCharacteristics.lateral.maxSpeed - EPSILON) {
-                    lateralAcceleration = (input.x * runningCharacteristics.lateral.maxSpeed - localVelocity.x) / Time.fixedDeltaTime;
-                }
-            }
-        }
-        else {
-            if (Mathf.Abs(input.x * runningCharacteristics.lateral.maxSpeed - localVelocity.x) > EPSILON) {
-                Debug.Log("5");
-                lateralAcceleration = Mathf.Sign(input.x) * runningCharacteristics.lateral.Acceleration(Mathf.Abs(localVelocity.x));
-            }
-            else {
-                Debug.Log("6");
-                lateralAcceleration = 0f;
-                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
-                localVelocity.x = 0f;
-            }
-        }
-
-        if (localVelocity.z > EPSILON) {
-            if (input.y * runningCharacteristics.forward.maxSpeed >= localVelocity.z) {
-                forwardAcceleration = runningCharacteristics.forward.Acceleration(localVelocity.z);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > input.y * runningCharacteristics.forward.maxSpeed + EPSILON) {
-                    forwardAcceleration = (input.y * runningCharacteristics.forward.maxSpeed - localVelocity.z) / Time.fixedDeltaTime;
-                }
-            }
-            else if (input.y * runningCharacteristics.forward.maxSpeed < localVelocity.z) {
-                forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < input.y * runningCharacteristics.forward.maxSpeed + EPSILON) {
-                    forwardAcceleration = (input.y * runningCharacteristics.forward.maxSpeed - localVelocity.z) / Time.fixedDeltaTime;
-                }
-            }
-        }
-        else if (localVelocity.z < -EPSILON) {
-            if (input.y * runningCharacteristics.reverse.maxSpeed <= localVelocity.z) {
-                forwardAcceleration = -runningCharacteristics.reverse.Acceleration(-localVelocity.z);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < input.y * runningCharacteristics.reverse.maxSpeed - EPSILON) {
-                    forwardAcceleration = (input.y * runningCharacteristics.reverse.maxSpeed - localVelocity.z) / Time.fixedDeltaTime;
-                }
-            }
-            else if (input.y * runningCharacteristics.reverse.maxSpeed > localVelocity.z) {
-                forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > input.y * runningCharacteristics.reverse.maxSpeed - EPSILON) {
-                    forwardAcceleration = (input.y * runningCharacteristics.reverse.maxSpeed - localVelocity.z) / Time.fixedDeltaTime;
-                }
-            }
-        }
-        else {
-            if (Mathf.Abs(input.y * runningCharacteristics.forward.maxSpeed - localVelocity.z) > EPSILON) {
-                forwardAcceleration = Mathf.Sign(input.y) * runningCharacteristics.forward.Acceleration(Mathf.Abs(localVelocity.z));
-            }
-            else {
-                forwardAcceleration = 0f;
-                localVelocity.z = 0f;
-            }
-        }
+        CalculateAcceleration();
 
         localVelocity = new Vector3(
             localVelocity.x + lateralAcceleration * Time.fixedDeltaTime,
