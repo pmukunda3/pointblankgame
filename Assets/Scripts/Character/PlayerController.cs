@@ -29,8 +29,9 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             return accelerationScalar * accelerationCurve.Evaluate(velocity / maxSpeed);
         }
 
-        public float Deceleration(float velocity) {
-            return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+        public float Deceleration(float velocity, bool active = false) {
+            if (active) return accelerationScalar * activeDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+            else        return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
         }
     }
 
@@ -151,7 +152,13 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                     }
                 }
                 else if (InputToTargetSpeedX(input.x) < localVelocity.x) {
-                    lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x);
+                    if (Mathf.Sign(input.x) != Mathf.Sign(localVelocity.x)) {
+                        Debug.Log("1");
+                        lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x, true);
+                    }
+                    else {
+                        lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x, false);
+                    }
                     if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) + EPSILON) {
                         lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
                     }
@@ -165,7 +172,13 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                     }
                 }
                 else if (InputToTargetSpeedX(input.x) > localVelocity.x) {
-                    lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x);
+                    if (Mathf.Sign(input.x) != Mathf.Sign(localVelocity.x)) {
+                        Debug.Log("2");
+                        lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x, true);
+                    }
+                    else {
+                        lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x, false);
+                    }
                     if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) - EPSILON) {
                         lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
                     }
@@ -193,7 +206,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                 localVelocity.x = 0f;
             }
             else {
-                lateralAcceleration = Mathf.Sign(-localVelocity.x) * runningCharacteristics.lateral.Deceleration(Mathf.Abs(localVelocity.x));
+                lateralAcceleration = Mathf.Sign(-localVelocity.x) * runningCharacteristics.lateral.Deceleration(Mathf.Abs(localVelocity.x), false);
                 if (Mathf.Sign(localVelocity.x) * (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime) < InputToTargetSpeedX(input.x) + EPSILON) {
                     lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
                 }
@@ -209,7 +222,12 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                     }
                 }
                 else if (InputToTargetSpeedY(input.y) < localVelocity.z) {
-                    forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z);
+                    if (Mathf.Sign(input.y) != Mathf.Sign(localVelocity.z)) {
+                        forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, true);
+                    }
+                    else {
+                        forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, false);
+                    }
                     if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + EPSILON) {
                         forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
                     }
@@ -223,7 +241,13 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                     }
                 }
                 else if (InputToTargetSpeedY(input.y) > localVelocity.z) {
-                    forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z);
+                    forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
+                    if (Mathf.Sign(input.y) != Mathf.Sign(localVelocity.z)) {
+                        forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, true);
+                    }
+                    else {
+                        forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
+                    }
                     if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - EPSILON) {
                         forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
                     }
@@ -245,13 +269,13 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
         else {
             if (localVelocity.z < -EPSILON) {
-                forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z);
+                forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
                 if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - EPSILON) {
                     forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
                 }
             }
             else if (localVelocity.z > EPSILON) {
-                forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z);
+                forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, false);
                 if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + EPSILON) {
                     forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
                 }

@@ -33300,7 +33300,7 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0.88
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -33309,7 +33309,7 @@ MonoBehaviour:
           outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0.1
+          value: 0.25
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -33321,7 +33321,34 @@ MonoBehaviour:
         m_RotationOrder: 4
       activeDecelerationCurve:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.88
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.48622906
+          value: 0.8127323
+          inSlope: -0.37498736
+          outSlope: -0.37498736
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0.75
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -33378,7 +33405,25 @@ MonoBehaviour:
         m_RotationOrder: 4
       activeDecelerationCurve:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.6
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0.5
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -33441,7 +33486,7 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
+          value: 0.8
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -33450,24 +33495,42 @@ MonoBehaviour:
           outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0.5
-          inSlope: -1.6981132
-          outSlope: -1.6981132
+          value: 0.25
+          inSlope: -1.1125568
+          outSlope: -1.1125568
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.070833325
+          inWeight: 0.12083334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       activeDecelerationCurve:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.8
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0.8
+          inSlope: -0.7227868
+          outSlope: -0.7227868
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.21666664
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       maxSpeed: 2.5
-      accelerationScalar: 6
+      accelerationScalar: 12
   deadzone: {x: 0.01, y: 0.01}
 --- !u!54 &1745082261
 Rigidbody:
