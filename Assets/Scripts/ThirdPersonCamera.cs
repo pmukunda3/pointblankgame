@@ -10,9 +10,9 @@ public class ThirdPersonCamera : MonoBehaviour {
     public Vector3 offset;
     public GameObject cameraPivot;
 
-    public AnimationCurve pitchOffsetFuncX;
-    public AnimationCurve pitchOffsetFuncY;
-    public AnimationCurve pitchOffsetFuncZ;
+    public AnimationCurve offsetFuncX;
+    public AnimationCurve offsetFuncY;
+    public AnimationCurve offsetFuncZ;
 
     //public float maxIn;
     //public float maxOut;
@@ -33,9 +33,9 @@ public class ThirdPersonCamera : MonoBehaviour {
 
     void LateUpdate() {
         Vector3 pitchAdjustedOffset = new Vector3(
-            pitchOffsetFuncX.Evaluate(playerController.AimPitch() / 90.0f) * offset.x,
-            pitchOffsetFuncY.Evaluate(playerController.AimPitch() / 90.0f) * offset.y,
-            pitchOffsetFuncZ.Evaluate(playerController.AimPitch() / 90.0f) * offset.z);
+            offsetFuncX.Evaluate(playerController.AimPitch() / 90.0f) * offset.x,
+            offsetFuncY.Evaluate(playerController.AimPitch() / 90.0f) * offset.y,
+            offsetFuncZ.Evaluate(playerController.AimPitch() / 90.0f) * offset.z);
         Vector3 desiredLocation = cameraPivot.transform.position + playerController.AimDirection() * pitchAdjustedOffset;
 
         //Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, playerController.AimDirection() * -Vector3.forward);

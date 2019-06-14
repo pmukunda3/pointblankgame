@@ -5062,7 +5062,7 @@ MonoBehaviour:
   player: {fileID: 1745082259}
   offset: {x: 0.5, y: 1, z: -0.9}
   cameraPivot: {fileID: 1493008396}
-  pitchOffsetFuncX:
+  offsetFuncX:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -5095,7 +5095,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  pitchOffsetFuncY:
+  offsetFuncY:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -5128,7 +5128,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  pitchOffsetFuncZ:
+  offsetFuncZ:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -16917,9 +16917,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.15
-  m_Height: 0.4
+  m_Height: 0.8
   m_Direction: 1
-  m_Center: {x: 0, y: -0.2, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &909838521
 PrefabInstance:
   m_ObjectHideFlags: 0

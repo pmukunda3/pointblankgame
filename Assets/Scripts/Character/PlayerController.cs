@@ -62,6 +62,9 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
         EventManager.StartListening<WeaponFireSecondary, float>(
             new UnityEngine.Events.UnityAction<float>(WeaponFirePrimaryCallbackTest));
+
+        Cursor.lockState = CursorLockMode.Locked;
+        screenControl = true;
     }
 
     private IMovementState currentMoveState;
@@ -69,6 +72,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private bool climbing = false;
     private bool climbingLowerTrigger = false;
 
+    private bool screenControl = true;
     private float aimPitch = 0f;
 
     private float speedTargetX;
@@ -106,15 +110,17 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             transform.position = transform.position + new Vector3(0f, 20f, 0f);
         }
 
-        mouseX = Input.GetAxis("Mouse X");
-        mouseY = Input.GetAxis("Mouse Y");
+        if (screenControl) {
+            mouseX = Input.GetAxis("Mouse X");
+            mouseY = Input.GetAxis("Mouse Y");
 
-        aimPitch += mouseSensitivity * mouseY * Time.deltaTime;
-        if (aimPitch > 80f) {
-            aimPitch = 80f;
-        }
-        else if (aimPitch < -80f) {
-            aimPitch = -80f;
+            aimPitch += mouseSensitivity * mouseY * Time.deltaTime;
+            if (aimPitch > 80f) {
+                aimPitch = 80f;
+            }
+            else if (aimPitch < -80f) {
+                aimPitch = -80f;
+            }
         }
 
         // Temporary until I get the targetting code correct
@@ -146,6 +152,18 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         input = new Vector2(speedTargetX, speedTargetY);
         if (input.sqrMagnitude > 1.0f) {
             input.Normalize();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            screenControl = false;
+            mouseX = mouseY = 0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            Cursor.lockState = CursorLockMode.Locked;
+            screenControl = true;
         }
     }
 
