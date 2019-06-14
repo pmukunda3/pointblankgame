@@ -8,14 +8,20 @@ public class ThirdPersonCamera : MonoBehaviour {
     public GameObject player;
 
     public Vector3 offset;
-    public Vector3 localPositionPivot;
+    public GameObject cameraPivot;
 
-    public float maxIn;
-    public float maxOut;
+    public AnimationCurve pitchOffsetFuncX;
+    public AnimationCurve pitchOffsetFuncY;
+    public AnimationCurve pitchOffsetFuncZ;
 
-    public float cameraMovementScalar;
+    //public float maxIn;
+    //public float maxOut;
+
+    //public float cameraMovementScalar;
 
     private IPlayerAim playerController;
+    private Vector3 previousPosition;
+    private Quaternion previousRotation;
 
     void Start() {
         camera = gameObject.GetComponent<Camera>();
@@ -25,22 +31,19 @@ public class ThirdPersonCamera : MonoBehaviour {
         previousRotation = playerController.AimDirection();
     }
 
-    public Vector3 previousPosition;
-    public Quaternion previousRotation;
-    public Quaternion relativeRotation;
-
     void LateUpdate() {
-        Quaternion cameraRotation = playerController.AimDirection();
-        Vector3 desiredLocation = player.transform.position + cameraRotation * offset;
-        Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, playerController.AimDirection() * -Vector3.forward);
+        Vector3 pitchAdjustedOffset = new Vector3(
+            pitchOffsetFuncX.Evaluate(playerController.AimPitch() / 90.0f) * offset.x,
+            pitchOffsetFuncY.Evaluate(playerController.AimPitch() / 90.0f) * offset.y,
+            pitchOffsetFuncZ.Evaluate(playerController.AimPitch() / 90.0f) * offset.z);
+        Vector3 desiredLocation = cameraPivot.transform.position + playerController.AimDirection() * pitchAdjustedOffset;
 
-            // Doesn't work, I'll have to break apart cameraRotation to two separate quaternions.
-        Vector3 cameraDirection = desiredLocation - cameraRotation * localPositionPivot;
+        //Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, playerController.AimDirection() * -Vector3.forward);
 
         previousPosition = transform.position;
         previousRotation = transform.rotation;
 
-        transform.rotation = playerController.AimDirection() * Quaternion.Euler(12f, 0f, 0f);
+        transform.rotation = playerController.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
         transform.position = desiredLocation; // + cameraAlignProjection;
     }
 }

@@ -2,6 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct MovementCharacteristics {
+    public AnimationCurve accelerationCurve;
+    public AnimationCurve passiveDecelerationCurve;
+    public AnimationCurve activeDecelerationCurve;
+    public float maxSpeed;
+    public float accelerationScalar;
+
+    public float Acceleration(float velocity) {
+        return accelerationScalar * accelerationCurve.Evaluate(velocity / maxSpeed);
+    }
+
+    public float Deceleration(float velocity, bool active = false) {
+        if (active) return accelerationScalar * activeDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+        else return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+    }
+}
+
 public class PlayerController : MonoBehaviour, IPlayerAim {
 
     public enum MoveMode : int {
@@ -11,30 +29,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         Landing
     };
 
-    private Rigidbody rigidbody;
-    private Animator animator;
-
-    public float mouseSensitivity = 1.0f;
-    public float screenMouseRatio = 1.777f;
-
-    [System.Serializable]
-    public struct MovementCharacteristics {
-        public AnimationCurve accelerationCurve;
-        public AnimationCurve passiveDecelerationCurve;
-        public AnimationCurve activeDecelerationCurve;
-        public float maxSpeed;
-        public float accelerationScalar;
-
-        public float Acceleration(float velocity) {
-            return accelerationScalar * accelerationCurve.Evaluate(velocity / maxSpeed);
-        }
-
-        public float Deceleration(float velocity, bool active = false) {
-            if (active) return accelerationScalar * activeDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
-            else        return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
-        }
-    }
-
     [System.Serializable]
     public struct CharacterMovementCharacteristics {
         public MovementCharacteristics forward;
@@ -42,11 +36,38 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         public MovementCharacteristics lateral;
     }
 
-    public float velocityCurveTraverseSpeed = 1f;
+    public const float EPSILON = 1e-6f;
 
-    public CharacterMovementCharacteristics runningCharacteristics;
+    public float mouseSensitivity = 1.0f;
+    public float screenMouseRatio = 1.777f;
 
     public Vector2 deadzone = new Vector2(0.01f, 0.01f);
+
+    public IMovementState runningState;
+
+    public WeaponController weaponController;
+
+    private Rigidbody rigidbody;
+    private Animator animator;
+
+    void Start() {
+        rigidbody = gameObject.GetComponent<Rigidbody>();
+        animator = gameObject.GetComponent<Animator>();
+
+        runningState = gameObject.GetComponent<Running>() as IMovementState;
+
+        currentMoveState = runningState;
+
+        EventManager.StartListening<WeaponFirePrimary>(
+            new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
+        EventManager.StartListening<WeaponFireSecondary, float>(
+            new UnityEngine.Events.UnityAction<float>(WeaponFirePrimaryCallbackTest));
+    }
+
+    private IMovementState currentMoveState;
+    private bool jump = false;
+    private bool climbing = false;
+    private bool climbingLowerTrigger = false;
 
     private float aimPitch = 0f;
 
@@ -55,34 +76,29 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private float mouseX;
     private float mouseY;
 
-    private MoveMode moveMode = MoveMode.Running;
-    private bool jump = false;
-    private bool climbing = false;
-    private bool climbingLowerTrigger = false;
-
-    private Vector3 playerVelocityLocal = Vector3.zero;
-
-    void Start() {
-        rigidbody = gameObject.GetComponent<Rigidbody>();
-        animator = gameObject.GetComponent<Animator>();
-    }
+    private Vector3 localVelocity = Vector3.zero;
+    private Vector2 input = Vector2.zero;
 
     public Quaternion AimDirection() {
         return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
     }
 
-    private bool ctrlRbJump = false;
+    public float AimPitch() {
+        return aimPitch;
+    }
+
+    private void WeaponFirePrimaryCallbackTest() {
+        Debug.Log("Fire Weapon Primary");
+    }
+
+    private void WeaponFirePrimaryCallbackTest(float holdTime) {
+        Debug.Log("Fire Weapon Secondary: " + holdTime);
+    }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             if (!jump) {
-                ctrlRbJump = jump = true;
-                if (moveMode == MoveMode.Running) {
-                    moveMode = MoveMode.Climbing;
-                }
-                else if (moveMode == MoveMode.Climbing) {
-                    moveMode = MoveMode.Running;
-                }
+                jump = true;
             }
         }
 
@@ -94,14 +110,14 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         mouseY = Input.GetAxis("Mouse Y");
 
         aimPitch += mouseSensitivity * mouseY * Time.deltaTime;
-        if (aimPitch > 90f) {
-            aimPitch = 90f;
+        if (aimPitch > 80f) {
+            aimPitch = 80f;
         }
-        else if (aimPitch < -90f) {
-            aimPitch = -90f;
+        else if (aimPitch < -80f) {
+            aimPitch = -80f;
         }
 
-            // Temporary until I get the targetting code correct
+        // Temporary until I get the targetting code correct
         //speedTargetX = Input.GetAxis("Horizontal");
         //speedTargetY = Input.GetAxis("Vertical");
 
@@ -133,198 +149,40 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
     }
 
-    private Vector3 localVelocity = Vector3.zero;
-    private Vector2 input = Vector2.zero;
-
-    private float forwardAcceleration = 0f;
-    private float lateralAcceleration = 0f;
-
-    private const float EPSILON = 1e-6f;
-
-    private void CalculateAcceleration() {
-
-        if (Mathf.Abs(input.x) > deadzone.x) {
-            if (localVelocity.x > EPSILON) {
-                if (InputToTargetSpeedX(input.x) >= localVelocity.x) {
-                    lateralAcceleration = runningCharacteristics.lateral.Acceleration(localVelocity.x);
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) + EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
-                    }
-                }
-                else if (InputToTargetSpeedX(input.x) < localVelocity.x) {
-                    if (Mathf.Sign(input.x) != Mathf.Sign(localVelocity.x)) {
-                        Debug.Log("1");
-                        lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x, true);
-                    }
-                    else {
-                        lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x, false);
-                    }
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) + EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
-                    }
-                }
-            }
-            else if (localVelocity.x < -EPSILON) {
-                if (InputToTargetSpeedX(input.x) <= localVelocity.x) {
-                    lateralAcceleration = -runningCharacteristics.lateral.Acceleration(-localVelocity.x);
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) - EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
-                    }
-                }
-                else if (InputToTargetSpeedX(input.x) > localVelocity.x) {
-                    if (Mathf.Sign(input.x) != Mathf.Sign(localVelocity.x)) {
-                        Debug.Log("2");
-                        lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x, true);
-                    }
-                    else {
-                        lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x, false);
-                    }
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) - EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
-                    }
-                }
-            }
-            else {
-                if (Mathf.Abs(InputToTargetSpeedX(input.x) - localVelocity.x) > EPSILON) {
-                    lateralAcceleration = Mathf.Sign(input.x) * runningCharacteristics.lateral.Acceleration(Mathf.Abs(localVelocity.x));
-                }
-                else {
-                    Debug.Log("This code should be impossible to reach. The input deadzone should be significantly (orders of magnitude) larger than EPSILON");
-                    Debug.Break();
-                    lateralAcceleration = 0f;
-                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
-                    //   You need to be able to maintain velocity
-                    localVelocity.x = 0f;
-                }
-            }
-        }
-        else {
-            if (Mathf.Abs(localVelocity.x) < EPSILON) {
-                lateralAcceleration = 0f;
-                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
-                    //   You need to be able to maintain velocity
-                localVelocity.x = 0f;
-            }
-            else {
-                lateralAcceleration = Mathf.Sign(-localVelocity.x) * runningCharacteristics.lateral.Deceleration(Mathf.Abs(localVelocity.x), false);
-                if (Mathf.Sign(localVelocity.x) * (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime) < InputToTargetSpeedX(input.x) + EPSILON) {
-                    lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
-                }
-            }
-        }
-
-        if (Mathf.Abs(input.y) > deadzone.y) {
-            if (localVelocity.z > EPSILON) {
-                if (InputToTargetSpeedY(input.y) >= localVelocity.z) {
-                    forwardAcceleration = runningCharacteristics.forward.Acceleration(localVelocity.z);
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) + EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
-                    }
-                }
-                else if (InputToTargetSpeedY(input.y) < localVelocity.z) {
-                    if (Mathf.Sign(input.y) != Mathf.Sign(localVelocity.z)) {
-                        forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, true);
-                    }
-                    else {
-                        forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, false);
-                    }
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
-                    }
-                }
-            }
-            else if (localVelocity.z < -EPSILON) {
-                if (InputToTargetSpeedY(input.y) <= localVelocity.z) {
-                    forwardAcceleration = -runningCharacteristics.reverse.Acceleration(-localVelocity.z);
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) - EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
-                    }
-                }
-                else if (InputToTargetSpeedY(input.y) > localVelocity.z) {
-                    forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
-                    if (Mathf.Sign(input.y) != Mathf.Sign(localVelocity.z)) {
-                        forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, true);
-                    }
-                    else {
-                        forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
-                    }
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
-                    }
-                }
-            }
-            else {
-                if (Mathf.Abs(InputToTargetSpeedY(input.y) - localVelocity.z) > EPSILON) {
-                    forwardAcceleration = Mathf.Sign(input.y) * runningCharacteristics.forward.Acceleration(Mathf.Abs(localVelocity.z));
-                }
-                else {
-                    Debug.Log("This code should be impossible to reach. The input deadzone should be significantly (orders of magnitude) larger than EPSILON");
-                    Debug.Break();
-                    forwardAcceleration = 0f;
-                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
-                    //   You need to be able to maintain velocity
-                    localVelocity.z = 0f;
-                }
-            }
-        }
-        else {
-            if (localVelocity.z < -EPSILON) {
-                forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - EPSILON) {
-                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
-                }
-            }
-            else if (localVelocity.z > EPSILON) {
-                forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, false);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + EPSILON) {
-                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
-                }
-            }
-            else {
-                forwardAcceleration = 0f;
-                    // TODO: THIS IS A MISTAKE, don't do this, replace in future
-                    //   You need to be able to maintain velocity
-                localVelocity.z = 0f;
-            }
-        }
-    }
-
-    private float InputToTargetSpeedY(float y) {
-        if (y > 0) {
-            return y * runningCharacteristics.forward.maxSpeed;
-        }
-        else {
-            return y * runningCharacteristics.reverse.maxSpeed;
-        }
-    }
-
-    private float InputToTargetSpeedX(float x) {
-        return x * runningCharacteristics.lateral.maxSpeed;
-    }
-
     void FixedUpdate() {
+        MovementChange moveChange = currentMoveState.CalculateAcceleration(input, localVelocity);
 
-        /*float*/ forwardAcceleration = 0f;
-        /*float*/ lateralAcceleration = 0f;
+        //localVelocity = new Vector3(
+        //    localVelocity.x + lateralAcceleration * Time.fixedDeltaTime,
+        //    localVelocity.y,
+        //    localVelocity.z + forwardAcceleration * Time.fixedDeltaTime
+        //);
 
-        CalculateAcceleration();
-
-        localVelocity = new Vector3(
-            localVelocity.x + lateralAcceleration * Time.fixedDeltaTime,
-            localVelocity.y,
-            localVelocity.z + forwardAcceleration * Time.fixedDeltaTime
-        );
-
-        if (localVelocity.x > runningCharacteristics.lateral.maxSpeed) localVelocity.x = runningCharacteristics.lateral.maxSpeed;
-        if (localVelocity.z > runningCharacteristics.forward.maxSpeed) localVelocity.z = runningCharacteristics.forward.maxSpeed;
+        if (localVelocity.Equals(moveChange.localVelocityOverride)) {
+            localVelocity += moveChange.localAcceleration * Time.fixedDeltaTime;
+        }
+        else {
+            if (localVelocity.x == moveChange.localVelocityOverride.x) {
+                localVelocity.x += moveChange.localAcceleration.x * Time.fixedDeltaTime;
+            }
+            else {
+                localVelocity.x = moveChange.localVelocityOverride.x;
+            }
+            if (localVelocity.y == moveChange.localVelocityOverride.y) {
+                localVelocity.y += moveChange.localAcceleration.y * Time.fixedDeltaTime;
+            }
+            else {
+                localVelocity.y = moveChange.localVelocityOverride.y;
+            }
+            if (localVelocity.z == moveChange.localVelocityOverride.z) {
+                localVelocity.z += moveChange.localAcceleration.z * Time.fixedDeltaTime;
+            }
+            else {
+                localVelocity.z = moveChange.localVelocityOverride.z;
+            }
+        }
 
         rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         rigidbody.MovePosition(rigidbody.position + (rigidbody.rotation * localVelocity) * Time.fixedDeltaTime);
-
-        if (ctrlRbJump) {
-            rigidbody.velocity = new Vector3(rigidbody.velocity.x, 4.0f, rigidbody.velocity.z);
-            ctrlRbJump = false;
-            jump = false;
-        }
     }
 }

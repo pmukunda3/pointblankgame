@@ -56,6 +56,10 @@ public class KinematicCharacterController : MonoBehaviour, IPlayerAim {
         return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
     }
 
+    public float AimPitch() {
+        return aimPitch;
+    }
+
     void OnCollisionEnter(Collision col) {
         ContactPoint contact = col.contacts[0];
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
