@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         Debug.Log("Fire Weapon Secondary: " + holdTime);
     }
 
-    void Update() {
+    private void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             if (!jump) {
                 jump = true;
@@ -167,14 +167,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
     }
 
-    void FixedUpdate() {
+    private void FixedUpdate() {
         MovementChange moveChange = currentMoveState.CalculateAcceleration(input, localVelocity);
-
-        //localVelocity = new Vector3(
-        //    localVelocity.x + lateralAcceleration * Time.fixedDeltaTime,
-        //    localVelocity.y,
-        //    localVelocity.z + forwardAcceleration * Time.fixedDeltaTime
-        //);
 
         if (localVelocity.Equals(moveChange.localVelocityOverride)) {
             localVelocity += moveChange.localAcceleration * Time.fixedDeltaTime;
@@ -200,7 +194,50 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             }
         }
 
+        if (jump) {
+            jump = false;
+            localVelocity.y += 4.0f;
+        }
+
         rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         rigidbody.MovePosition(rigidbody.position + (rigidbody.rotation * localVelocity) * Time.fixedDeltaTime);
+
+        localVelocity.y -= 9.81f * Time.fixedDeltaTime;
+
+        localVelocity -= Vector3.Project(localVelocity, Quaternion.Inverse(rigidbody.rotation) * rbCollisionContact);
+        //localVelocity -= Quaternion.Inverse(rigidbody.rotation) * rbCollisionContact.normalized * localVelocity.magnitude; // - Vector3.Project(rbCollisionContact, Vector3.up);
+
+        Debug.DrawRay(rigidbody.position + 0.1f * Vector3.up, rigidbody.rotation * localVelocity, Color.green);
+        Debug.DrawRay(rigidbody.position, rbCollisionContact.normalized * localVelocity.magnitude, Color.blue);
+        rbCollisionContact = Vector3.zero;
+    }
+
+    private Vector3 rbCollisionContact = Vector3.zero;
+    private List<Collider> contactColliders = new List<Collider>(64);
+
+    private void OnCollisionStay(Collision collision) {
+        ContactPoint[] contacts = new ContactPoint[32];
+        collision.GetContacts(contacts);
+
+        int n = 0;
+        for (n = 0; n < contacts.Length && contacts[n].otherCollider != null; ++n) {
+            ContactPoint contact = contacts[n];
+            Debug.DrawRay(contact.point, -10f * contact.separation * contact.normal, Color.red);
+            rbCollisionContact += contact.separation * contact.normal;
+        }
+        Debug.Log(n + " contacts");
+
+        //if (n > 1) Debug.Break();
+    }
+
+    private void OnCollisionEnter(Collision collision) {
+        contactColliders.Add(collision.collider);
+        //foreach (ContactPoint contact in collision.contacts) {
+            
+        //}
+    }
+
+    private void OnCollisionExit(Collision collision) {
+        contactColliders.Remove(collision.collider);
     }
 }
