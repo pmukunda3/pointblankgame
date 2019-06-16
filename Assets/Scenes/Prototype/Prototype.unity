@@ -33499,6 +33499,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180.00002
       objectReference: {fileID: 0}
+    - target: {fileID: 1431017917298376, guid: c827c24f41bb1224aa742a2a9b9f2aa4, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4018776875516380, guid: c827c24f41bb1224aa742a2a9b9f2aa4, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
@@ -33510,10 +33514,6 @@ PrefabInstance:
     - target: {fileID: 4018776875516380, guid: c827c24f41bb1224aa742a2a9b9f2aa4, type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1431017917298376, guid: c827c24f41bb1224aa742a2a9b9f2aa4, type: 3}
-      propertyPath: m_Layer
-      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c827c24f41bb1224aa742a2a9b9f2aa4, type: 3}
@@ -36094,7 +36094,8 @@ MonoBehaviour:
   screenMouseRatio: 1.777
   deadzone: {x: 0.01, y: 0.01}
   weaponController: {fileID: 760658158}
-  groundCheckDistance: 0.15
+  groundCheckDistance: 0.18
+  maxTurnSpeed: 1
 --- !u!1001 &1748565403
 PrefabInstance:
   m_ObjectHideFlags: 0

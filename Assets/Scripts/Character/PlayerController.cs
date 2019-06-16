@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     public WeaponController weaponController;
 
     public float groundCheckDistance = 0.1f;
+    public float maxTurnSpeed = 1.0f;
 
     private Rigidbody rigidbody;
     private Animator animator;
@@ -185,20 +186,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             input.Normalize();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            screenControl = false;
-            mouseX = mouseY = 0f;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0)) {
-            Cursor.lockState = CursorLockMode.Locked;
-            screenControl = true;
-        }
-    }
-
-    private void FixedUpdate() {
         if (screenControl) {
             mouseX = Input.GetAxis("Mouse X");
             mouseY = Input.GetAxis("Mouse Y");
@@ -211,6 +198,26 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                 aimPitch = -80f;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            screenControl = false;
+            mouseX = mouseY = 0f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            Cursor.lockState = CursorLockMode.Locked;
+            screenControl = true;
+        }
+
+        transform.Rotate(Vector3.up, screenMouseRatio * mouseSensitivity * mouseX * Time.deltaTime);
+        float extraRotation = Mathf.Clamp(mouseX, -maxTurnSpeed, maxTurnSpeed);
+
+        rigidbody.velocity = Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+    }
+
+    private void FixedUpdate() {
 
         Vector3 localRigidbodyVelocity = Quaternion.Inverse(rigidbody.rotation) * Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up);
         Debug.DrawRay(rigidbody.position + 0.5f * Vector3.up, Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity, Color.green);
@@ -229,7 +236,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         float forwardAmount = input.y;
 
         //float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
-        float extraRotation = 0.0f;
 
         //Debug.Log(Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity == transform.InverseTransformDirection(rigidbody.velocity));
         Debug.Log(localRigidbodyVelocity);
@@ -249,16 +255,21 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
 
         if (moveChange.localVelocityOverride == localRigidbodyVelocity) {
+            Debug.Log(rigidbody.velocity.x + ", " + rigidbody.velocity.y + ", " + rigidbody.velocity.z);
             rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
                 // or
             //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
-            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX + extraRotation) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+
+            if (Input.GetKey(KeyCode.Alpha7)) Debug.Break();
+            //rigidbody.velocity = Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * extraRotation, Vector3.up) * rigidbody.velocity;
+
+            //rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         }
         else {
             Vector3 localVelocityOverride = new Vector3(localRigidbodyVelocity.x, localRigidbodyVelocity.y, localRigidbodyVelocity.z);
 
             rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
-            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX + extraRotation) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
 
             if (moveChange.localVelocityOverride.x != localRigidbodyVelocity.x) {
                 localVelocityOverride.x = moveChange.localVelocityOverride.x;
