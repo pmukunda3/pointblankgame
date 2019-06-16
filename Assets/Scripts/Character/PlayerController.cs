@@ -2,32 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public struct MovementCharacteristics {
-    public AnimationCurve accelerationCurve;
-    public AnimationCurve passiveDecelerationCurve;
-    public AnimationCurve activeDecelerationCurve;
-    public float maxSpeed;
-    public float accelerationScalar;
-
-    public float Acceleration(float velocity) {
-        return accelerationScalar * accelerationCurve.Evaluate(velocity / maxSpeed);
-    }
-
-    public float Deceleration(float velocity, bool active = false) {
-        if (active) return accelerationScalar * activeDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
-        else return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
-    }
-}
-
 public class PlayerController : MonoBehaviour, IPlayerAim {
-
-    public enum MoveMode : int {
-        Running = 0,
-        Falling,
-        Climbing,
-        Landing
-    };
 
     [System.Serializable]
     public struct CharacterMovementCharacteristics {
@@ -38,7 +13,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
     public const float EPSILON = 1e-6f;
 
-    public float mouseSensitivity = 1.0f;
+    public float mouseSensitivity = 100.0f;
     public float screenMouseRatio = 1.777f;
 
     public Vector2 deadzone = new Vector2(0.01f, 0.01f);
@@ -47,10 +22,82 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
     public WeaponController weaponController;
 
+    public float groundCheckDistance = 0.1f;
+
     private Rigidbody rigidbody;
     private Animator animator;
 
-    void Start() {
+    private IMovementState currentMoveState;
+    private bool jump = false;
+    private bool climbing = false;
+    private bool climbingLowerTrigger = false;
+
+    private bool grounded = true;
+    private Vector3 groundNormal;
+    private Vector3 groundPoint;
+
+    private bool screenControl = true;
+    private float aimPitch = 0f;
+
+    private float speedTargetX;
+    private float speedTargetY;
+    private float mouseX;
+    private float mouseY;
+
+    private Vector3 localVelocity = Vector3.zero;
+    private Vector2 input = Vector2.zero;
+
+    private LayerMask mask;
+
+    private class VelocityBuffer {
+        private Vector3[] buffer;
+        private int index = 0;
+
+        public VelocityBuffer(int size) {
+            buffer = new Vector3[size];
+            for (int n = 0; n < buffer.Length; ++n) {
+                buffer[n] = Vector3.zero;
+            }
+            index = 0;
+        }
+
+        public void AddVelocity(Vector3 velocity) {
+            buffer[index] = velocity;
+            index = (index + 1) % buffer.Length;
+        }
+
+        public Vector3 Average() {
+            Vector3 current = Vector3.zero;
+            foreach (Vector3 vec in buffer) {
+                current += vec;
+            }
+            current /= buffer.Length;
+            return current;
+        }
+
+        public Vector3 WeightedAverage() {
+            Vector3 current = Vector3.zero;
+            int totalWeight = 0;
+            for (int n = 0, index = this.index; n < buffer.Length; ++n) {
+                current += (buffer.Length - n) * buffer[(index + n) % buffer.Length];
+                totalWeight += buffer.Length - n;
+            }
+            current /= totalWeight;
+            return current;
+        }
+    }
+
+    private VelocityBuffer velBuffer;
+
+    public Quaternion AimDirection() {
+        return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
+    }
+
+    public float AimPitch() {
+        return aimPitch;
+    }
+
+    private void Start() {
         rigidbody = gameObject.GetComponent<Rigidbody>();
         animator = gameObject.GetComponent<Animator>();
 
@@ -65,30 +112,9 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         Cursor.lockState = CursorLockMode.Locked;
         screenControl = true;
-    }
 
-    private IMovementState currentMoveState;
-    private bool jump = false;
-    private bool climbing = false;
-    private bool climbingLowerTrigger = false;
-
-    private bool screenControl = true;
-    private float aimPitch = 0f;
-
-    private float speedTargetX;
-    private float speedTargetY;
-    private float mouseX;
-    private float mouseY;
-
-    private Vector3 localVelocity = Vector3.zero;
-    private Vector2 input = Vector2.zero;
-
-    public Quaternion AimDirection() {
-        return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
-    }
-
-    public float AimPitch() {
-        return aimPitch;
+        mask = LayerMask.GetMask("Static Level Geometry", "Moving Level Geometry");
+        velBuffer = new VelocityBuffer(16);
     }
 
     private void WeaponFirePrimaryCallbackTest() {
@@ -108,19 +134,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
             transform.position = transform.position + new Vector3(0f, 20f, 0f);
-        }
-
-        if (screenControl) {
-            mouseX = Input.GetAxis("Mouse X");
-            mouseY = Input.GetAxis("Mouse Y");
-
-            aimPitch += mouseSensitivity * mouseY * Time.deltaTime;
-            if (aimPitch > 80f) {
-                aimPitch = 80f;
-            }
-            else if (aimPitch < -80f) {
-                aimPitch = -80f;
-            }
         }
 
         // Temporary until I get the targetting code correct
@@ -168,76 +181,106 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     }
 
     private void FixedUpdate() {
-        MovementChange moveChange = currentMoveState.CalculateAcceleration(input, localVelocity);
+        if (screenControl) {
+            mouseX = Input.GetAxis("Mouse X");
+            mouseY = Input.GetAxis("Mouse Y");
 
-        if (localVelocity.Equals(moveChange.localVelocityOverride)) {
-            localVelocity += moveChange.localAcceleration * Time.fixedDeltaTime;
+            aimPitch += mouseSensitivity * mouseY * Time.deltaTime;
+            if (aimPitch > 80f) {
+                aimPitch = 80f;
+            }
+            else if (aimPitch < -80f) {
+                aimPitch = -80f;
+            }
+        }
+
+        Vector3 localRigidbodyVelocity = Quaternion.Inverse(rigidbody.rotation) * Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up);
+        Debug.DrawRay(rigidbody.position + 0.5f * Vector3.up, Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity, Color.green);
+
+        CheckGrounded();
+
+            // this is wrong.
+        //input = Vector3.ProjectOnPlane(input, groundNormal);
+        //Vector3 desiredMove = Vector3.ProjectOnPlane(input, groundNormal).normalized;
+
+        //if ((Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity).sqrMagnitude > 1f) {
+        //    rigidbody.AddForce(desiredMove, ForceMode.Acceleration);
+        //}
+
+        float rotationAmount = Mathf.Atan2(input.x, input.y);
+        float forwardAmount = input.y;
+
+        //float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
+        float extraRotation = 0.0f;
+
+        //Debug.Log(Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity == transform.InverseTransformDirection(rigidbody.velocity));
+        Debug.Log(localRigidbodyVelocity);
+
+        MovementChange moveChange;
+        if (grounded) {
+            moveChange = currentMoveState.CalculateAcceleration(input, localRigidbodyVelocity);
+
+            if (jump) {
+                moveChange.localVelocityOverride.y = 4.0f;
+                grounded = false;
+                jump = false;
+            }
         }
         else {
-            if (localVelocity.x == moveChange.localVelocityOverride.x) {
-                localVelocity.x += moveChange.localAcceleration.x * Time.fixedDeltaTime;
-            }
-            else {
-                localVelocity.x = moveChange.localVelocityOverride.x;
-            }
-            if (localVelocity.y == moveChange.localVelocityOverride.y) {
-                localVelocity.y += moveChange.localAcceleration.y * Time.fixedDeltaTime;
-            }
-            else {
-                localVelocity.y = moveChange.localVelocityOverride.y;
-            }
-            if (localVelocity.z == moveChange.localVelocityOverride.z) {
-                localVelocity.z += moveChange.localAcceleration.z * Time.fixedDeltaTime;
-            }
-            else {
-                localVelocity.z = moveChange.localVelocityOverride.z;
-            }
+            moveChange = new MovementChange(-0.7f * Vector3.up, localRigidbodyVelocity);
         }
 
-        if (jump) {
-            jump = false;
-            localVelocity.y += 4.0f;
+        if (moveChange.localVelocityOverride == localRigidbodyVelocity) {
+            rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
+                // or
+            //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
+            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX + extraRotation) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+        }
+        else {
+            Vector3 localVelocityOverride = new Vector3(localRigidbodyVelocity.x, localRigidbodyVelocity.y, localRigidbodyVelocity.z);
+
+            rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
+            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX + extraRotation) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+
+            if (moveChange.localVelocityOverride.x != localRigidbodyVelocity.x) {
+                localVelocityOverride.x = moveChange.localVelocityOverride.x;
+            }
+            if (moveChange.localVelocityOverride.y != localRigidbodyVelocity.y) {
+                localVelocityOverride.y = moveChange.localVelocityOverride.y;
+            }
+            if (moveChange.localVelocityOverride.z != localRigidbodyVelocity.z) {
+                localVelocityOverride.z = moveChange.localVelocityOverride.z;
+            }
+
+            rigidbody.velocity = rigidbody.rotation * localVelocityOverride;
         }
 
-        rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-        rigidbody.MovePosition(rigidbody.position + (rigidbody.rotation * localVelocity) * Time.fixedDeltaTime);
-
-        localVelocity.y -= 9.81f * Time.fixedDeltaTime;
-
-        localVelocity -= Vector3.Project(localVelocity, Quaternion.Inverse(rigidbody.rotation) * rbCollisionContact);
-        //localVelocity -= Quaternion.Inverse(rigidbody.rotation) * rbCollisionContact.normalized * localVelocity.magnitude; // - Vector3.Project(rbCollisionContact, Vector3.up);
-
-        Debug.DrawRay(rigidbody.position + 0.1f * Vector3.up, rigidbody.rotation * localVelocity, Color.green);
-        Debug.DrawRay(rigidbody.position, rbCollisionContact.normalized * localVelocity.magnitude, Color.blue);
-        rbCollisionContact = Vector3.zero;
+        velBuffer.AddVelocity(rigidbody.velocity);
     }
 
-    private Vector3 rbCollisionContact = Vector3.zero;
-    private List<Collider> contactColliders = new List<Collider>(64);
+    private void CheckGrounded() {
+        RaycastHit hitInfo;
 
-    private void OnCollisionStay(Collision collision) {
-        ContactPoint[] contacts = new ContactPoint[32];
-        collision.GetContacts(contacts);
+        Debug.DrawLine(transform.position + (Vector3.up * 0.1f), transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
 
-        int n = 0;
-        for (n = 0; n < contacts.Length && contacts[n].otherCollider != null; ++n) {
-            ContactPoint contact = contacts[n];
-            Debug.DrawRay(contact.point, -10f * contact.separation * contact.normal, Color.red);
-            rbCollisionContact += contact.separation * contact.normal;
+        if (Physics.Raycast(transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, mask)) {
+            groundNormal = hitInfo.normal;
+            groundPoint = hitInfo.point;
+            grounded = true;
+            //animator.applyRootMotion = true;
         }
-        Debug.Log(n + " contacts");
-
-        //if (n > 1) Debug.Break();
+        else {
+            groundNormal = Vector3.zero;
+            grounded = false;
+            //animator.applyRootMotion = false;
+        }
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        contactColliders.Add(collision.collider);
-        //foreach (ContactPoint contact in collision.contacts) {
-            
-        //}
-    }
-
-    private void OnCollisionExit(Collision collision) {
-        contactColliders.Remove(collision.collider);
-    }
+    //private void OnAnimatorMove() {
+    //    if (grounded) {
+    //        Vector3 newVelocity = animator.deltaPosition / Time.deltaTime;
+    //        newVelocity.y = rigidbody.velocity.y;
+    //        //rigidbody.velocity = newVelocity;
+    //    }
+    //}
 }

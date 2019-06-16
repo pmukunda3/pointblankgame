@@ -26,7 +26,8 @@ public class WeaponController : MonoBehaviour {
     }
 
     void Update() {
-        Vector3 pitchAdjustedOffset = new Vector3(offset.x, offsetFuncY.Evaluate(playerController.AimPitch() / 90.0f) * offset.y, offsetFuncZ.Evaluate(playerController.AimPitch() / 90.0f) * offset.z);
+        Vector3 pitchAdjustedOffset = Vector3.Scale(offset,
+            new Vector3(1f, offsetFuncY.Evaluate(playerController.AimPitch() / 90.0f), offsetFuncZ.Evaluate(playerController.AimPitch() / 90.0f)));
         Vector3 desiredLocation = weaponPivot.transform.position + playerController.AimDirection() * pitchAdjustedOffset;
 
         previousPosition = transform.position;
