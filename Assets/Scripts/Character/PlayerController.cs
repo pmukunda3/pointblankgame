@@ -211,7 +211,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             screenControl = true;
         }
 
-        transform.Rotate(Vector3.up, screenMouseRatio * mouseSensitivity * mouseX * Time.deltaTime);
         float extraRotation = Mathf.Clamp(mouseX, -maxTurnSpeed, maxTurnSpeed);
 
         rigidbody.velocity = Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
@@ -263,7 +262,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             if (Input.GetKey(KeyCode.Alpha7)) Debug.Break();
             //rigidbody.velocity = Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * extraRotation, Vector3.up) * rigidbody.velocity;
 
-            //rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+            rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         }
         else {
             Vector3 localVelocityOverride = new Vector3(localRigidbodyVelocity.x, localRigidbodyVelocity.y, localRigidbodyVelocity.z);

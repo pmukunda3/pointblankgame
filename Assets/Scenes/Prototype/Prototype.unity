@@ -36095,7 +36095,7 @@ MonoBehaviour:
   deadzone: {x: 0.01, y: 0.01}
   weaponController: {fileID: 760658158}
   groundCheckDistance: 0.18
-  maxTurnSpeed: 1
+  maxTurnSpeed: 0.4
 --- !u!1001 &1748565403
 PrefabInstance:
   m_ObjectHideFlags: 0
