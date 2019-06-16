@@ -2,6 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct MovementCharacteristics {
+    public AnimationCurve accelerationCurve;
+    public AnimationCurve passiveDecelerationCurve;
+    public AnimationCurve activeDecelerationCurve;
+    public float maxSpeed;
+    public float accelerationScalar;
+
+    public float Acceleration(float velocity) {
+        return accelerationScalar * accelerationCurve.Evaluate(velocity / maxSpeed);
+    }
+
+    public float Deceleration(float velocity, bool active = false) {
+        if (active) return accelerationScalar * activeDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+        else return accelerationScalar * passiveDecelerationCurve.Evaluate(1.0f - velocity / maxSpeed);
+    }
+}
+
 public class PlayerController : MonoBehaviour, IPlayerAim {
 
     [System.Serializable]
