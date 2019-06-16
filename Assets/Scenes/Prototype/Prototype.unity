@@ -36094,7 +36094,7 @@ MonoBehaviour:
   screenMouseRatio: 1.777
   deadzone: {x: 0.01, y: 0.01}
   weaponController: {fileID: 760658158}
-  groundCheckDistance: 0.18
+  groundCheckDistance: 0.12
   maxTurnSpeed: 0.4
 --- !u!1001 &1748565403
 PrefabInstance:

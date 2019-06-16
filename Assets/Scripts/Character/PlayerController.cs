@@ -46,8 +46,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private Rigidbody rigidbody;
     private Animator animator;
 
-    private IMovementState currentMoveState;
     private bool jump = false;
+    private bool jumpAllowed = true;
     private bool climbing = false;
     private bool climbingLowerTrigger = false;
 
@@ -122,8 +122,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         runningState = gameObject.GetComponent<Running>() as IMovementState;
 
-        currentMoveState = runningState;
-
         EventManager.StartListening<WeaponFirePrimary>(
             new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
         EventManager.StartListening<WeaponFireSecondary, float>(
@@ -145,10 +143,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (!jump) {
-                jump = true;
-            }
+        if (Input.GetKeyDown(KeyCode.Space) && jumpAllowed) {
+            jump = true;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
@@ -241,11 +237,11 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         MovementChange moveChange;
         if (grounded) {
-            moveChange = currentMoveState.CalculateAcceleration(input, localRigidbodyVelocity);
+            moveChange = runningState.CalculateAcceleration(input, localRigidbodyVelocity);
 
             if (jump) {
                 moveChange.localVelocityOverride.y = 4.0f;
-                grounded = false;
+                jumpAllowed = false;
                 jump = false;
             }
         }
@@ -259,16 +255,12 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
                 // or
             //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
 
-            if (Input.GetKey(KeyCode.Alpha7)) Debug.Break();
-            //rigidbody.velocity = Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * extraRotation, Vector3.up) * rigidbody.velocity;
-
             rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         }
         else {
             Vector3 localVelocityOverride = new Vector3(localRigidbodyVelocity.x, localRigidbodyVelocity.y, localRigidbodyVelocity.z);
 
-            rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
-            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+            localVelocityOverride += moveChange.localAcceleration * Time.fixedDeltaTime;
 
             if (moveChange.localVelocityOverride.x != localRigidbodyVelocity.x) {
                 localVelocityOverride.x = moveChange.localVelocityOverride.x;
@@ -281,6 +273,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             }
 
             rigidbody.velocity = rigidbody.rotation * localVelocityOverride;
+            rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         }
 
         velBuffer.AddVelocity(rigidbody.velocity);
@@ -295,11 +288,13 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             groundNormal = hitInfo.normal;
             groundPoint = hitInfo.point;
             grounded = true;
+            jumpAllowed = true;
             //animator.applyRootMotion = true;
         }
         else {
             groundNormal = Vector3.zero;
             grounded = false;
+            jumpAllowed = false;
             //animator.applyRootMotion = false;
         }
     }
