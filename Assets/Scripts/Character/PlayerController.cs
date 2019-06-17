@@ -233,7 +233,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         //float turnSpeed = Mathf.Lerp(m_StationaryTurnSpeed, m_MovingTurnSpeed, m_ForwardAmount);
 
         //Debug.Log(Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity == transform.InverseTransformDirection(rigidbody.velocity));
-        Debug.Log(localRigidbodyVelocity);
 
         MovementChange moveChange;
         if (grounded) {
@@ -250,7 +249,6 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
 
         if (moveChange.localVelocityOverride == localRigidbodyVelocity) {
-            Debug.Log(rigidbody.velocity.x + ", " + rigidbody.velocity.y + ", " + rigidbody.velocity.z);
             rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
                 // or
             //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
