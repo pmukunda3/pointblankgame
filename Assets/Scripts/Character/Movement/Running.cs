@@ -174,4 +174,15 @@ public class Running : MonoBehaviour, IMovementState {
     private float InputToTargetSpeedX(float x) {
         return x * runningCharacteristics.lateral.maxSpeed;
     }
+
+    public float MaxSpeed(int direction = 1) {
+        switch (direction) {
+            case 0:
+                return runningCharacteristics.lateral.maxSpeed;
+            case 1:
+                return runningCharacteristics.forward.maxSpeed;
+            default:
+                return runningCharacteristics.forward.maxSpeed;
+        }
+    }
 }

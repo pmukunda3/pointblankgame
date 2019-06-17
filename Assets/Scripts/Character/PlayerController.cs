@@ -276,6 +276,9 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             rigidbody.MoveRotation(Quaternion.AngleAxis((screenMouseRatio * mouseSensitivity * mouseX) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         }
 
+        localRigidbodyVelocity = Quaternion.Inverse(rigidbody.rotation) * Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up);
+        UpdateAnimator(localRigidbodyVelocity);
+
         velBuffer.AddVelocity(rigidbody.velocity);
     }
 
@@ -306,4 +309,11 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     //        //rigidbody.velocity = newVelocity;
     //    }
     //}
+
+    private void UpdateAnimator(Vector3 localVelocity) {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded")) {
+            animator.SetFloat("velLocalX", localVelocity.x / runningState.MaxSpeed(0));
+            animator.SetFloat("velLocalY", localVelocity.z / runningState.MaxSpeed(1));
+        }
+    }
 }

@@ -13,4 +13,5 @@ public struct MovementChange {
 
 public interface IMovementState {
     MovementChange CalculateAcceleration(Vector3 input, Vector3 localVelocity);
+    float MaxSpeed(int direction);
 }
