@@ -22,6 +22,12 @@ public struct MovementCharacteristics {
 
 public class PlayerController : MonoBehaviour, IPlayerAim {
 
+    public enum MoveMode : int {
+        Grounded,
+        Airborne,
+        WallClimbing
+    }
+
     [System.Serializable]
     public struct CharacterMovementCharacteristics {
         public MovementCharacteristics forward;
@@ -37,6 +43,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     public Vector2 deadzone = new Vector2(0.01f, 0.01f);
 
     public IMovementState runningState;
+    public IMovementState airControlFromJump;
 
     public WeaponController weaponController;
 
@@ -67,6 +74,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private Vector2 input = Vector2.zero;
 
     private LayerMask mask;
+
+    private MoveMode moveMode;
 
     private class VelocityBuffer {
         private Vector3[] buffer;
@@ -121,6 +130,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         animator = gameObject.GetComponent<Animator>();
 
         runningState = gameObject.GetComponent<Running>() as IMovementState;
+        airControlFromJump = gameObject.GetComponent<AirControlFromJump>() as IMovementState;
 
         EventManager.StartListening<WeaponFirePrimary>(
             new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
@@ -132,6 +142,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         mask = LayerMask.GetMask("Static Level Geometry", "Moving Level Geometry");
         velBuffer = new VelocityBuffer(16);
+
+        moveMode = MoveMode.Grounded;
     }
 
     private void WeaponFirePrimaryCallbackTest() {
@@ -236,16 +248,15 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         MovementChange moveChange;
         if (grounded) {
-            moveChange = runningState.CalculateAcceleration(input, localRigidbodyVelocity);
+            moveChange = runningState.CalculateAcceleration(input, localRigidbodyVelocity, Time.fixedDeltaTime);
 
             if (jump) {
                 moveChange.localVelocityOverride.y = 4.0f;
                 jumpAllowed = false;
-                jump = false;
             }
         }
         else {
-            moveChange = new MovementChange(-0.7f * Vector3.up, localRigidbodyVelocity);
+            moveChange = airControlFromJump.CalculateAcceleration(input, localRigidbodyVelocity, Time.fixedDeltaTime);
         }
 
         if (moveChange.localVelocityOverride == localRigidbodyVelocity) {
@@ -291,12 +302,14 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             grounded = true;
             jumpAllowed = true;
             //animator.applyRootMotion = true;
+            moveMode = MoveMode.Grounded;
         }
         else {
             groundNormal = Vector3.zero;
             grounded = false;
             jumpAllowed = false;
             //animator.applyRootMotion = false;
+            moveMode = MoveMode.Airborne;
         }
     }
 
@@ -309,9 +322,19 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     //}
 
     private void UpdateAnimator(Vector3 localVelocity) {
+        animator.SetInteger("moveMode", (int) moveMode);
+
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded")) {
             animator.SetFloat("velLocalX", localVelocity.x / runningState.MaxSpeed(0));
             animator.SetFloat("velLocalY", localVelocity.z / runningState.MaxSpeed(1));
+            
+            if (jump) {
+                animator.SetBool("jump", true);
+                jump = false;
+            }
+        }
+        else {
+            animator.SetBool("jump", false);
         }
     }
 }

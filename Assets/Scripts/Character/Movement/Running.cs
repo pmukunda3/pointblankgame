@@ -6,12 +6,7 @@ public class Running : MonoBehaviour, IMovementState {
 
     public PlayerController.CharacterMovementCharacteristics runningCharacteristics;
 
-    void FixedUpdate() {
-        // TODO: in here, perform checks for collisions or...
-        //   maybe don't do it in fixed update...
-    }
-
-    public MovementChange CalculateAcceleration(Vector3 input, Vector3 localVelocity) {
+    public MovementChange CalculateAcceleration(Vector2 input, Vector3 localVelocity, float timeStep) {
 
         float forwardAcceleration = 0f;
         float lateralAcceleration = 0f;
@@ -20,8 +15,8 @@ public class Running : MonoBehaviour, IMovementState {
             if (localVelocity.x > PlayerController.EPSILON) {
                 if (InputToTargetSpeedX(input.x) >= localVelocity.x) {
                     lateralAcceleration = runningCharacteristics.lateral.Acceleration(localVelocity.x);
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) + PlayerController.EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    if (localVelocity.x + lateralAcceleration * timeStep > InputToTargetSpeedX(input.x) + PlayerController.EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / timeStep;
                     }
                 }
                 else if (InputToTargetSpeedX(input.x) < localVelocity.x) {
@@ -31,16 +26,16 @@ public class Running : MonoBehaviour, IMovementState {
                     else {
                         lateralAcceleration = -runningCharacteristics.lateral.Deceleration(localVelocity.x, false);
                     }
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) + PlayerController.EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    if (localVelocity.x + lateralAcceleration * timeStep < InputToTargetSpeedX(input.x) + PlayerController.EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / timeStep;
                     }
                 }
             }
             else if (localVelocity.x < -PlayerController.EPSILON) {
                 if (InputToTargetSpeedX(input.x) <= localVelocity.x) {
                     lateralAcceleration = -runningCharacteristics.lateral.Acceleration(-localVelocity.x);
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime < InputToTargetSpeedX(input.x) - PlayerController.EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    if (localVelocity.x + lateralAcceleration * timeStep < InputToTargetSpeedX(input.x) - PlayerController.EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / timeStep;
                     }
                 }
                 else if (InputToTargetSpeedX(input.x) > localVelocity.x) {
@@ -50,8 +45,8 @@ public class Running : MonoBehaviour, IMovementState {
                     else {
                         lateralAcceleration = runningCharacteristics.lateral.Deceleration(-localVelocity.x, false);
                     }
-                    if (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime > InputToTargetSpeedX(input.x) - PlayerController.EPSILON) {
-                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                    if (localVelocity.x + lateralAcceleration * timeStep > InputToTargetSpeedX(input.x) - PlayerController.EPSILON) {
+                        lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / timeStep;
                     }
                 }
             }
@@ -78,8 +73,8 @@ public class Running : MonoBehaviour, IMovementState {
             }
             else {
                 lateralAcceleration = Mathf.Sign(-localVelocity.x) * runningCharacteristics.lateral.Deceleration(Mathf.Abs(localVelocity.x), false);
-                if (Mathf.Sign(localVelocity.x) * (localVelocity.x + lateralAcceleration * Time.fixedDeltaTime) < InputToTargetSpeedX(input.x) + PlayerController.EPSILON) {
-                    lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / Time.fixedDeltaTime;
+                if (Mathf.Sign(localVelocity.x) * (localVelocity.x + lateralAcceleration * timeStep) < InputToTargetSpeedX(input.x) + PlayerController.EPSILON) {
+                    lateralAcceleration = (InputToTargetSpeedX(input.x) - localVelocity.x) / timeStep;
                 }
             }
         }
@@ -88,8 +83,8 @@ public class Running : MonoBehaviour, IMovementState {
             if (localVelocity.z > PlayerController.EPSILON) {
                 if (InputToTargetSpeedY(input.y) >= localVelocity.z) {
                     forwardAcceleration = runningCharacteristics.forward.Acceleration(localVelocity.z);
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) + PlayerController.EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    if (localVelocity.z + forwardAcceleration * timeStep > InputToTargetSpeedY(input.y) + PlayerController.EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / timeStep;
                     }
                 }
                 else if (InputToTargetSpeedY(input.y) < localVelocity.z) {
@@ -99,16 +94,16 @@ public class Running : MonoBehaviour, IMovementState {
                     else {
                         forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, false);
                     }
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + PlayerController.EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    if (localVelocity.z + forwardAcceleration * timeStep < InputToTargetSpeedY(input.y) + PlayerController.EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / timeStep;
                     }
                 }
             }
             else if (localVelocity.z < -PlayerController.EPSILON) {
                 if (InputToTargetSpeedY(input.y) <= localVelocity.z) {
                     forwardAcceleration = -runningCharacteristics.reverse.Acceleration(-localVelocity.z);
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) - PlayerController.EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    if (localVelocity.z + forwardAcceleration * timeStep < InputToTargetSpeedY(input.y) - PlayerController.EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / timeStep;
                     }
                 }
                 else if (InputToTargetSpeedY(input.y) > localVelocity.z) {
@@ -119,8 +114,8 @@ public class Running : MonoBehaviour, IMovementState {
                     else {
                         forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
                     }
-                    if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - PlayerController.EPSILON) {
-                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                    if (localVelocity.z + forwardAcceleration * timeStep > InputToTargetSpeedY(input.y) - PlayerController.EPSILON) {
+                        forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / timeStep;
                     }
                 }
             }
@@ -141,14 +136,14 @@ public class Running : MonoBehaviour, IMovementState {
         else {
             if (localVelocity.z < -PlayerController.EPSILON) {
                 forwardAcceleration = runningCharacteristics.reverse.Deceleration(-localVelocity.z, false);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime > InputToTargetSpeedY(input.y) - PlayerController.EPSILON) {
-                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                if (localVelocity.z + forwardAcceleration * timeStep > InputToTargetSpeedY(input.y) - PlayerController.EPSILON) {
+                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / timeStep;
                 }
             }
             else if (localVelocity.z > PlayerController.EPSILON) {
                 forwardAcceleration = -runningCharacteristics.forward.Deceleration(localVelocity.z, false);
-                if (localVelocity.z + forwardAcceleration * Time.fixedDeltaTime < InputToTargetSpeedY(input.y) + PlayerController.EPSILON) {
-                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / Time.fixedDeltaTime;
+                if (localVelocity.z + forwardAcceleration * timeStep < InputToTargetSpeedY(input.y) + PlayerController.EPSILON) {
+                    forwardAcceleration = (InputToTargetSpeedY(input.y) - localVelocity.z) / timeStep;
                 }
             }
             else {
