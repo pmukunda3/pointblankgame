@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     public float groundCheckDistance = 0.1f;
     public float maxTurnSpeed = 1.0f;
 
+    public float moveSpeedMultiplier = 1.0f;
+
     private Rigidbody rigidbody;
     private Animator animator;
 
@@ -131,6 +133,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private void Start() {
         rigidbody = gameObject.GetComponent<Rigidbody>();
         animator = gameObject.GetComponent<Animator>();
+
+        StateMachineBehaviour[] stateMachineBehaviours = animator.GetBehaviours<MecanimStateBehaviourEvents>();
 
         runningState = gameObject.GetComponent<Running>() as IMovementState;
         airControlFromJump = gameObject.GetComponent<AirControlFromJump>() as IMovementState;
@@ -325,11 +329,11 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         }
     }
 
-    //private void OnAnimatorMove() {
+    //public void OnAnimatorMove() {
     //    if (grounded) {
-    //        Vector3 newVelocity = animator.deltaPosition / Time.deltaTime;
-    //        newVelocity.y = rigidbody.velocity.y;
-    //        //rigidbody.velocity = newVelocity;
+    //        Vector3 newVelocity = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
+    //        //newVelocity.y = rigidbody.velocity.y;
+    //        rigidbody.velocity = newVelocity;
     //    }
     //}
 
