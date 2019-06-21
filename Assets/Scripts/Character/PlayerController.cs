@@ -58,6 +58,9 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     private bool climbing = false;
     private bool climbingLowerTrigger = false;
 
+    private bool sprint = false;
+    private bool aimMode = false;
+
     private bool grounded = true;
     private Vector3 groundNormal;
     private Vector3 groundPoint;
@@ -163,31 +166,40 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             transform.position = transform.position + new Vector3(0f, 20f, 0f);
         }
 
-        // Temporary until I get the targetting code correct
-        //speedTargetX = Input.GetAxis("Horizontal");
-        //speedTargetY = Input.GetAxis("Vertical");
+        speedTargetX = Input.GetAxis("Horizontal");
+        speedTargetY = Input.GetAxis("Vertical");
 
-        speedTargetX = speedTargetY = 0f;
-        if (Input.GetKey(KeyCode.W)) speedTargetY += 1.0f;
-        if (Input.GetKey(KeyCode.A)) speedTargetX -= 1.0f;
-        if (Input.GetKey(KeyCode.S)) speedTargetY -= 1.0f;
-        if (Input.GetKey(KeyCode.D)) speedTargetX += 1.0f;
+        //speedTargetX = speedTargetY = 0f;
+        //if (Input.GetKey(KeyCode.W)) speedTargetY += 1.0f;
+        //if (Input.GetKey(KeyCode.A)) speedTargetX -= 1.0f;
+        //if (Input.GetKey(KeyCode.S)) speedTargetY -= 1.0f;
+        //if (Input.GetKey(KeyCode.D)) speedTargetX += 1.0f;
 
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            if (speedTargetX > 0.5f) {
-                speedTargetX = 0.5f;
+        if (Input.GetKey(KeyCode.X)) {
+            if (speedTargetX > 0.3f) {
+                speedTargetX = 0.3f;
             }
-            else if (speedTargetX < -0.5f) {
-                speedTargetX = -0.5f;
+            else if (speedTargetX < -0.3f) {
+                speedTargetX = -0.3f;
             }
 
-            if (speedTargetY > 0.5f) {
-                speedTargetY = 0.5f;
+            if (speedTargetY > 0.3f) {
+                speedTargetY = 0.3f;
             }
-            else if (speedTargetY < -0.5f) {
-                speedTargetY = -0.5f;
+            else if (speedTargetY < -0.3f) {
+                speedTargetY = -0.3f;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1)) {
+            aimMode = !aimMode;
+        }
+
+        sprint = false;
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            sprint = true;
+        }
+        weaponController.aimingWeapon = aimMode;
 
         input = new Vector2(speedTargetX, speedTargetY);
         if (input.sqrMagnitude > 1.0f) {
@@ -231,7 +243,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         CheckGrounded();
 
-            // this is wrong.
+        // this is wrong.
         //input = Vector3.ProjectOnPlane(input, groundNormal);
         //Vector3 desiredMove = Vector3.ProjectOnPlane(input, groundNormal).normalized;
 
@@ -261,8 +273,8 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
         if (moveChange.localVelocityOverride == localRigidbodyVelocity) {
             rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
-                // or
-            //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
+            // or
+            rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
 
             rigidbody.MoveRotation(Quaternion.AngleAxis(screenMouseRatio * mouseSensitivity * mouseX * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
         }
@@ -323,18 +335,12 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
     private void UpdateAnimator(Vector3 localVelocity) {
         animator.SetInteger("moveMode", (int) moveMode);
+        animator.SetBool("sprint", sprint);
+        animator.SetBool("aimMode", aimMode);
 
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Grounded")) {
-            animator.SetFloat("velLocalX", localVelocity.x / runningState.MaxSpeed(0));
-            animator.SetFloat("velLocalY", localVelocity.z / runningState.MaxSpeed(1));
-            
-            if (jump) {
-                animator.SetBool("jump", true);
-                jump = false;
-            }
-        }
-        else {
-            animator.SetBool("jump", false);
-        }
+        //animator.SetFloat("velLocalX", localVelocity.x / runningState.MaxSpeed(0));
+        //animator.SetFloat("velLocalZ", localVelocity.z / runningState.MaxSpeed(1));
+        animator.SetFloat("velLocalX", input.x);
+        animator.SetFloat("velLocalZ", input.y);
     }
 }
