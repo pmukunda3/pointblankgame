@@ -22,12 +22,6 @@ public struct MovementCharacteristics {
 
 public class PlayerController : MonoBehaviour, IPlayerAim {
 
-    public enum MoveMode : int {
-        Grounded,
-        Airborne,
-        WallClimbing
-    }
-
     [System.Serializable]
     public struct CharacterMovementCharacteristics {
         public MovementCharacteristics forward;
@@ -80,7 +74,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
 
     private LayerMask mask;
 
-    private MoveMode moveMode;
+    //private MoveMode moveMode;
 
     private class VelocityBuffer {
         private Vector3[] buffer;
@@ -150,7 +144,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         mask = LayerMask.GetMask("Static Level Geometry", "Moving Level Geometry");
         velBuffer = new VelocityBuffer(16);
 
-        moveMode = MoveMode.Grounded;
+        //moveMode = MoveMode.Grounded;
     }
 
     private void WeaponFirePrimaryCallbackTest() {
@@ -318,14 +312,14 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
             grounded = true;
             jumpAllowed = true;
             //animator.applyRootMotion = true;
-            moveMode = MoveMode.Grounded;
+            //moveMode = MoveMode.Grounded;
         }
         else {
             groundNormal = Vector3.zero;
             grounded = false;
             jumpAllowed = false;
             //animator.applyRootMotion = false;
-            moveMode = MoveMode.Airborne;
+            //moveMode = MoveMode.Airborne;
         }
     }
 
@@ -338,7 +332,7 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
     //}
 
     private void UpdateAnimator(Vector3 localVelocity) {
-        animator.SetInteger("moveMode", (int) moveMode);
+        //animator.SetInteger("moveMode", (int) moveMode);
         animator.SetBool("sprint", sprint);
         animator.SetBool("aimMode", aimMode);
 
@@ -346,5 +340,9 @@ public class PlayerController : MonoBehaviour, IPlayerAim {
         //animator.SetFloat("velLocalZ", localVelocity.z / runningState.MaxSpeed(1));
         animator.SetFloat("velLocalX", input.x);
         animator.SetFloat("velLocalZ", input.y);
+    }
+
+    public void SetMovement(Id stateId) {
+
     }
 }

@@ -1,0 +1,72 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public struct Id {
+    public static Id none;
+
+    private readonly uint mId;
+
+    public Id this[int childId] {
+        get { return new Id((mId << 8) | (uint)childId); }
+    }
+
+    public Id super {
+        get { return new Id(mId >> 8); }
+    }
+
+    public bool isa(Id super) {
+        return (this != none) && ((this.super == super) || this.super.isa(super));
+    }
+
+    public static implicit operator Id(int id) {
+        if (id == 0) {
+            throw new System.InvalidCastException("Top level Id cannot be 0");
+        }
+        return new Id((uint)id);
+    }
+
+    public static bool operator ==(Id a, Id b) {
+        return a.mId == b.mId;
+    }
+
+    public static bool operator !=(Id a, Id b) {
+        return a.mId != b.mId;
+    }
+
+    public override bool Equals(object obj) {
+        if (obj is Id) {
+            return ((Id)obj).mId == mId;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public override int GetHashCode() {
+        return (int)mId;
+    }
+
+    private Id(uint id) {
+        mId = id;
+    }
+}
+
+//public enum MoveMode : int {
+//    Grounded,
+//    Airborne,
+//    WallClimbing
+//}
+
+public static class PlayerStateId {
+    public static readonly Id moveMode = 1;
+    public static class MoveModes {
+        public static readonly Id grounded = moveMode[0];
+        public static class Grounded {
+            public static readonly Id sprint = grounded[0];
+            public static readonly Id aiming = grounded[1];
+            public static readonly Id freeRoam = grounded[2];
+        }
+    }
+}
+
