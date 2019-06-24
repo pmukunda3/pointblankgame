@@ -7,7 +7,12 @@ namespace PlayerControl {
         public class Sprint : PlayerControlState {
 
             public float groundCheckDistance = 0.18f;
-            public float maxTurnSpeed = 0.2f;
+            public float maxTurnSpeed = 30.0f;
+            public float maxMouseInput = 4.0f;
+            public float mouseTurnScalar = 0.25f;
+            public float moveTurnScalar = 100.0f;
+
+            public float moveSpeedMultiplier = 1.1f;
 
             private Vector2 mouseInput;
             private Vector2 moveInput;
@@ -15,6 +20,9 @@ namespace PlayerControl {
             private Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
+
+            private float playerRotation = 0.0f;
+            private float mouseRotation = 0.0f;
 
             public new void Start() {
                 base.Start();
@@ -24,14 +32,9 @@ namespace PlayerControl {
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
-                //MovementChange moveChange = freeRoamMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
-
-                //Vector3 newVelocity = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
-                //newVelocity += Vector3.Scale(moveChange.localAcceleration, new Vector3(1f, 0f, 0f)) * Time.deltaTime;
-                //newVelocity.y = rigidbody.velocity.y;
-                //rigidbody.velocity = newVelocity;
-
-                rigidbody.velocity = animator.velocity;
+                Vector3 playerVelocity = moveSpeedMultiplier * animator.velocity;
+                playerVelocity.y = rigidbody.velocity.y;
+                rigidbody.velocity = playerVelocity;
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
@@ -40,13 +43,12 @@ namespace PlayerControl {
                     Debug.Log("SetBool('grounded', false);");
                 }
 
-                //MovementChange moveChange = runningState.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
+                float extraRotation = mouseRotation;
+                if (Mathf.Abs(moveInput.x) > player.deadzone.x) {
+                    extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxTurnSpeed, maxTurnSpeed);
+                }
 
-                //if (jump) {
-                //    moveChange.localVelocityOverride.y = 4.0f;
-                //    jumpAllowed = false;
-                //}
-
+                rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -60,8 +62,7 @@ namespace PlayerControl {
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
 
-                float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(0.25f * player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+                mouseRotation = mouseTurnScalar * player.screenMouseRatio * player.mouseSensitivity * Mathf.Clamp(mouseInput.x, -maxMouseInput, maxMouseInput);
 
                 if (!sprint) animator.SetBool("sprint", false);
                 if (secondaryFire) animator.SetBool("aimMode", true);

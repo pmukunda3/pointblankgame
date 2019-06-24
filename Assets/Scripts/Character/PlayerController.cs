@@ -234,8 +234,9 @@ namespace PlayerControl {
         }
 
         public void OnAnimatorMove() {
-            Vector3 localAnimatorVelocity = Quaternion.Inverse(animator.rootRotation) * Vector3.ProjectOnPlane(animator.velocity, Vector3.up);
+            //Vector3 localAnimatorVelocity = Quaternion.Inverse(animator.rootRotation) * Vector3.ProjectOnPlane(animator.velocity, Vector3.up);
             //Vector3 localRigidbodyVelocity = Quaternion.Inverse(rigidbody.rotation) * Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up);
+            Vector3 localAnimatorVelocity = Quaternion.Inverse(animator.rootRotation) * animator.velocity;
             Vector3 localRigidbodyVelocity = Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity;
             currPlayerState.AnimatorMove(localAnimatorVelocity, localRigidbodyVelocity);
 

@@ -23191,8 +23191,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03e5fa33d7388342b7d39cf99371f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckDistance: 0.18
-  maxTurnSpeed: 0.2
+  groundCheckDistance: 0.36
+  maxTurnSpeed: 22
+  maxMouseInput: 4
+  mouseTurnScalar: 0.5
+  moveTurnScalar: 100
+  moveSpeedMultiplier: 1.1
 --- !u!114 &1159379140
 MonoBehaviour:
   m_ObjectHideFlags: 0

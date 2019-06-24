@@ -53,8 +53,8 @@ namespace PlayerControl {
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
                 MovementChange moveChange = freeRoamMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.deltaTime);
 
-                Vector3 newVelocity = animator.velocity * moveSpeedMultiplier;
-                newVelocity.y = rigidbody.velocity.y;
+                //Vector3 newVelocity = animator.velocity * moveSpeedMultiplier;
+                //newVelocity.y = rigidbody.velocity.y;
 
                 //lateralSpeed += moveChange.localAcceleration.x * Time.deltaTime;
 
@@ -69,7 +69,7 @@ namespace PlayerControl {
                 //forwardVector = Vector3.Project(localAnimatorVelocity, Vector3.forward);
                 //Vector3 lateralVector = localRigidbodyVelocity - forwardVector;
 
-                newVelocity = forwardVector;
+                Vector3 newVelocity = forwardVector;
                 newVelocity.y = localRigidbodyVelocity.y;
                 newVelocity.x = localRigidbodyVelocity.x + moveChange.localAcceleration.x * Time.deltaTime;
 

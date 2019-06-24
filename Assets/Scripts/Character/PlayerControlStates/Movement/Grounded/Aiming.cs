@@ -36,7 +36,7 @@ namespace PlayerControl {
                     }
                 }
 
-                Debug.Log(moveInput.ToString("F3"));
+                //Debug.Log(moveInput.ToString("F3"));
 
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
