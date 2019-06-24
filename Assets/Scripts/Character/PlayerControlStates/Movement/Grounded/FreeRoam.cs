@@ -43,8 +43,8 @@ namespace PlayerControl {
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
 
-                //float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                //rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+                float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
+                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
                 if (sprint) animator.SetBool("sprint", true);
                 if (secondaryFire) animator.SetBool("aimMode", true);
@@ -56,14 +56,29 @@ namespace PlayerControl {
                 Vector3 newVelocity = animator.velocity * moveSpeedMultiplier;
                 newVelocity.y = rigidbody.velocity.y;
 
-                lateralSpeed += moveChange.localAcceleration.x * Time.deltaTime;
+                //lateralSpeed += moveChange.localAcceleration.x * Time.deltaTime;
 
-                //rigidbody.velocity = newVelocity;
+                Vector3 forwardVector;
+                if (localRigidbodyVelocity.sqrMagnitude > 1.0f && localAnimatorVelocity.sqrMagnitude > 1.0f
+                    && Vector3.Dot(localAnimatorVelocity.normalized, localRigidbodyVelocity.normalized) > 0.8f) {
+                    forwardVector = Vector3.Project(localAnimatorVelocity, localRigidbodyVelocity);
+                }
+                else {
+                    forwardVector = Vector3.Project(localAnimatorVelocity, Vector3.forward);
+                }
+                //forwardVector = Vector3.Project(localAnimatorVelocity, Vector3.forward);
+                //Vector3 lateralVector = localRigidbodyVelocity - forwardVector;
+
+                newVelocity = forwardVector;
+                newVelocity.y = localRigidbodyVelocity.y;
+                newVelocity.x = localRigidbodyVelocity.x + moveChange.localAcceleration.x * Time.deltaTime;
+
+                rigidbody.velocity = rigidbody.rotation * newVelocity;
                 //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
-                rigidbody.velocity = newVelocity + rigidbody.rotation * new Vector3(lateralSpeed, 0f, 0f);
+                //rigidbody.velocity = newVelocity + rigidbody.rotation * new Vector3(lateralSpeed, 0f, 0f);
 
-                //Debug.DrawRay(rigidbody.position + 0.7f * Vector3.up, localRigidbodyVelocity, Color.blue);
-                //Debug.DrawRay(rigidbody.position + 0.8f * Vector3.up, rigidbody.rotation * moveChange.localAcceleration, Color.cyan);
+                Debug.DrawRay(rigidbody.position + 0.7f * Vector3.up, localRigidbodyVelocity, Color.blue);
+                Debug.DrawRay(rigidbody.position + 0.8f * Vector3.up, localAnimatorVelocity, Color.cyan);
                 //Debug.DrawRay(rigidbody.position + 0.9f * Vector3.up, newVelocity, Color.magenta);
 
                 //Debug.Log("input: " + moveInput.ToString("F2") + ", local Rb Vel: " + localRigidbodyVelocity.ToString("F3") + ", local Accel: " + moveChange.localAcceleration.ToString("F3") + ", new Vel: " + newVelocity.ToString("F3"));
