@@ -75,8 +75,6 @@ namespace PlayerControl {
             get { return mask; }
         }
 
-        //private MoveMode moveMode;
-
         private class VelocityBuffer {
             private Vector3[] buffer;
             private int index = 0;

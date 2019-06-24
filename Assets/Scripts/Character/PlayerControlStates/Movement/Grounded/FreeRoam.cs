@@ -53,11 +53,6 @@ namespace PlayerControl {
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
                 MovementChange moveChange = freeRoamMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.deltaTime);
 
-                //Vector3 newVelocity = animator.velocity * moveSpeedMultiplier;
-                //newVelocity.y = rigidbody.velocity.y;
-
-                //lateralSpeed += moveChange.localAcceleration.x * Time.deltaTime;
-
                 Vector3 forwardVector;
                 if (localRigidbodyVelocity.sqrMagnitude > 1.0f && localAnimatorVelocity.sqrMagnitude > 1.0f
                     && Vector3.Dot(localAnimatorVelocity.normalized, localRigidbodyVelocity.normalized) > 0.8f) {
@@ -66,21 +61,15 @@ namespace PlayerControl {
                 else {
                     forwardVector = Vector3.Project(localAnimatorVelocity, Vector3.forward);
                 }
-                //forwardVector = Vector3.Project(localAnimatorVelocity, Vector3.forward);
-                //Vector3 lateralVector = localRigidbodyVelocity - forwardVector;
 
                 Vector3 newVelocity = forwardVector;
                 newVelocity.y = localRigidbodyVelocity.y;
                 newVelocity.x = localRigidbodyVelocity.x + moveChange.localAcceleration.x * Time.deltaTime;
 
                 rigidbody.velocity = rigidbody.rotation * newVelocity;
-                //rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
-                //rigidbody.velocity = newVelocity + rigidbody.rotation * new Vector3(lateralSpeed, 0f, 0f);
 
                 Debug.DrawRay(rigidbody.position + 0.7f * Vector3.up, localRigidbodyVelocity, Color.blue);
                 Debug.DrawRay(rigidbody.position + 0.8f * Vector3.up, localAnimatorVelocity, Color.cyan);
-                //Debug.DrawRay(rigidbody.position + 0.9f * Vector3.up, newVelocity, Color.magenta);
-
                 //Debug.Log("input: " + moveInput.ToString("F2") + ", local Rb Vel: " + localRigidbodyVelocity.ToString("F3") + ", local Accel: " + moveChange.localAcceleration.ToString("F3") + ", new Vel: " + newVelocity.ToString("F3"));
 
                 Debug.DrawRay(rigidbody.position + 0.5f * Vector3.up, rigidbody.velocity, Color.white);
