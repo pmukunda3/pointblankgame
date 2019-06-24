@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace PlayerControl {
     namespace MecanimBehaviour {
-        public class Sprint : PlayerControllerStateBehaviourBase {
+        public class Aiming : PlayerControllerStateBehaviourBase {
 
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Sprint");
-                playerController.SetState(PlayerStateId.MoveModes.Grounded.sprint);
+                Debug.Log("On State Enter: Aiming");
+                playerController.SetState(PlayerStateId.MoveModes.Grounded.aiming);
 
-                playerController.weaponController.aimingWeapon = false;
+                playerController.weaponController.aimingWeapon = true;
             }
         }
     }

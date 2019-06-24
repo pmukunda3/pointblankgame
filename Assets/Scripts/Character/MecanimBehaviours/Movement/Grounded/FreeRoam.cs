@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace PlayerControl {
     namespace MecanimBehaviour {
-        public class Sprint : PlayerControllerStateBehaviourBase {
+        public class FreeRoam : PlayerControllerStateBehaviourBase {
 
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Sprint");
-                playerController.SetState(PlayerStateId.MoveModes.Grounded.sprint);
+                Debug.Log("On State Enter: FreeRoam");
+                playerController.SetState(PlayerStateId.MoveModes.Grounded.freeRoam);
 
                 playerController.weaponController.aimingWeapon = false;
             }

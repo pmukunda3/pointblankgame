@@ -58,8 +58,10 @@ public struct Id {
 //    WallClimbing
 //}
 
+[System.Serializable]
 public static class PlayerStateId {
-    public static readonly Id moveMode = 1;
+    public static readonly Id empty = 1;
+    public static readonly Id moveMode = 2;
     public static class MoveModes {
         public static readonly Id grounded = moveMode[0];
         public static class Grounded {
