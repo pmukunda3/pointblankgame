@@ -28,10 +28,10 @@ namespace PlayerControl {
                 rigidbody = player.GetComponent<Rigidbody>();
             }
 
-            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, bool walk, bool sprint, bool crouch, bool jump, bool use, bool primaryFire, bool secondaryFire) {
+            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 //if (sprint) Debug.Log("Sprint Pressed");
 
-                if (walk) {
+                if (actions.walk.active) {
                     if (moveInput.sqrMagnitude > 0.3f * 0.3f) {
                         moveInput = moveInput.normalized * 0.3f;
                     }
@@ -45,15 +45,15 @@ namespace PlayerControl {
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
                 rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
-                if (sprint) animator.SetBool("sprint", true);
+                if (actions.sprint.active) animator.SetBool("sprint", true);
                 else animator.SetBool("sprint", false);
 
-                if (secondaryFire) {
+                if (actions.secondaryFire.down) {
                     animator.SetBool("aimMode", false);
                     Debug.Log("Secondary Fire pressed in AIMING MODE");
                 }
 
-                if (jump) jumpRb = true;
+                if (actions.jump.down) jumpRb = true;
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {

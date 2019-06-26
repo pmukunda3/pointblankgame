@@ -46,7 +46,7 @@ namespace PlayerControl {
                 animator.SetFloat("velLocalY", localRigidbodyVelocity.y);
             }
 
-            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, bool walk, bool sprint, bool crouch, bool jump, bool use, bool primaryFire, bool secondaryFire) {
+            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 //if (!sprint) Debug.Log("Sprint Released");
 
                 this.moveInput = moveInput;

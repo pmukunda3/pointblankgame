@@ -22,7 +22,7 @@ namespace PlayerControl {
         }
     }
 
-    [RequireComponent(typeof(Rigidbody), typeof(Animator))]
+    [RequireComponent(typeof(Rigidbody), typeof(Animator), typeof(UserInput))]
     public class PlayerController : MonoBehaviour, IPlayerAim {
 
         [System.Serializable]
@@ -46,19 +46,11 @@ namespace PlayerControl {
 
         private Rigidbody rigidbody;
         private Animator animator;
+        private UserInput userInput;
 
         private Dictionary<Id, PlayerControlState> playerControlStates;
         public PlayerControlState currPlayerState;
         private PlayerControlState emptyState;
-
-        private bool jump = false;
-        private bool jumpAllowed = true;
-        private bool climbing = false;
-        private bool climbingLowerTrigger = false;
-
-        private bool grounded = true;
-        private Vector3 groundNormal;
-        private Vector3 groundPoint;
 
         private bool screenControl = true;
         private float aimPitch = 0f;
@@ -130,6 +122,7 @@ namespace PlayerControl {
         private void Start() {
             rigidbody = gameObject.GetComponent<Rigidbody>();
             animator = gameObject.GetComponent<Animator>();
+            userInput = gameObject.GetComponent<UserInput>();
 
             StateMachineBehaviour[] stateMachineBehaviours = animator.GetBehaviours<MecanimStateBehaviourEvents>();
 
@@ -163,16 +156,6 @@ namespace PlayerControl {
         }
 
         private void Update() {
-            bool walk   = Input.GetKey(KeyCode.X);
-            bool sprint = Input.GetKey(KeyCode.LeftShift);
-            bool crouch = Input.GetKey(KeyCode.LeftControl);
-            bool use    = Input.GetKey(KeyCode.F);
-            bool primaryFire = Input.GetKey(KeyCode.Mouse0);
-
-                //TODO: Create a proper way to pass in input
-            bool jump = Input.GetKeyDown(KeyCode.Space);
-            bool secondaryFire = Input.GetKeyDown(KeyCode.Mouse1);
-
             speedTargetX = Input.GetAxis("Horizontal");
             speedTargetY = Input.GetAxis("Vertical");
 
@@ -216,7 +199,7 @@ namespace PlayerControl {
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
             if (Input.GetKeyDown(KeyCode.Keypad4)) rigidbody.position = new Vector3(-12, 8, 32);
 
-            currPlayerState.UseInput(moveInput, mouseInput, walk, sprint, crouch, jump, use, primaryFire, secondaryFire);
+            currPlayerState.UseInput(moveInput, mouseInput, userInput.actions);
         }
 
         private void FixedUpdate() {
@@ -276,7 +259,7 @@ namespace PlayerControl {
                 //Debug.Log("Empty State: UpdateAnimator");
             }
 
-            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, bool walk, bool sprint, bool crouch, bool jump, bool use, bool primaryFire, bool secondaryFire) {
+            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions action) {
                 //Debug.Log("Empty State: UseInput");
             }
         }

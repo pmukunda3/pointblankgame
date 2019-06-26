@@ -342,9 +342,75 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1159379137}
+  - {fileID: 725680121}
   m_Father: {fileID: 7431189260587521888}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &725680120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 725680121}
+  - component: {fileID: 725680122}
+  - component: {fileID: 725680123}
+  m_Layer: 8
+  m_Name: AirMovement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &725680121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725680120}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1652819983}
+  - {fileID: 6302120418489600761}
+  m_Father: {fileID: 444955248}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &725680122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725680120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81cb37eff4072434c88486c7b9a219b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheckDistanceMinimum: 0.11
+  landAnimationFrameTarget: 3
+  landAnimationFrameRate: 30
+  maxTurnSpeed: 0.2
+--- !u!114 &725680123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725680120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2163f8864be7d845a6ba2f6a3a28c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheckDistance: 0.18
+  maxTurnSpeed: 1
+  moveSpeedMultiplier: 1
 --- !u!1 &904833820
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +469,7 @@ GameObject:
   - component: {fileID: 1159379139}
   - component: {fileID: 1159379138}
   m_Layer: 8
-  m_Name: Movement
+  m_Name: GroundedMovement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -437,7 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e4ab1c58031434f8fd72db83591926, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckDistance: 0.18
+  groundCheckDistance: 0.22
   maxTurnSpeed: 1
   moveSpeedMultiplier: 1
 --- !u!114 &1159379139
@@ -470,9 +536,98 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f0825af1aee60c48944d429bb2980ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckDistance: 0.18
+  groundCheckDistance: 0.2
   maxTurnSpeed: 1
   moveSpeedMultiplier: 1.05
+--- !u!1 &1652819982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1652819983}
+  - component: {fileID: 1652819984}
+  m_Layer: 8
+  m_Name: AirControlFromFall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1652819983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652819982}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 725680121}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1652819984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652819982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58431d78a22747744a931843dfdaef37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  airAccel: {x: 0.4, y: 0, z: 0.4}
+--- !u!1 &3693680687040455133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6302120418489600761}
+  - component: {fileID: 5481569095535769818}
+  m_Layer: 8
+  m_Name: AirControlFromJump
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6302120418489600761
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693680687040455133}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 725680121}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5481569095535769818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693680687040455133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83971f9860920f24c859533bb833a0c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  airAccel: {x: 1.2, y: 0, z: 0.2}
+  localVelocityLimit: {x: 2.5, y: 0, z: 3.5}
 --- !u!1 &7431189259980921191
 GameObject:
   m_ObjectHideFlags: 0
@@ -749,7 +904,7 @@ GameObject:
   - component: {fileID: 7431189260587521889}
   - component: {fileID: 7431189260587521890}
   - component: {fileID: 7431189260587521902}
-  - component: {fileID: 7431189260587521903}
+  - component: {fileID: 1644425778348867457}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -825,12 +980,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b20110e1fc46e142af84a9970c61448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  mouseSensitivity: 75
   screenMouseRatio: 1.777
   deadzone: {x: 0.01, y: 0.01}
   weaponController: {fileID: 7431189261750188057}
   currPlayerState: {fileID: 0}
---- !u!114 &7431189260587521903
+  landingAnimation: 0
+--- !u!114 &1644425778348867457
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -839,11 +995,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7431189260587521892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83971f9860920f24c859533bb833a0c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 3822f27a7b6b0f24393736efe9567d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airAccel: {x: 1.2, y: 0, z: 0.2}
-  localVelocityLimit: {x: 2.5, y: 0, z: 3.5}
+  walkKey: 120
+  sprintKey: 304
+  crouchKey: 306
+  useKey: 102
+  primaryFireKey: 323
+  jumpKey: 32
+  secondaryFireKey: 324
+  reloadKey: 114
+  climbUpKey: 102
+  grabLedgeKey: 0
 --- !u!1 &7431189260629622831
 GameObject:
   m_ObjectHideFlags: 0

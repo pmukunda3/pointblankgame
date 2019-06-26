@@ -13,7 +13,7 @@ namespace PlayerControl {
             animator = gameObject.GetComponentInParent<Animator>();
         }
 
-        public abstract void UseInput(Vector2 moveInput, Vector2 mouseInput, bool walk, bool sprint, bool crouch, bool jump, bool use, bool primaryFire, bool secondaryFire);
+        public abstract void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions);
         public abstract void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity);
         public abstract void UpdateAnimator(Vector3 localRigidbodyVelocity);
         public abstract void MoveRigidbody(Vector3 localRigidbodyVelocity);

@@ -54,7 +54,7 @@ namespace PlayerControl {
                 animator.SetFloat("velLocalZ", moveInput.y);
             }
 
-            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, bool walk, bool sprint, bool crouch, bool jump, bool use, bool primaryFire, bool secondaryFire) {
+            public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 //if (!sprint) Debug.Log("Sprint Released");
 
                 this.moveInput = moveInput;
@@ -63,9 +63,9 @@ namespace PlayerControl {
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
                 rigidbody.velocity = Quaternion.AngleAxis(0.25f * player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
-                if (!sprint) animator.SetBool("sprint", false);
-                if (secondaryFire) animator.SetBool("aimMode", true);
-                else animator.SetBool("aimMode", false);
+                if (!actions.sprint.active) animator.SetBool("sprint", false);
+                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                else                            animator.SetBool("aimMode", false);
             }
 
             private bool CheckGrounded() {
