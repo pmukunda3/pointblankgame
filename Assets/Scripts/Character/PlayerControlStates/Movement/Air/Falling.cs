@@ -6,11 +6,15 @@ namespace PlayerControl {
     namespace State {
         public class Falling : PlayerControlState {
 
-            public float groundCheckDistance = 0.18f;
+            public float groundCheckDistanceMinimum = 0.11f;
+            public float landAnimationFrameTarget = 3f;
+            public float landAnimationFrameRate = 30f;
             public float maxTurnSpeed = 0.2f;
 
             private Vector2 mouseInput;
             private Vector2 moveInput;
+
+            private IMovementState airControlMovement;
 
             private Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
@@ -18,40 +22,28 @@ namespace PlayerControl {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Grounded.sprint, this);
+                player.RegisterState(PlayerStateId.MoveModes.Air.falling, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
+
+                airControlMovement = gameObject.GetComponentInChildren<AirControlFromFall>() as IMovementState;
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
-                //MovementChange moveChange = freeRoamMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
-
-                //Vector3 newVelocity = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
-                //newVelocity += Vector3.Scale(moveChange.localAcceleration, new Vector3(1f, 0f, 0f)) * Time.deltaTime;
-                //newVelocity.y = rigidbody.velocity.y;
-                //rigidbody.velocity = newVelocity;
-
-                rigidbody.velocity = animator.velocity;
+                // do nothing
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                if (!CheckGrounded()) {
-                    //animator.SetBool("grounded", false);
-                    Debug.Log("SetBool('grounded', false);");
-                }
+                MovementChange moveChange = airControlMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
+                rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
 
-                //MovementChange moveChange = runningState.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
-
-                //if (jump) {
-                //    moveChange.localVelocityOverride.y = 4.0f;
-                //    jumpAllowed = false;
-                //}
-
+                CheckLandingDistance();
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
-                animator.SetFloat("velLocalX", moveInput.x);
-                animator.SetFloat("velLocalZ", moveInput.y);
+                animator.SetFloat("velLocalX", 0f);
+                animator.SetFloat("velLocalZ", 0f);
+                animator.SetFloat("velLocalY", localRigidbodyVelocity.y);
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, bool walk, bool sprint, bool crouch, bool jump, bool use, bool primaryFire, bool secondaryFire) {
@@ -61,26 +53,23 @@ namespace PlayerControl {
                 this.mouseInput = mouseInput;
 
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(0.25f * player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
-
-                if (!sprint) animator.SetBool("sprint", false);
-                if (secondaryFire) animator.SetBool("aimMode", true);
-                else animator.SetBool("aimMode", false);
+                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
             }
 
-            private bool CheckGrounded() {
+            private void CheckLandingDistance() {
                 RaycastHit hitInfo;
 
-                Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
+                float checkDistance = Mathf.Max(landAnimationFrameTarget / landAnimationFrameRate * -rigidbody.velocity.y, groundCheckDistanceMinimum);
+                Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
 
-                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
-                    groundNormal = hitInfo.normal;
-                    groundPoint = hitInfo.point;
-                    return true;
-                }
-                else {
-                    groundNormal = Vector3.zero;
-                    return false;
+                if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                    if (rigidbody.velocity.y < -8f) {
+                        player.landingAnimation = 0;
+                    }
+                    else {
+                        player.landingAnimation = 1;
+                    }
+                    animator.SetBool("grounded", true);
                 }
             }
         }

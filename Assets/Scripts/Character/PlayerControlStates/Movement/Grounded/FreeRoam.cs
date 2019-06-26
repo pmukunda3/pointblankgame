@@ -15,6 +15,7 @@ namespace PlayerControl {
 
             private Vector2 mouseInput;
             private Vector2 moveInput;
+            private bool jumpRb = false;
 
             private Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
@@ -48,6 +49,8 @@ namespace PlayerControl {
 
                 if (sprint) animator.SetBool("sprint", true);
                 if (secondaryFire) animator.SetBool("aimMode", true);
+
+                if (jump) jumpRb = true;
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -107,10 +110,16 @@ namespace PlayerControl {
                     //    rigidbody.velocity = rigidbody.rotation * localVelocityOverride;
                     //    rigidbody.MoveRotation(Quaternion.AngleAxis((player.screenMouseRatio * player.mouseSensitivity * mouseInput.x) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     //}
+
+                    if (jumpRb) {
+                        rigidbody.velocity += new Vector3(0f, 4f, 0f);
+                        animator.SetTrigger("TRI_jump");
+                        jumpRb = false;
+                    }
                 }
                 else {
-                    //animator.SetBool("grounded", false);
-                    Debug.Log("SetBool('grounded', false);");
+                    animator.SetBool("grounded", false);
+                    animator.SetTrigger("TRI_fall");
                 }
             }
 

@@ -16,6 +16,7 @@ namespace PlayerControl {
 
             private Vector2 mouseInput;
             private Vector2 moveInput;
+            private bool jumpRb = false;
 
             private Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
@@ -38,17 +39,24 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                if (!CheckGrounded()) {
-                    //animator.SetBool("grounded", false);
-                    Debug.Log("SetBool('grounded', false);");
-                }
+                if (CheckGrounded()) {
+                    float extraRotation = mouseRotation;
+                    if (Mathf.Abs(moveInput.x) > player.deadzone.x) {
+                        extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxTurnSpeed, maxTurnSpeed);
+                    }
 
-                float extraRotation = mouseRotation;
-                if (Mathf.Abs(moveInput.x) > player.deadzone.x) {
-                    extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxTurnSpeed, maxTurnSpeed);
-                }
+                    rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
 
-                rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+                    if (jumpRb) {
+                        rigidbody.velocity += new Vector3(0f, 6f, 0f);
+                        animator.SetBool("jump", true);
+                        jumpRb = false;
+                    }
+                }
+                else {
+                    animator.SetBool("grounded", false);
+                    animator.SetTrigger("TRI_fall");
+                }
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -67,6 +75,8 @@ namespace PlayerControl {
                 if (!sprint) animator.SetBool("sprint", false);
                 if (secondaryFire) animator.SetBool("aimMode", true);
                 else animator.SetBool("aimMode", false);
+
+                if (jump) jumpRb = true;
             }
 
             private bool CheckGrounded() {

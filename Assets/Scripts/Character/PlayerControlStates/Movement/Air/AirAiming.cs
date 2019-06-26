@@ -18,7 +18,7 @@ namespace PlayerControl {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Grounded.sprint, this);
+                player.RegisterState(PlayerStateId.MoveModes.Air.aiming, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
             }

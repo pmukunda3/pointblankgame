@@ -75,6 +75,9 @@ namespace PlayerControl {
             get { return mask; }
         }
 
+            // TODO: Create a data passing interface between these states.
+        public int landingAnimation = 0;
+
         private class VelocityBuffer {
             private Vector3[] buffer;
             private int index = 0;
@@ -163,11 +166,11 @@ namespace PlayerControl {
             bool walk   = Input.GetKey(KeyCode.X);
             bool sprint = Input.GetKey(KeyCode.LeftShift);
             bool crouch = Input.GetKey(KeyCode.LeftControl);
-            bool jump   = Input.GetKey(KeyCode.Space);
             bool use    = Input.GetKey(KeyCode.F);
             bool primaryFire = Input.GetKey(KeyCode.Mouse0);
 
                 //TODO: Create a proper way to pass in input
+            bool jump = Input.GetKeyDown(KeyCode.Space);
             bool secondaryFire = Input.GetKeyDown(KeyCode.Mouse1);
 
             speedTargetX = Input.GetAxis("Horizontal");
@@ -211,6 +214,7 @@ namespace PlayerControl {
             if (Input.GetKeyDown(KeyCode.Keypad1)) rigidbody.position = new Vector3(-32, 0, 22);
             if (Input.GetKeyDown(KeyCode.Keypad2)) rigidbody.position = new Vector3(-12, 4, 40);
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
+            if (Input.GetKeyDown(KeyCode.Keypad4)) rigidbody.position = new Vector3(-12, 8, 32);
 
             currPlayerState.UseInput(moveInput, mouseInput, walk, sprint, crouch, jump, use, primaryFire, secondaryFire);
         }
