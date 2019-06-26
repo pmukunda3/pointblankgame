@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerControl;
 
 public class Running : MonoBehaviour, IMovementState {
 
