@@ -23,9 +23,11 @@ namespace PlayerControl {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Grounded.aiming, this);
+                player.RegisterState(StateId.Player.MoveModes.Grounded.aiming, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
+
+                EventManager.StartListening<MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(TestAimingEvent));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
@@ -102,6 +104,11 @@ namespace PlayerControl {
                     groundNormal = Vector3.zero;
                     return false;
                 }
+            }
+
+            private void TestAimingEvent() {
+                player.SetState(StateId.Player.MoveModes.Grounded.aiming);
+                player.weaponController.aimingWeapon = true;
             }
         }
     }

@@ -22,7 +22,7 @@ namespace PlayerControl {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Air.falling, this);
+                player.RegisterState(StateId.Player.MoveModes.Air.falling, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
 

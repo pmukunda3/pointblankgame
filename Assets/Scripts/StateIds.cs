@@ -52,29 +52,35 @@ public struct Id {
     }
 }
 
-//public enum MoveMode : int {
-//    Grounded,
-//    Airborne,
-//    WallClimbing
-//}
-
 [System.Serializable]
-public static class PlayerStateId {
-    public static readonly Id empty = 1;
-    public static readonly Id moveMode = 2;
-    public static class MoveModes {
-        public static readonly Id grounded = moveMode[0];
-        public static readonly Id air = moveMode[1];
-        public static class Grounded {
-            public static readonly Id sprint = grounded[0];
-            public static readonly Id aiming = grounded[1];
-            public static readonly Id freeRoam = grounded[2];
+public static class StateId {
+
+    public static class Player {
+        public static readonly Id empty = 1;
+        public static readonly Id moveMode = 2;
+        public static class MoveModes {
+            public static readonly Id grounded = moveMode[0];
+            public static readonly Id air = moveMode[1];
+            public static class Grounded {
+                public static readonly Id sprint = grounded[0];
+                public static readonly Id aiming = grounded[1];
+                public static readonly Id freeRoam = grounded[2];
+            }
+            public static class Air {
+                public static readonly Id jump = air[0];
+                public static readonly Id falling = air[1];
+                public static readonly Id land = air[2];
+                public static readonly Id aiming = air[3];
+            }
         }
-        public static class Air {
-            public static readonly Id jump = air[0];
-            public static readonly Id falling = air[1];
-            public static readonly Id land = air[2];
-            public static readonly Id aiming = air[3];
+    }
+
+    public static class Camera {
+        public static readonly Id grounded = 1;
+        public static class Grounded {
+            public static readonly Id aim = grounded[1];
+            public static readonly Id freeRoam = grounded[2];
+            public static readonly Id sprint = grounded[3];
         }
     }
 }

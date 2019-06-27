@@ -10,7 +10,7 @@ namespace PlayerControl {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
                 Debug.Log("On State Enter: Jump");
-                playerController.SetState(PlayerStateId.MoveModes.Air.jump);
+                playerController.SetState(StateId.Player.MoveModes.Air.jump);
             }
         }
     }

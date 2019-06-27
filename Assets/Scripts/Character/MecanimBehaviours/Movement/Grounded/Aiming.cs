@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PlayerControl {
     namespace MecanimBehaviour {
@@ -10,10 +11,13 @@ namespace PlayerControl {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
                 Debug.Log("On State Enter: Aiming");
-                playerController.SetState(PlayerStateId.MoveModes.Grounded.aiming);
+                //playerController.SetState(StateId.Player.MoveModes.Grounded.aiming);
+                //playerController.weaponController.aimingWeapon = true;
 
-                playerController.weaponController.aimingWeapon = true;
+                EventManager.TriggerEvent<AimingEvent>();
             }
         }
+
+        public class AimingEvent : UnityEvent { }
     }
 }

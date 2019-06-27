@@ -27,7 +27,7 @@ namespace PlayerControl {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Grounded.sprint, this);
+                player.RegisterState(StateId.Player.MoveModes.Grounded.sprint, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
             }

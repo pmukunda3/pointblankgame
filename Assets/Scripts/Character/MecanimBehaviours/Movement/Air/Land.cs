@@ -10,7 +10,7 @@ namespace PlayerControl {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
                 Debug.Log("On State Enter: Land");
-                playerController.SetState(PlayerStateId.MoveModes.Air.land);
+                playerController.SetState(StateId.Player.MoveModes.Air.land);
 
                 playerController.weaponController.aimingWeapon = false;
             }

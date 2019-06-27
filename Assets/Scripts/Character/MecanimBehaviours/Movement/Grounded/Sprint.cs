@@ -10,7 +10,7 @@ namespace PlayerControl {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
                 Debug.Log("On State Enter: Sprint");
-                playerController.SetState(PlayerStateId.MoveModes.Grounded.sprint);
+                playerController.SetState(StateId.Player.MoveModes.Grounded.sprint);
 
                 playerController.weaponController.aimingWeapon = false;
             }

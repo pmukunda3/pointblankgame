@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PlayerControl {
     namespace MecanimBehaviour {
@@ -10,10 +11,13 @@ namespace PlayerControl {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
                 Debug.Log("On State Enter: FreeRoam");
-                playerController.SetState(PlayerStateId.MoveModes.Grounded.freeRoam);
+                //playerController.SetState(StateId.Player.MoveModes.Grounded.freeRoam);
+                //playerController.weaponController.aimingWeapon = false;
 
-                playerController.weaponController.aimingWeapon = false;
+                EventManager.TriggerEvent<FreeRoamEvent>();
             }
         }
+
+        public class FreeRoamEvent : UnityEvent { }
     }
 }

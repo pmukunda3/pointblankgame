@@ -48,7 +48,7 @@ namespace PlayerControl {
         private Animator animator;
         private UserInput userInput;
 
-        private Dictionary<Id, PlayerControlState> playerControlStates;
+        private Dictionary<Id, PlayerControlState> playerControlStates = new Dictionary<Id, PlayerControlState>();
         public PlayerControlState currPlayerState;
         private PlayerControlState emptyState;
 
@@ -141,10 +141,8 @@ namespace PlayerControl {
             rbVelBuffer = new VelocityBuffer(16);
             animVelBuffer = new VelocityBuffer(16);
 
-            playerControlStates = new Dictionary<Id, PlayerControlState>();
-
             currPlayerState = emptyState = gameObject.AddComponent<EmptyPlayerState>() as PlayerControlState;
-            RegisterState(PlayerStateId.empty, emptyState);
+            RegisterState(StateId.Player.empty, emptyState);
         }
 
         private void WeaponFirePrimaryCallbackTest() {

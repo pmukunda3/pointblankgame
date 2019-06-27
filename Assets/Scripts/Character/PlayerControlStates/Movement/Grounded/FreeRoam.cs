@@ -26,10 +26,12 @@ namespace PlayerControl {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Grounded.freeRoam, this);
+                player.RegisterState(StateId.Player.MoveModes.Grounded.freeRoam, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
                 freeRoamMovement = gameObject.GetComponentInChildren<Running>() as IMovementState;
+
+                EventManager.StartListening<MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(TestFreeRoamEvent));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
@@ -142,6 +144,11 @@ namespace PlayerControl {
                     groundNormal = Vector3.zero;
                     return false;
                 }
+            }
+
+            private void TestFreeRoamEvent() {
+                player.SetState(StateId.Player.MoveModes.Grounded.freeRoam);
+                player.weaponController.aimingWeapon = false;
             }
         }
     }
