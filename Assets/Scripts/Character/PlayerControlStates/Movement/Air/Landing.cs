@@ -21,6 +21,8 @@ namespace PlayerControl {
                 player.RegisterState(StateId.Player.MoveModes.Air.land, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
+
+                EventManager.StartListening<MecanimBehaviour.LandEvent>(new UnityEngine.Events.UnityAction(OnLandingEvent));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
@@ -62,6 +64,11 @@ namespace PlayerControl {
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
                 animator.SetFloat("velLocalX", moveInput.x);
                 animator.SetFloat("velLocalZ", moveInput.y);
+            }
+
+            public void OnLandingEvent() {
+                player.SetState(StateId.Player.MoveModes.Air.land);
+                player.weaponController.aimingWeapon = false;
             }
         }
     }

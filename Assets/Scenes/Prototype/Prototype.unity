@@ -10832,7 +10832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ab93a5f9f7b7748b2f085eaf4a34e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0.24, y: 1, z: -1.1}
   offsetFuncX:
     serializedVersion: 2
     m_Curve:
@@ -10844,15 +10844,24 @@ MonoBehaviour:
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0.000029942463
+      outSlope: 4.7999144
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.041666627
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      value: 1.8
+      inSlope: 0.14524764
+      outSlope: 0.14524764
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.44166672
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -10861,22 +10870,31 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      time: -1
+      value: 0.15
+      inSlope: -0.15
+      outSlope: -0.15
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.00000033857256
+      outSlope: -0.00000033857256
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.41666666
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: -1
+      inSlope: -1
+      outSlope: -1
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -10885,14 +10903,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      time: -1
+      value: 1.7
+      inSlope: -0.70000005
+      outSlope: -0.70000005
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.35000002
+      outSlope: -0.35000002
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
@@ -10900,7 +10927,7 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -10925,9 +10952,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: -1
-      value: 0.8
-      inSlope: 0.19999999
-      outSlope: 0.19999999
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -10935,20 +10962,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0.20000002
-      outSlope: 0.20000002
-      tangentMode: 34
+      inSlope: -0.0026328065
+      outSlope: 2.4567723
+      tangentMode: 1
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.05
     - serializedVersion: 3
       time: 1
-      value: 1.2
-      inSlope: 0.20000005
-      outSlope: 0.20000005
-      tangentMode: 34
+      value: 1.8
+      inSlope: -0.00267614
+      outSlope: -0.00267614
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.55
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -43281,6 +43308,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379139, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxTurnSpeed
+      value: 28
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}

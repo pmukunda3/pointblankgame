@@ -24,6 +24,8 @@ namespace CameraControl {
                 player = thirdPCamera.player;
 
                 thirdPCamera.RegisterState(StateId.Camera.Grounded.sprint, this);
+
+                EventManager.StartListening<PlayerControl.MecanimBehaviour.SprintEvent>(new UnityEngine.Events.UnityAction(OnSprintEvent));
             }
 
             public override void CameraUpdate() {
@@ -33,13 +35,15 @@ namespace CameraControl {
                     offsetFuncZ.Evaluate(player.AimPitch() / 90.0f) * offset.z);
                 Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + player.AimDirection() * pitchAdjustedOffset;
 
-                //Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, player.AimDirection() * -Vector3.forward);
-
                 previousPosition = thirdPCamera.transform.position;
                 previousRotation = thirdPCamera.transform.rotation;
 
-                thirdPCamera.transform.rotation = player.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
-                thirdPCamera.transform.position = desiredLocation; // + cameraAlignProjection;
+                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, player.AimDirection(), 0.2f);
+                thirdPCamera.transform.position = Vector3.LerpUnclamped(previousPosition, desiredLocation, 0.2f);
+            }
+
+            private void OnSprintEvent() {
+                thirdPCamera.SetState(StateId.Camera.Grounded.sprint);
             }
         }
     }

@@ -124,8 +124,6 @@ namespace PlayerControl {
             animator = gameObject.GetComponent<Animator>();
             userInput = gameObject.GetComponent<UserInput>();
 
-            StateMachineBehaviour[] stateMachineBehaviours = animator.GetBehaviours<MecanimStateBehaviourEvents>();
-
             runningState = gameObject.GetComponent<Running>() as IMovementState;
             airControlFromJump = gameObject.GetComponent<AirControlFromJump>() as IMovementState;
 
@@ -143,8 +141,6 @@ namespace PlayerControl {
 
             currPlayerState = emptyState = gameObject.AddComponent<EmptyPlayerState>() as PlayerControlState;
             RegisterState(StateId.Player.empty, emptyState);
-
-            EventManager.StartListening<PlayerControlStateEvent, Id>(new UnityEngine.Events.UnityAction<Id>(SetState));
         }
 
         private void WeaponFirePrimaryCallbackTest() {

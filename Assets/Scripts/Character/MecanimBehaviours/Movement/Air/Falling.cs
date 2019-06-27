@@ -9,11 +9,10 @@ namespace PlayerControl {
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Falling");
-                playerController.SetState(StateId.Player.MoveModes.Air.falling);
-
-                playerController.weaponController.aimingWeapon = false;
+                EventManager.TriggerEvent<FallingEvent>();
             }
         }
+
+        public class FallingEvent : UnityEngine.Events.UnityEvent { }
     }
 }

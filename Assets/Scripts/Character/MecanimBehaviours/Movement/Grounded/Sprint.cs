@@ -9,11 +9,10 @@ namespace PlayerControl {
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Sprint");
-                playerController.SetState(StateId.Player.MoveModes.Grounded.sprint);
-
-                playerController.weaponController.aimingWeapon = false;
+                EventManager.TriggerEvent<SprintEvent>();
             }
         }
+
+        public class SprintEvent : UnityEngine.Events.UnityEvent { }
     }
 }

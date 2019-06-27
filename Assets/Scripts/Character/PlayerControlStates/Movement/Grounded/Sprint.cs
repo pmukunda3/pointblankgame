@@ -30,6 +30,8 @@ namespace PlayerControl {
                 player.RegisterState(StateId.Player.MoveModes.Grounded.sprint, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
+
+                EventManager.StartListening<MecanimBehaviour.SprintEvent>(new UnityEngine.Events.UnityAction(OnSprintEvent));
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -73,8 +75,9 @@ namespace PlayerControl {
                 mouseRotation = mouseTurnScalar * player.screenMouseRatio * player.mouseSensitivity * Mathf.Clamp(mouseInput.x, -maxMouseInput, maxMouseInput);
 
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
-                else                            animator.SetBool("aimMode", false);
+                if (actions.secondaryFire.down) {
+                    animator.SetBool("aimMode", true);
+                }
 
                 if (actions.jump.down) jumpRb = true;
             }
@@ -93,6 +96,12 @@ namespace PlayerControl {
                     groundNormal = Vector3.zero;
                     return false;
                 }
+            }
+
+            private void OnSprintEvent() {
+                player.SetState(StateId.Player.MoveModes.Grounded.sprint);
+                player.weaponController.aimingWeapon = false;
+                animator.SetBool("aimMode", false);
             }
         }
     }

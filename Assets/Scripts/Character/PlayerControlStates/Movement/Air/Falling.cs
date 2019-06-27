@@ -27,6 +27,8 @@ namespace PlayerControl {
                 rigidbody = player.GetComponent<Rigidbody>();
 
                 airControlMovement = gameObject.GetComponentInChildren<AirControlFromFall>() as IMovementState;
+
+                EventManager.StartListening<MecanimBehaviour.FallingEvent>(new UnityEngine.Events.UnityAction(OnFallingEvent));
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -71,6 +73,11 @@ namespace PlayerControl {
                     }
                     animator.SetBool("grounded", true);
                 }
+            }
+
+            private void OnFallingEvent() {
+                player.SetState(StateId.Player.MoveModes.Air.falling);
+                player.weaponController.aimingWeapon = false;
             }
         }
     }

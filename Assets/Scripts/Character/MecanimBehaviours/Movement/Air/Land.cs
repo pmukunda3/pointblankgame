@@ -9,11 +9,10 @@ namespace PlayerControl {
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Land");
-                playerController.SetState(StateId.Player.MoveModes.Air.land);
-
-                playerController.weaponController.aimingWeapon = false;
+                EventManager.TriggerEvent<LandEvent>();
             }
         }
+
+        public class LandEvent : UnityEngine.Events.UnityEvent { }
     }
 }

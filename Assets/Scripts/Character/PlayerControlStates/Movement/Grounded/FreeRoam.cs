@@ -31,7 +31,7 @@ namespace PlayerControl {
                 rigidbody = player.GetComponent<Rigidbody>();
                 freeRoamMovement = gameObject.GetComponentInChildren<Running>() as IMovementState;
 
-                EventManager.StartListening<MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(TestFreeRoamEvent));
+                EventManager.StartListening<MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(OnFreeRoamEvent));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
@@ -146,7 +146,7 @@ namespace PlayerControl {
                 }
             }
 
-            private void TestFreeRoamEvent() {
+            private void OnFreeRoamEvent() {
                 player.SetState(StateId.Player.MoveModes.Grounded.freeRoam);
                 player.weaponController.aimingWeapon = false;
             }

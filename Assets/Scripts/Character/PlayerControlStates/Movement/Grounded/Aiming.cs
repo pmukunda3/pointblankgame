@@ -47,8 +47,7 @@ namespace PlayerControl {
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
                 rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
-                if (actions.sprint.active) animator.SetBool("sprint", true);
-                else animator.SetBool("sprint", false);
+                if (actions.sprint.down) animator.SetBool("sprint", true);
 
                 if (actions.secondaryFire.down) {
                     animator.SetBool("aimMode", false);
@@ -109,6 +108,7 @@ namespace PlayerControl {
             private void TestAimingEvent() {
                 player.SetState(StateId.Player.MoveModes.Grounded.aiming);
                 player.weaponController.aimingWeapon = true;
+                animator.SetBool("sprint", false);
             }
         }
     }

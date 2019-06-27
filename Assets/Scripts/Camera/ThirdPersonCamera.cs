@@ -24,8 +24,6 @@ namespace CameraControl {
             //    new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
             //EventManager.StartListening<WeaponFireSecondary, float>(
             //    new UnityEngine.Events.UnityAction<float>(WeaponFirePrimaryCallbackTest));
-
-            EventManager.StartListening<ThirdPersonCameraStateEvent, Id>(new UnityEngine.Events.UnityAction<Id>(SetState));
         }
 
         void LateUpdate() {
