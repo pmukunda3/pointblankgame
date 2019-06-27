@@ -9,6 +9,9 @@ namespace CameraControl {
 
             public Vector3 offset;
 
+            public AnimationCurve cameraAimEnterDistance;
+            public float enterStateTime = 0.25f;
+
             public AnimationCurve offsetFuncX;
             public AnimationCurve offsetFuncY;
             public AnimationCurve offsetFuncZ;
@@ -16,8 +19,11 @@ namespace CameraControl {
             private ThirdPersonCamera thirdPCamera;
             private PlayerController player;
 
-            private Vector3 previousPosition;
-            private Quaternion previousRotation;
+            private Vector3 enterStatePosition;
+            private Quaternion enterStateRotation;
+
+            private float elapsedTime = 0.0f;
+            private bool enterState = false;
 
             public void Start() {
                 thirdPCamera = gameObject.GetComponentInParent<ThirdPersonCamera>();
@@ -25,7 +31,7 @@ namespace CameraControl {
 
                 thirdPCamera.RegisterState(StateId.Camera.Grounded.aim, this);
 
-                EventManager.StartListening<PlayerControl.MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(TestAimingEvent));
+                EventManager.StartListening<PlayerControl.MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(OnAimingEvent));
             }
 
             public override void CameraUpdate() {
@@ -37,14 +43,28 @@ namespace CameraControl {
 
                 //Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, player.AimDirection() * -Vector3.forward);
 
-                previousPosition = thirdPCamera.transform.position;
-                previousRotation = thirdPCamera.transform.rotation;
+                if (enterState) {
+                    thirdPCamera.transform.rotation = Quaternion.Slerp(enterStateRotation, player.AimDirection() * Quaternion.Euler(2f, 0f, 0f), cameraAimEnterDistance.Evaluate(elapsedTime / enterStateTime));
+                    thirdPCamera.transform.position = Vector3.Lerp(enterStatePosition, desiredLocation, cameraAimEnterDistance.Evaluate(elapsedTime / enterStateTime));
 
-                thirdPCamera.transform.rotation = player.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
-                thirdPCamera.transform.position = desiredLocation; // + cameraAlignProjection;
+                    elapsedTime += Time.deltaTime;
+                    if (elapsedTime > enterStateTime) {
+                        enterState = false;
+                    }
+                }
+                else {
+                    thirdPCamera.transform.rotation = player.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
+                    thirdPCamera.transform.position = desiredLocation;
+                }
             }
 
-            private void TestAimingEvent() {
+            private void OnAimingEvent() {
+                enterState = true;
+                elapsedTime = 0.0f;
+
+                enterStatePosition = thirdPCamera.transform.position;
+                enterStateRotation = thirdPCamera.transform.rotation;
+
                 thirdPCamera.SetState(StateId.Camera.Grounded.aim);
             }
         }

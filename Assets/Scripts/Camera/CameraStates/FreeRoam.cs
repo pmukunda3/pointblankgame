@@ -9,6 +9,9 @@ namespace CameraControl {
 
             public Vector3 offset;
 
+            public float maxSpeed;
+            public float maxTurnSpeed;
+
             public AnimationCurve offsetFuncX;
             public AnimationCurve offsetFuncY;
             public AnimationCurve offsetFuncZ;
@@ -25,7 +28,7 @@ namespace CameraControl {
 
                 thirdPCamera.RegisterState(StateId.Camera.Grounded.freeRoam, this);
 
-                EventManager.StartListening<PlayerControl.MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(TestFreeRoamEvent));
+                EventManager.StartListening<PlayerControl.MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(OnFreeRoamEvent));
             }
 
             public override void CameraUpdate() {
@@ -35,16 +38,38 @@ namespace CameraControl {
                     offsetFuncZ.Evaluate(player.AimPitch() / 90.0f) * offset.z);
                 Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + player.AimDirection() * pitchAdjustedOffset;
 
-                //Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, player.AimDirection() * -Vector3.forward);
-
                 previousPosition = thirdPCamera.transform.position;
                 previousRotation = thirdPCamera.transform.rotation;
 
-                thirdPCamera.transform.rotation = player.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
-                thirdPCamera.transform.position = desiredLocation; // + cameraAlignProjection;
+                    // This ultimately proved to be a really bad way to move the camera
+                float angleDiff = Quaternion.Angle(previousRotation, player.AimDirection());
+                float distance = Vector3.Distance(previousPosition, desiredLocation);
+
+                float slerpT;
+                float lerpT;
+
+                if (angleDiff > maxTurnSpeed * Time.deltaTime) {
+                    slerpT = maxTurnSpeed * Time.deltaTime / angleDiff;
+                }
+                else {
+                    slerpT = 1.0f;
+                }
+
+                if (distance > maxSpeed * Time.deltaTime) {
+                    lerpT = maxSpeed * Time.deltaTime / distance;
+                }
+                else {
+                    lerpT = 1.0f;
+                }
+
+                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, player.AimDirection(), 0.5f);
+                thirdPCamera.transform.position = Vector3.LerpUnclamped(previousPosition, desiredLocation, 0.5f);
             }
 
-            private void TestFreeRoamEvent() {
+            private void OnFreeRoamEvent() {
+                previousPosition = thirdPCamera.transform.position;
+                previousRotation = thirdPCamera.transform.rotation;
+
                 thirdPCamera.SetState(StateId.Camera.Grounded.freeRoam);
             }
         }

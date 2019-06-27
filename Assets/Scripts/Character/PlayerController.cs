@@ -143,6 +143,8 @@ namespace PlayerControl {
 
             currPlayerState = emptyState = gameObject.AddComponent<EmptyPlayerState>() as PlayerControlState;
             RegisterState(StateId.Player.empty, emptyState);
+
+            EventManager.StartListening<PlayerControlStateEvent, Id>(new UnityEngine.Events.UnityAction<Id>(SetState));
         }
 
         private void WeaponFirePrimaryCallbackTest() {
@@ -261,5 +263,7 @@ namespace PlayerControl {
                 //Debug.Log("Empty State: UseInput");
             }
         }
+
+        public class PlayerControlStateEvent : UnityEngine.Events.UnityEvent<Id> { }
     }
 }

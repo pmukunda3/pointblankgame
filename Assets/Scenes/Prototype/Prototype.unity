@@ -10918,6 +10918,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.24, y: -0.36, z: -1.22}
+  maxSpeed: 8
+  maxTurnSpeed: 120
   offsetFuncX:
     serializedVersion: 2
     m_Curve:
@@ -43148,9 +43150,64 @@ PrefabInstance:
       objectReference: {fileID: 1493008396}
     - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
         type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
       propertyPath: cameraPivot
       value: 
       objectReference: {fileID: 1493008396}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[0].inSlope
+      value: 1.1338863
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[0].outSlope
+      value: 1.1338863
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[0].outWeight
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[1].inSlope
+      value: -0.037828445
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[1].outSlope
+      value: -0.037828445
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[1].inWeight
+      value: 0.1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: cameraAimEnterDistance.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5862783469329633396, guid: a2353be67261439439afc5c6e6e35f68,
+        type: 3}
+      propertyPath: enterStateTime
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2353be67261439439afc5c6e6e35f68, type: 3}
 --- !u!1001 &7431189260990382327

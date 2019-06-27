@@ -15,6 +15,9 @@ namespace PlayerControl {
                 //playerController.weaponController.aimingWeapon = true;
 
                 EventManager.TriggerEvent<AimingEvent>();
+
+                //EventManager.TriggerEvent<CameraControl.ThirdPersonCamera.ThirdPersonCameraStateEvent, Id>(StateId.Player.MoveModes.Grounded.aiming);
+                //EventManager.TriggerEvent<PlayerControl.PlayerController.PlayerControlStateEvent, Id>(StateId.Player.MoveModes.Grounded.aiming);
             }
         }
 
