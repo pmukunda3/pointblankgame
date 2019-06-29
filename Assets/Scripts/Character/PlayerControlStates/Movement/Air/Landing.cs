@@ -52,13 +52,10 @@ namespace PlayerControl {
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
                 // Velocity is preserved in the rigidbody.velocity, but animator.velocity is (0, 0, 0) for the first time this is called.
                 Vector3 playerVelocity;
-                //Vector3 playerVelocity = animator.velocity;
-                //playerVelocity.y = rigidbody.velocity.y;
-                //rigidbody.velocity = playerVelocity;
                 AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
                 switch (landMode) {
                     case 0:
-                        playerVelocity = rigidbody.velocity;
+                        //playerVelocity == rigidbody.velocity;
                         break;
                     case 1:
                         playerVelocity = animator.velocity;
@@ -66,16 +63,18 @@ namespace PlayerControl {
                         if (animState.IsName("Roll Landing") || animState.IsName("Roll Landing Settle")) {
                             animator.speed = rollAnimationSpeed;
                         }
+                        rigidbody.velocity = playerVelocity;
                         break;
                     case 2:
                         playerVelocity = animator.velocity;
                         playerVelocity.y = rigidbody.velocity.y;
+                        rigidbody.velocity = playerVelocity;
                         break;
                 }
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                //Debug.Log(rigidbody.velocity.ToString("F4") + ", " + player.shared.lastRigidbodyVelocity.ToString("F4"));
+                // do nothing
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
