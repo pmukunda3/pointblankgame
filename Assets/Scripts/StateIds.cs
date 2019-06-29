@@ -65,9 +65,9 @@ public static class StateId {
                 public static readonly Id sprint = grounded[0];
                 public static readonly Id aiming = grounded[1];
                 public static readonly Id freeRoam = grounded[2];
+                public static readonly Id jump = grounded[3];
             }
             public static class Air {
-                public static readonly Id jump = air[0];
                 public static readonly Id falling = air[1];
                 public static readonly Id land = air[2];
                 public static readonly Id aiming = air[3];

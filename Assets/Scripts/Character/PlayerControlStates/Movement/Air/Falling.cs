@@ -40,6 +40,8 @@ namespace PlayerControl {
                 rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
 
                 CheckLandingDistance();
+
+
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -65,11 +67,15 @@ namespace PlayerControl {
                 Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
 
                 if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
-                    if (rigidbody.velocity.y < -8f) {
-                        player.landingAnimation = 0;
+                    player.shared.lastRigidbodyVelocity = rigidbody.velocity;
+                    if (player.shared.lastRigidbodyVelocity.y > -4f) {
+                        animator.SetInteger("landMode", 0);
+                    }
+                    else if (player.shared.lastRigidbodyVelocity.y > -10f) {
+                        animator.SetInteger("landMode", 1);
                     }
                     else {
-                        player.landingAnimation = 1;
+                        animator.SetInteger("landMode", 2);
                     }
                     animator.SetBool("grounded", true);
                 }

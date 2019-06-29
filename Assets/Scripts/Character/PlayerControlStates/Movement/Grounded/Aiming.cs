@@ -11,9 +11,13 @@ namespace PlayerControl {
 
             public float moveSpeedMultiplier = 1.0f;
 
+            public float maxTimeButtonHold = 0.25f;
+            public float jumpLateralInputClearingDamp = 18f;
+            public float jumpForwardInputClearingDamp = 18f;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
-            private bool jumpRb = false;
+            private bool jumpInput = false;
 
             private Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
@@ -48,13 +52,37 @@ namespace PlayerControl {
                 rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
                 if (actions.sprint.down) animator.SetBool("sprint", true);
+                if (actions.secondaryFire.down) animator.SetBool("aimMode", false);
 
-                if (actions.secondaryFire.down) {
-                    animator.SetBool("aimMode", false);
-                    Debug.Log("Secondary Fire pressed in AIMING MODE");
+                if (!jumpInput && actions.jump.down) {
+                    player.shared.timeHeldJump = new Vector3(0f, 0f, 0f);
+                    jumpInput = true;
                 }
+                else if (actions.jump.active) {
+                    if (player.shared.timeHeldJump.y < maxTimeButtonHold) {
+                        player.shared.timeHeldJump.y += Time.deltaTime;
 
-                if (actions.jump.down) jumpRb = true;
+                        if (Mathf.Abs(moveInput.x) > 0.4f) {
+                            player.shared.timeHeldJump.x += Time.deltaTime;
+                        }
+                        else {
+                            player.shared.timeHeldJump.x = Mathf.Lerp(player.shared.timeHeldJump.x, 0.0f, jumpLateralInputClearingDamp * Time.deltaTime);
+                        }
+                        if (Mathf.Abs(moveInput.y) > 0.4f) {
+                            player.shared.timeHeldJump.z += Time.deltaTime;
+                        }
+                        else {
+                            player.shared.timeHeldJump.z = Mathf.Lerp(player.shared.timeHeldJump.x, 0.0f, jumpForwardInputClearingDamp * Time.deltaTime);
+                        }
+                    }
+                    else {
+                        Debug.Log("JUMP := true");
+                        animator.SetTrigger("TRG_jump");
+                    }
+                }
+                else if (jumpInput) {
+                    animator.SetTrigger("TRG_jump");
+                }
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -71,16 +99,16 @@ namespace PlayerControl {
                 if (CheckGrounded()) {
                     //rigidbody.velocity = Vector3.Scale(rigidbody.velocity, velocityReset);
                     rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-                    if (jumpRb) {
-                        Debug.Log("jumpRb");
-                        rigidbody.velocity += new Vector3(0f, 4f, 0f);
-                        animator.SetBool("jump", true);
-                        jumpRb = false;
-                    }
+                    //if (jumpInput) {
+                    //    Debug.Log("jumpRb");
+                    //    //rigidbody.velocity += new Vector3(0f, 3f, 0f);
+                    //    animator.SetBool("jump", true);
+                    //    jumpInput = false;
+                    //}
                 }
                 else {
                     animator.SetBool("grounded", false);
-                    animator.SetTrigger("TRI_fall");
+                    animator.SetTrigger("TRG_fall");
                 }
             }
 
@@ -106,9 +134,14 @@ namespace PlayerControl {
             }
 
             private void TestAimingEvent() {
-                player.SetState(StateId.Player.MoveModes.Grounded.aiming);
+                jumpInput = false;
                 player.weaponController.aimingWeapon = true;
                 animator.SetBool("sprint", false);
+                animator.speed = 1.0f;
+
+                this.moveInput = player.GetLatestMoveInput();
+
+                player.SetState(StateId.Player.MoveModes.Grounded.aiming);
             }
         }
     }

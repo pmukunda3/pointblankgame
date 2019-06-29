@@ -9,6 +9,8 @@ namespace CameraControl {
 
             public Vector3 offset;
 
+            public float cameraDampTime = 0.45f;
+
             public AnimationCurve offsetFuncX;
             public AnimationCurve offsetFuncY;
             public AnimationCurve offsetFuncZ;
@@ -38,8 +40,8 @@ namespace CameraControl {
                 previousPosition = thirdPCamera.transform.position;
                 previousRotation = thirdPCamera.transform.rotation;
 
-                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, player.AimDirection(), 0.2f);
-                thirdPCamera.transform.position = Vector3.LerpUnclamped(previousPosition, desiredLocation, 0.2f);
+                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, player.AimDirection(), cameraDampTime * Time.deltaTime);
+                thirdPCamera.transform.position = Vector3.LerpUnclamped(previousPosition, desiredLocation, cameraDampTime * Time.deltaTime);
             }
 
             private void OnSprintEvent() {

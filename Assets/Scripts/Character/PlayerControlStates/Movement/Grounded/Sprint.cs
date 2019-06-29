@@ -14,9 +14,13 @@ namespace PlayerControl {
 
             public float moveSpeedMultiplier = 1.1f;
 
+            public float maxTimeButtonHold = 0.75f;
+            public float jumpLateralInputClearingDamp = 6f;
+            public float jumpForwardInputClearingDamp = 6f;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
-            private bool jumpRb = false;
+            private bool jumpInput = false;
 
             private Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
@@ -49,15 +53,15 @@ namespace PlayerControl {
 
                     rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
 
-                    if (jumpRb) {
-                        rigidbody.velocity += new Vector3(0f, 6f, 0f);
-                        animator.SetBool("jump", true);
-                        jumpRb = false;
-                    }
+                    //if (jumpInput) {
+                    //    //rigidbody.velocity += new Vector3(0f, 6f, 0f);
+                    //    animator.SetBool("jump", true);
+                    //    jumpInput = false;
+                    //}
                 }
                 else {
                     animator.SetBool("grounded", false);
-                    animator.SetTrigger("TRI_fall");
+                    animator.SetTrigger("TRG_fall");
                 }
             }
 
@@ -79,7 +83,35 @@ namespace PlayerControl {
                     animator.SetBool("aimMode", true);
                 }
 
-                if (actions.jump.down) jumpRb = true;
+                if (!jumpInput && actions.jump.down) {
+                    player.shared.timeHeldJump = new Vector3(0f, 0f, 0f);
+                    jumpInput = true;
+                }
+                else if (actions.jump.active) {
+                    if (player.shared.timeHeldJump.y < maxTimeButtonHold) {
+                        player.shared.timeHeldJump.y += Time.deltaTime;
+
+                        if (Mathf.Abs(moveInput.x) > 0.4f) {
+                            player.shared.timeHeldJump.x += Time.deltaTime;
+                        }
+                        else {
+                            player.shared.timeHeldJump.x = Mathf.Lerp(player.shared.timeHeldJump.x, 0.0f, jumpLateralInputClearingDamp * Time.deltaTime);
+                        }
+                        if (Mathf.Abs(moveInput.y) > 0.4f) {
+                            player.shared.timeHeldJump.z += Time.deltaTime;
+                        }
+                        else {
+                            player.shared.timeHeldJump.z = Mathf.Lerp(player.shared.timeHeldJump.x, 0.0f, jumpForwardInputClearingDamp * Time.deltaTime);
+                        }
+                    }
+                    else {
+                        Debug.Log("JUMP := true");
+                        animator.SetTrigger("TRG_jump");
+                    }
+                }
+                else if (jumpInput) {
+                    animator.SetTrigger("TRG_jump");
+                }
             }
 
             private bool CheckGrounded() {
@@ -99,9 +131,14 @@ namespace PlayerControl {
             }
 
             private void OnSprintEvent() {
-                player.SetState(StateId.Player.MoveModes.Grounded.sprint);
+                jumpInput = false;
                 player.weaponController.aimingWeapon = false;
                 animator.SetBool("aimMode", false);
+                animator.speed = 1.0f;
+
+                this.moveInput = player.GetLatestMoveInput();
+
+                player.SetState(StateId.Player.MoveModes.Grounded.sprint);
             }
         }
     }

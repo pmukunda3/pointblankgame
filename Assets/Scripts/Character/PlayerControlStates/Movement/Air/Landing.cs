@@ -11,10 +11,15 @@ namespace PlayerControl {
 
             public float moveSpeedMultiplier = 1.0f;
 
+            public AnimationCurve rollAnimationSpeedCurve;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
             private Rigidbody rigidbody;
+
+            private int landMode = 0;
+            private float rollAnimationSpeed = 1.0f;
 
             public new void Start() {
                 base.Start();
@@ -41,24 +46,36 @@ namespace PlayerControl {
                 rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
                 if (actions.sprint.active) animator.SetBool("sprint", true);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                else                       animator.SetBool("sprint", false);
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
-                Vector3 playerVelocity = animator.velocity;
-                playerVelocity.y = rigidbody.velocity.y;
-                rigidbody.velocity = playerVelocity;
+                // Velocity is preserved in the rigidbody.velocity, but animator.velocity is (0, 0, 0) for the first time this is called.
+                Vector3 playerVelocity;
+                //Vector3 playerVelocity = animator.velocity;
+                //playerVelocity.y = rigidbody.velocity.y;
+                //rigidbody.velocity = playerVelocity;
+                AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
+                switch (landMode) {
+                    case 0:
+                        playerVelocity = rigidbody.velocity;
+                        break;
+                    case 1:
+                        playerVelocity = animator.velocity;
+                        playerVelocity.y = rigidbody.velocity.y;
+                        if (animState.IsName("Roll Landing") || animState.IsName("Roll Landing Settle")) {
+                            animator.speed = rollAnimationSpeed;
+                        }
+                        break;
+                    case 2:
+                        playerVelocity = animator.velocity;
+                        playerVelocity.y = rigidbody.velocity.y;
+                        break;
+                }
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                // This is wrong,
-                // TODO: Seperate hard landing from the other landing animations.
-                if (player.landingAnimation == 0) {
-                    animator.SetFloat("velLocalY", 0f);
-                }
-                else {
-                    animator.SetFloat("velLocalY", 1f);
-                }
+                //Debug.Log(rigidbody.velocity.ToString("F4") + ", " + player.shared.lastRigidbodyVelocity.ToString("F4"));
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -67,6 +84,13 @@ namespace PlayerControl {
             }
 
             public void OnLandingEvent() {
+                player.shared.lastRigidbodyVelocity = rigidbody.velocity;
+                landMode = animator.GetInteger("landMode");
+                if (landMode == 1) {
+                    Debug.Log((Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity).z);
+                    rollAnimationSpeed = rollAnimationSpeedCurve.Evaluate((Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity).z);
+                }
+
                 player.SetState(StateId.Player.MoveModes.Air.land);
                 player.weaponController.aimingWeapon = false;
             }

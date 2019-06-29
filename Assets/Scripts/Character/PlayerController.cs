@@ -32,6 +32,12 @@ namespace PlayerControl {
             public MovementCharacteristics lateral;
         }
 
+        [System.Serializable]
+        public struct SharedData {
+            public Vector3 lastRigidbodyVelocity;
+            public Vector3 timeHeldJump;
+        }
+
         public const float EPSILON = 1e-6f;
 
         public float mouseSensitivity = 100.0f;
@@ -43,6 +49,8 @@ namespace PlayerControl {
         public IMovementState airControlFromJump;
 
         public WeaponController weaponController;
+
+        public SharedData shared;
 
         private Rigidbody rigidbody;
         private Animator animator;
@@ -66,9 +74,6 @@ namespace PlayerControl {
         public LayerMask raycastMask {
             get { return mask; }
         }
-
-            // TODO: Create a data passing interface between these states.
-        public int landingAnimation = 0;
 
         private class VelocityBuffer {
             private Vector3[] buffer;
@@ -240,6 +245,14 @@ namespace PlayerControl {
 
         public void RegisterState(Id stateId, PlayerControlState state) {
             playerControlStates.Add(stateId, state);
+        }
+
+        public Vector2 GetLatestMoveInput() {
+            return this.moveInput;
+        }
+
+        public Vector2 GetLatestMouseInput() {
+            return this.mouseInput;
         }
 
         private class EmptyPlayerState : PlayerControlState {
