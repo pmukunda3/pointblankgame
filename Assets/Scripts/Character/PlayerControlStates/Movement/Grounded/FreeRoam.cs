@@ -28,12 +28,15 @@ namespace PlayerControl {
                     }
                 }
 
-                    // TODO: Fix this.
+                    // This technically isn't wrong, but the correct fix has to take into account when the character
+                    // is moving fast from something other than itself. But, the work around is to just slow the player
+                    // down for spinning while moving.
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+                rigidbody.velocity = 0.955f * (Quaternion.AngleAxis(extraRotation, Vector3.up) * rigidbody.velocity);
 
                 if (actions.sprint.active) animator.SetBool("sprint", true);
                 if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.crouch.down) animator.SetBool("crouch", true);
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -65,7 +68,7 @@ namespace PlayerControl {
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
                     //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-                    rigidbody.rotation = Quaternion.Euler(0f, player.AimYaw(), 0f);
+                    rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                 }
                 else {
                     animator.SetBool("grounded", false);

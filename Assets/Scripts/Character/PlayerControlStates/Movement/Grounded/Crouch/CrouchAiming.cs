@@ -22,29 +22,26 @@ namespace PlayerControl {
                     }
                 }
 
-                float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+                if (actions.sprint.active) {
+                    animator.SetBool("sprint", true);
+                    animator.SetBool("crouch", false);
+                }
 
-                if (actions.sprint.down) animator.SetBool("sprint", true);
                 if (actions.secondaryFire.down) animator.SetBool("aimMode", false);
+                if (actions.crouch.down) animator.SetBool("crouch", false);
+                if (actions.jump.down) animator.SetBool("crouch", false);
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
-                //rigidbody.position = animator.rootPosition;
-                //player.transform.rotation = animator.rootRotation;
-
-                Vector3 playerVelocity = moveSpeedMultiplier * animator.velocity;
-
-                playerVelocity.y = rigidbody.velocity.y;
-                rigidbody.velocity = playerVelocity;
+                // do nothing
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
-                    //rigidbody.velocity = Vector3.Scale(rigidbody.velocity, velocityReset);
-                    rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+                    rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                 }
                 else {
+                    animator.SetBool("crouch", false);
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }
@@ -56,7 +53,6 @@ namespace PlayerControl {
             }
 
             private void OnCrouchAimingEvent() {
-                jumpInput = false;
                 player.weaponController.aimingWeapon = true;
                 animator.SetBool("sprint", false);
                 animator.speed = 1.0f;

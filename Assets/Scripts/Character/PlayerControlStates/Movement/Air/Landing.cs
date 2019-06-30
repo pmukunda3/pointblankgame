@@ -74,7 +74,13 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                // do nothing
+                float angleDiff = Quaternion.Angle(rigidbody.rotation, player.AimYawQuaternion());
+                if (angleDiff / Time.fixedDeltaTime > maxTurnSpeed) {
+                    rigidbody.MoveRotation(Quaternion.Slerp(rigidbody.rotation, player.AimYawQuaternion(), maxTurnSpeed / angleDiff * Time.fixedDeltaTime));
+                }
+                else {
+                    rigidbody.MoveRotation(player.AimYawQuaternion()); // same as Slerp(rb.rot, play.yawQuat(), 1.0)
+                }
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {

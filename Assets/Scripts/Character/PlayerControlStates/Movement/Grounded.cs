@@ -7,7 +7,7 @@ namespace PlayerControl {
         public abstract class Grounded : PlayerControlState {
 
             public float groundCheckDistance = 0.18f;
-            public float maxTurnSpeed = 1.0f;
+            public float maxTurnSpeed = 120f;
 
             public float moveSpeedMultiplier = 1.0f;
 

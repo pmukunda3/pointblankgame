@@ -16,7 +16,7 @@ namespace PlayerControl {
 
             private IMovementState airControlMovement;
 
-            private Rigidbody rigidbody;
+            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
@@ -39,9 +39,15 @@ namespace PlayerControl {
                 MovementChange moveChange = airControlMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
                 rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
 
+                float angleDiff = Quaternion.Angle(rigidbody.rotation, player.AimYawQuaternion());
+                if (angleDiff / Time.fixedDeltaTime > maxTurnSpeed) {
+                    rigidbody.MoveRotation(Quaternion.Slerp(rigidbody.rotation, player.AimYawQuaternion(), maxTurnSpeed / angleDiff * Time.fixedDeltaTime));
+                }
+                else {
+                    rigidbody.MoveRotation(player.AimYawQuaternion()); // same as Slerp(rb.rot, play.yawQuat(), 1.0)
+                }
+
                 CheckLandingDistance();
-
-
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -51,13 +57,8 @@ namespace PlayerControl {
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
-                //if (!sprint) Debug.Log("Sprint Released");
-
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
-
-                float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
             }
 
             private void CheckLandingDistance() {

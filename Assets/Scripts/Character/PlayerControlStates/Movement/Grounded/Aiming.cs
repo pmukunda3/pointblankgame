@@ -24,11 +24,11 @@ namespace PlayerControl {
                     }
                 }
 
-                float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
-
                 if (actions.sprint.down) animator.SetBool("sprint", true);
                 if (actions.secondaryFire.down) animator.SetBool("aimMode", false);
+                if (actions.crouch.down) animator.SetBool("crouch", true);
+
+                // TODO: movement input will cause character to get up
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -43,9 +43,7 @@ namespace PlayerControl {
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
-                    //rigidbody.velocity = Vector3.Scale(rigidbody.velocity, velocityReset);
-                    //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-                    rigidbody.rotation = Quaternion.Euler(0f, player.AimYaw(), 0f);
+                    rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                 }
                 else {
                     animator.SetBool("grounded", false);
