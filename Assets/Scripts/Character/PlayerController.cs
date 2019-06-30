@@ -40,19 +40,16 @@ namespace PlayerControl {
 
         public const float EPSILON = 1e-6f;
 
-        public float mouseSensitivity = 100.0f;
+        public float mouseSensitivity = 5.0f;
         public float screenMouseRatio = 1.777f;
 
         public Vector2 deadzone = new Vector2(0.01f, 0.01f);
-
-        public IMovementState runningState;
-        public IMovementState airControlFromJump;
 
         public WeaponController weaponController;
 
         public SharedData shared;
 
-        private Rigidbody rigidbody;
+        private new Rigidbody rigidbody;
         private Animator animator;
         private UserInput userInput;
 
@@ -62,6 +59,7 @@ namespace PlayerControl {
 
         private bool screenControl = true;
         private float aimPitch = 0f;
+        private float aimYaw = 0f;
 
         private float speedTargetX;
         private float speedTargetY;
@@ -116,21 +114,34 @@ namespace PlayerControl {
         private VelocityBuffer rbVelBuffer;
         private VelocityBuffer animVelBuffer;
 
+        private Quaternion charDirection;
+
         public Quaternion AimDirection() {
-            return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
+            return Quaternion.Euler(-aimPitch, aimYaw, 0f);
+        }
+
+        public Quaternion AimYawQuaternion() {
+            return Quaternion.Euler(0f, aimYaw, 0f);
         }
 
         public float AimPitch() {
             return aimPitch;
         }
 
+        public float AimYaw() {
+            return aimYaw;
+        }
+
+        public float LookToMoveAngle() {
+            float angle = rigidbody.rotation.eulerAngles.y - aimYaw;
+            if (angle > 180f) angle -= 360f;
+            return angle;
+        }
+
         private void Start() {
             rigidbody = gameObject.GetComponent<Rigidbody>();
             animator = gameObject.GetComponent<Animator>();
             userInput = gameObject.GetComponent<UserInput>();
-
-            runningState = gameObject.GetComponent<Running>() as IMovementState;
-            airControlFromJump = gameObject.GetComponent<AirControlFromJump>() as IMovementState;
 
             EventManager.StartListening<WeaponFirePrimary>(
                 new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
@@ -172,16 +183,26 @@ namespace PlayerControl {
             }
 
             if (screenControl) {
-                mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                mouseInput = new Vector2 {
+                    x = Input.GetAxis("Mouse X"),
+                    y = Input.GetAxis("Mouse Y")
+                };
 
-                aimPitch += mouseSensitivity * mouseInput.y * Time.deltaTime;
+                aimPitch += mouseSensitivity * mouseInput.y;
                 if (aimPitch > 80f) {
                     aimPitch = 80f;
                 }
                 else if (aimPitch < -80f) {
                     aimPitch = -80f;
                 }
+
+                aimYaw += mouseSensitivity * mouseInput.x;
+
+                if (aimYaw < -180f) aimYaw += 360f;
+                else if (aimYaw > 180f) aimYaw -= 360f;
             }
+
+            //viewDirection = Quaternion.Euler(-aimPitch, rigidbody.rotation.eulerAngles.y, 0f);
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 Cursor.lockState = CursorLockMode.None;
@@ -195,6 +216,7 @@ namespace PlayerControl {
                 screenControl = true;
             }
 
+            if (Input.GetKeyDown(KeyCode.Backspace)) Debug.Break();
             if (Input.GetKeyDown(KeyCode.Keypad1)) rigidbody.position = new Vector3(-32, 0, 22);
             if (Input.GetKeyDown(KeyCode.Keypad2)) rigidbody.position = new Vector3(-12, 4, 40);
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);

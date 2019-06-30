@@ -6,17 +6,13 @@ namespace PlayerControl {
     namespace State {
         public class Sprint : Grounded {
 
-            public float maxMouseInput = 4.0f;
             public float mouseTurnScalar = 0.25f;
             public float moveTurnScalar = 100.0f;
-
-            private float mouseRotation = 0.0f;
+            public float maxInputTurnSpeed = 0.75f;
 
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.sprint, this);
-
-                rigidbody = player.GetComponent<Rigidbody>();
 
                 EventManager.StartListening<MecanimBehaviour.SprintEvent>(new UnityEngine.Events.UnityAction(OnSprintEvent));
             }
@@ -29,12 +25,10 @@ namespace PlayerControl {
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
-                    float extraRotation = mouseRotation;
                     if (Mathf.Abs(moveInput.x) > player.deadzone.x) {
-                        extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxTurnSpeed, maxTurnSpeed);
+                        float extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxInputTurnSpeed, maxInputTurnSpeed);
+                        rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     }
-
-                    rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                 }
                 else {
                     animator.SetBool("grounded", false);
@@ -49,8 +43,6 @@ namespace PlayerControl {
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 base.UseInput(moveInput, mouseInput, actions);
-
-                mouseRotation = mouseTurnScalar * player.screenMouseRatio * player.mouseSensitivity * Mathf.Clamp(mouseInput.x, -maxMouseInput, maxMouseInput);
 
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
                 if (actions.secondaryFire.down) animator.SetBool("aimMode", true);

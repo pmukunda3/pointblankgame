@@ -15,6 +15,8 @@ namespace CameraControl {
             public AnimationCurve offsetFuncY;
             public AnimationCurve offsetFuncZ;
 
+            public AnimationCurve lookDiffFuncX;
+
             private ThirdPersonCamera thirdPCamera;
             private PlayerController player;
 
@@ -32,7 +34,7 @@ namespace CameraControl {
 
             public override void CameraUpdate() {
                 Vector3 pitchAdjustedOffset = new Vector3(
-                    offsetFuncX.Evaluate(player.AimPitch() / 90.0f) * offset.x,
+                    (offsetFuncX.Evaluate(player.AimPitch() / 90.0f) + lookDiffFuncX.Evaluate(player.LookToMoveAngle())) * offset.x,
                     offsetFuncY.Evaluate(player.AimPitch() / 90.0f) * offset.y,
                     offsetFuncZ.Evaluate(player.AimPitch() / 90.0f) * offset.z);
                 Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + player.AimDirection() * pitchAdjustedOffset;

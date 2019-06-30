@@ -4,15 +4,13 @@ using UnityEngine;
 
 namespace PlayerControl {
     namespace State {
-        public class Aiming : Grounded {
-
-            private Vector3 velocityReset = new Vector3(0f, 1f, 0f);
+        public class CrouchAiming : Grounded {
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(StateId.Player.MoveModes.Grounded.aiming, this);
+                player.RegisterState(StateId.Player.MoveModes.Grounded.Crouch.aiming, this);
 
-                EventManager.StartListening<MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(OnAimingEvent));
+                EventManager.StartListening<MecanimBehaviour.CrouchAimingEvent>(new UnityEngine.Events.UnityAction(OnCrouchAimingEvent));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
@@ -44,8 +42,7 @@ namespace PlayerControl {
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
                     //rigidbody.velocity = Vector3.Scale(rigidbody.velocity, velocityReset);
-                    //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-                    rigidbody.rotation = Quaternion.Euler(0f, player.AimYaw(), 0f);
+                    rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                 }
                 else {
                     animator.SetBool("grounded", false);
@@ -58,7 +55,7 @@ namespace PlayerControl {
                 animator.SetFloat("velLocalZ", moveInput.y);
             }
 
-            private void OnAimingEvent() {
+            private void OnCrouchAimingEvent() {
                 jumpInput = false;
                 player.weaponController.aimingWeapon = true;
                 animator.SetBool("sprint", false);
@@ -66,7 +63,7 @@ namespace PlayerControl {
 
                 this.moveInput = player.GetLatestMoveInput();
 
-                player.SetState(StateId.Player.MoveModes.Grounded.aiming);
+                player.SetState(StateId.Player.MoveModes.Grounded.Crouch.aiming);
             }
         }
     }

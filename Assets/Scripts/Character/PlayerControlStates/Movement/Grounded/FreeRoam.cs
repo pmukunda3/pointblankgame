@@ -14,7 +14,6 @@ namespace PlayerControl {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.freeRoam, this);
 
-                rigidbody = player.GetComponent<Rigidbody>();
                 freeRoamMovement = gameObject.GetComponentInChildren<Running>() as IMovementState;
 
                 EventManager.StartListening<MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(OnFreeRoamEvent));
@@ -29,6 +28,7 @@ namespace PlayerControl {
                     }
                 }
 
+                    // TODO: Fix this.
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
                 rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
@@ -64,7 +64,8 @@ namespace PlayerControl {
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
-                    rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+                    //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+                    rigidbody.rotation = Quaternion.Euler(0f, player.AimYaw(), 0f);
                 }
                 else {
                     animator.SetBool("grounded", false);

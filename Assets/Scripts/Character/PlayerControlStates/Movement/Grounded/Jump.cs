@@ -33,12 +33,11 @@ namespace PlayerControl {
             private bool jumpInput = true;
             private bool leavingGround = false;
 
-            private Rigidbody rigidbody;
+            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
             private float playerRotation = 0.0f;
-            private float mouseRotation = 0.0f;
 
             private float timeButtonHeld = 0.0f;
 
@@ -94,7 +93,15 @@ namespace PlayerControl {
                     animator.SetInteger("landMode", 2);
                 }
 
-                rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(mouseRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+                //rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(mouseRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+
+                float angleDiff = Quaternion.Angle(rigidbody.rotation, player.AimYawQuaternion());
+                if (angleDiff / Time.fixedDeltaTime > maxTurnSpeed) {
+                    rigidbody.MoveRotation(Quaternion.Slerp(rigidbody.rotation, player.AimYawQuaternion(), maxTurnSpeed / angleDiff * Time.fixedDeltaTime));
+                }
+                else {
+                    rigidbody.MoveRotation(player.AimYawQuaternion()); // same as Slerp(rb.rot, play.yawQuat(), 1.0)
+                }
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -103,11 +110,7 @@ namespace PlayerControl {
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
-                //if (!sprint) Debug.Log("Sprint Released");
-
                 this.moveInput = moveInput;
-
-                mouseRotation = mouseTurnScalar * player.screenMouseRatio * player.mouseSensitivity * Mathf.Clamp(mouseInput.x, -maxMouseInput, maxMouseInput);
             }
 
             private bool CheckGrounded() {

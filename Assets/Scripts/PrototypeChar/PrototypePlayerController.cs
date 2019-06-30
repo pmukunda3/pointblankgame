@@ -51,6 +51,14 @@ public class PrototypePlayerController : MonoBehaviour, IPlayerAim {
         return aimPitch;
     }
 
+    public float AimYaw() {
+        return transform.eulerAngles.y;
+    }
+
+    public Quaternion AimYawQuaternion() {
+        return Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+    }
+
     private bool ctrlRbJump = false;
 
     void Update() {

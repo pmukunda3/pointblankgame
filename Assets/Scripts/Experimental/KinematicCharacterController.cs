@@ -53,11 +53,19 @@ public class KinematicCharacterController : MonoBehaviour, IPlayerAim {
     }
 
     public Quaternion AimDirection() {
-        return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
+        return Quaternion.Euler(-aimPitch, rigidbody.rotation.y, 0f);
     }
 
     public float AimPitch() {
         return aimPitch;
+    }
+
+    public float AimYaw() {
+        return rigidbody.rotation.y;
+    }
+
+    public Quaternion AimYawQuaternion() {
+        return Quaternion.Euler(0f, rigidbody.rotation.y, 0f);
     }
 
     void OnCollisionEnter(Collision col) {
