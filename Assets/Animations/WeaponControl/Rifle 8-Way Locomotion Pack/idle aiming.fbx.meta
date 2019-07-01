@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: 2804e4431c288264ca4201520c6385ba
 ModelImporter:
-  serializedVersion: 26
+  serializedVersion: 25
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: mixamo.com
+    second: Aiming Idle
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: mixamo.com
+      name: Aiming Idle
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
@@ -70,7 +70,6 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
-    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

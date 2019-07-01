@@ -65,6 +65,10 @@ namespace PlayerControl {
                 Debug.DrawRay(rigidbody.position + 0.6f * Vector3.up, animator.velocity, Color.red);
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 base.MoveRigidbody(localRigidbodyVelocity);
 
@@ -86,7 +90,6 @@ namespace PlayerControl {
 
             private void OnFreeRoamEvent() {
                 jumpInput = false;
-                player.weaponController.aimingWeapon = false;
                 animator.speed = 1.0f;
 
                 this.moveInput = player.GetLatestMoveInput();

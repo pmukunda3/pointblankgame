@@ -34,6 +34,10 @@ namespace PlayerControl {
                 rigidbody.velocity = animator.velocity;
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (!CheckGrounded()) {
                     //animator.SetBool("grounded", false);

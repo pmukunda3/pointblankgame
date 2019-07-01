@@ -48,6 +48,10 @@ namespace PlayerControl {
                 // do nothing
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
                     if (jumpInput) {
@@ -153,7 +157,6 @@ namespace PlayerControl {
 
                 this.moveInput = player.GetLatestMoveInput();
 
-                player.weaponController.aimingWeapon = false;
                 player.SetState(StateId.Player.MoveModes.Grounded.jump);
             }
         }

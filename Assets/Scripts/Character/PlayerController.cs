@@ -252,6 +252,10 @@ namespace PlayerControl {
             animVelBuffer.AddVelocity(animator.velocity);
         }
 
+        public void OnAnimatorIK() {
+            currPlayerState.AnimatorIK();
+        }
+
         private void UpdateAnimator(Vector3 localVelocity) {
             currPlayerState.UpdateAnimator(localVelocity);
         }
@@ -285,6 +289,10 @@ namespace PlayerControl {
         private class EmptyPlayerState : PlayerControlState {
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
                 //Debug.Log("Empty State: AnimatorMove");
+            }
+
+            public override void AnimatorIK() {
+                // do nothing
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {

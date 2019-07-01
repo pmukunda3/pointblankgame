@@ -35,6 +35,10 @@ namespace PlayerControl {
                 // do nothing
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 MovementChange moveChange = airControlMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
                 rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
@@ -89,7 +93,6 @@ namespace PlayerControl {
 
             private void OnFallingEvent() {
                 player.SetState(StateId.Player.MoveModes.Air.falling);
-                player.weaponController.aimingWeapon = false;
             }
         }
     }

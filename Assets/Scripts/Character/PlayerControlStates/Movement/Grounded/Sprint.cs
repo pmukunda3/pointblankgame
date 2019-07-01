@@ -23,6 +23,10 @@ namespace PlayerControl {
                 rigidbody.velocity = playerVelocity;
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 base.MoveRigidbody(localRigidbodyVelocity);
 
@@ -53,7 +57,6 @@ namespace PlayerControl {
 
             private void OnSprintEvent() {
                 jumpInput = false;
-                player.weaponController.aimingWeapon = false;
                 animator.SetBool("aimMode", false);
                 animator.speed = 1.0f;
 
