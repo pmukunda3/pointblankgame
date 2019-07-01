@@ -9,7 +9,6 @@ public class GameStarter : MonoBehaviour
 
     public void StartGame()
     {
-        print("click");
         SceneManager.LoadScene("Prototype");
     }
 }
