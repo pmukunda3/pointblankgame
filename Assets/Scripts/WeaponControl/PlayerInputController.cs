@@ -6,7 +6,6 @@ public class PlayerInputController : MonoBehaviour
 {
     public float speed;
     public GameObject Character;
-    public GameObject Camera;
 
     public float X_Sensitivity;
     private Animator anim;
@@ -15,6 +14,7 @@ public class PlayerInputController : MonoBehaviour
     void Start()
     {
         anim = Character.GetComponent<Animator>();
+        //anim.SetFloat("Blend", 0.5f);
     }
 
     // Update is called once per frame
