@@ -397,6 +397,14 @@ MonoBehaviour:
   maxTimeButtonHold: 0.5
   jumpLateralInputClearingDamp: 12
   jumpForwardInputClearingDamp: 12
+  maxStepSize: {x: 0, y: 0, z: 0}
+  realignSpeed:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  timeToCompleteTurn: 0
 --- !u!114 &454373522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +423,7 @@ MonoBehaviour:
   maxTimeButtonHold: 0.5
   jumpLateralInputClearingDamp: 12
   jumpForwardInputClearingDamp: 12
+  maxStepSize: {x: 0, y: 0, z: 0}
 --- !u!1 &725680120
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,6 +612,7 @@ MonoBehaviour:
   maxTimeButtonHold: 0.5
   jumpLateralInputClearingDamp: 12
   jumpForwardInputClearingDamp: 12
+  maxStepSize: {x: 0, y: 0, z: 0}
 --- !u!114 &1159379139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,6 +631,7 @@ MonoBehaviour:
   maxTimeButtonHold: 0.75
   jumpLateralInputClearingDamp: 6
   jumpForwardInputClearingDamp: 6
+  maxStepSize: {x: 0, y: 0, z: 0}
   mouseTurnScalar: 0.5
   moveTurnScalar: 100
   maxInputTurnSpeed: 0.75
@@ -642,6 +653,7 @@ MonoBehaviour:
   maxTimeButtonHold: 0.25
   jumpLateralInputClearingDamp: 18
   jumpForwardInputClearingDamp: 18
+  maxStepSize: {x: 0, y: 0, z: 0}
 --- !u!114 &1311224922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1013,36 +1025,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &7431189259986859256
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7431189259986859239}
-  m_Layer: 8
-  m_Name: Stand
-  m_TagString: climbTrigger
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7431189259986859239
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7431189259986859256}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 7431189260725917261}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7431189260304037582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,6 +1277,7 @@ MonoBehaviour:
   shared:
     lastRigidbodyVelocity: {x: 0, y: 0, z: 0}
     timeHeldJump: {x: 0, y: 0, z: 0}
+  maxStepSize: {x: 0, y: 0, z: 0}
   currPlayerState: {fileID: 0}
 --- !u!114 &1644425778348867457
 MonoBehaviour:
@@ -1349,37 +1332,6 @@ Transform:
   - {fileID: 7431189261680151979}
   m_Father: {fileID: 7431189260587521888}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7431189260725917262
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7431189260725917261}
-  m_Layer: 8
-  m_Name: RayCasts
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7431189260725917261
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7431189260725917262}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7431189259986859239}
-  m_Father: {fileID: 7431189260997140912}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7431189260808636038
 GameObject:
@@ -1517,7 +1469,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7431189261293241516}
-  - {fileID: 7431189260725917261}
   m_Father: {fileID: 7431189260587521888}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1592,7 +1543,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7431189261293241516}
-  - component: {fileID: 7431189261293241515}
   - component: {fileID: 7431189261293241514}
   m_Layer: 8
   m_Name: Stand
@@ -1615,18 +1565,6 @@ Transform:
   m_Father: {fileID: 7431189260997140912}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7431189261293241515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7431189261293241517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 608c5267b3c8bef47b0ba536b01467db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!136 &7431189261293241514
 CapsuleCollider:
   m_ObjectHideFlags: 0
