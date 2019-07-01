@@ -204,8 +204,6 @@ namespace PlayerControl {
                 else if (aimYaw > 180f) aimYaw -= 360f;
             }
 
-            //viewDirection = Quaternion.Euler(-aimPitch, rigidbody.rotation.eulerAngles.y, 0f);
-
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -219,6 +217,7 @@ namespace PlayerControl {
             }
 
             if (Input.GetKeyDown(KeyCode.Backspace)) Debug.Break();
+
             if (Input.GetKeyDown(KeyCode.Keypad1)) rigidbody.position = new Vector3(-32, 0, 22);
             if (Input.GetKeyDown(KeyCode.Keypad2)) rigidbody.position = new Vector3(-12, 4, 40);
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
