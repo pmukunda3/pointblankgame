@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace PlayerControl {
     namespace MecanimBehaviour {
-        public class Jump : PlayerControllerStateBehaviourBase {
+        public class Crouch : PlayerControllerStateBehaviourBase {
 
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Jump");
-                playerController.SetState(PlayerStateId.MoveModes.Air.jump);
+                EventManager.TriggerEvent<CrouchEvent>();
             }
         }
+
+        public class CrouchEvent : UnityEngine.Events.UnityEvent { }
     }
 }

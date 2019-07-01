@@ -32,28 +32,36 @@ namespace PlayerControl {
             public MovementCharacteristics lateral;
         }
 
+        [System.Serializable]
+        public struct SharedData {
+            public Vector3 lastRigidbodyVelocity;
+            public Vector3 timeHeldJump;
+        }
+
         public const float EPSILON = 1e-6f;
 
-        public float mouseSensitivity = 100.0f;
+        public float mouseSensitivity = 5.0f;
         public float screenMouseRatio = 1.777f;
 
         public Vector2 deadzone = new Vector2(0.01f, 0.01f);
 
-        public IMovementState runningState;
-        public IMovementState airControlFromJump;
-
         public WeaponController weaponController;
 
-        private Rigidbody rigidbody;
+        public SharedData shared;
+
+        public Vector3 maxStepSize;
+
+        private new Rigidbody rigidbody;
         private Animator animator;
         private UserInput userInput;
 
-        private Dictionary<Id, PlayerControlState> playerControlStates;
+        private Dictionary<Id, PlayerControlState> playerControlStates = new Dictionary<Id, PlayerControlState>();
         public PlayerControlState currPlayerState;
         private PlayerControlState emptyState;
 
         private bool screenControl = true;
         private float aimPitch = 0f;
+        private float aimYaw = 0f;
 
         private float speedTargetX;
         private float speedTargetY;
@@ -66,9 +74,6 @@ namespace PlayerControl {
         public LayerMask raycastMask {
             get { return mask; }
         }
-
-            // TODO: Create a data passing interface between these states.
-        public int landingAnimation = 0;
 
         private class VelocityBuffer {
             private Vector3[] buffer;
@@ -111,23 +116,34 @@ namespace PlayerControl {
         private VelocityBuffer rbVelBuffer;
         private VelocityBuffer animVelBuffer;
 
+        private Quaternion charDirection;
+
         public Quaternion AimDirection() {
-            return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
+            return Quaternion.Euler(-aimPitch, aimYaw, 0f);
+        }
+
+        public Quaternion AimYawQuaternion() {
+            return Quaternion.Euler(0f, aimYaw, 0f);
         }
 
         public float AimPitch() {
             return aimPitch;
         }
 
+        public float AimYaw() {
+            return aimYaw;
+        }
+
+        public float LookToMoveAngle() {
+            float angle = rigidbody.rotation.eulerAngles.y - aimYaw;
+            if (angle > 180f) angle -= 360f;
+            return angle;
+        }
+
         private void Start() {
             rigidbody = gameObject.GetComponent<Rigidbody>();
             animator = gameObject.GetComponent<Animator>();
             userInput = gameObject.GetComponent<UserInput>();
-
-            StateMachineBehaviour[] stateMachineBehaviours = animator.GetBehaviours<MecanimStateBehaviourEvents>();
-
-            runningState = gameObject.GetComponent<Running>() as IMovementState;
-            airControlFromJump = gameObject.GetComponent<AirControlFromJump>() as IMovementState;
 
             EventManager.StartListening<WeaponFirePrimary>(
                 new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
@@ -141,10 +157,8 @@ namespace PlayerControl {
             rbVelBuffer = new VelocityBuffer(16);
             animVelBuffer = new VelocityBuffer(16);
 
-            playerControlStates = new Dictionary<Id, PlayerControlState>();
-
             currPlayerState = emptyState = gameObject.AddComponent<EmptyPlayerState>() as PlayerControlState;
-            RegisterState(PlayerStateId.empty, emptyState);
+            RegisterState(StateId.Player.empty, emptyState);
         }
 
         private void WeaponFirePrimaryCallbackTest() {
@@ -171,16 +185,26 @@ namespace PlayerControl {
             }
 
             if (screenControl) {
-                mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                mouseInput = new Vector2 {
+                    x = Input.GetAxis("Mouse X"),
+                    y = Input.GetAxis("Mouse Y")
+                };
 
-                aimPitch += mouseSensitivity * mouseInput.y * Time.deltaTime;
+                aimPitch += mouseSensitivity * mouseInput.y;
                 if (aimPitch > 80f) {
                     aimPitch = 80f;
                 }
                 else if (aimPitch < -80f) {
                     aimPitch = -80f;
                 }
+
+                aimYaw += mouseSensitivity * mouseInput.x;
+
+                if (aimYaw < -180f) aimYaw += 360f;
+                else if (aimYaw > 180f) aimYaw -= 360f;
             }
+
+            //viewDirection = Quaternion.Euler(-aimPitch, rigidbody.rotation.eulerAngles.y, 0f);
 
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 Cursor.lockState = CursorLockMode.None;
@@ -194,6 +218,7 @@ namespace PlayerControl {
                 screenControl = true;
             }
 
+            if (Input.GetKeyDown(KeyCode.Backspace)) Debug.Break();
             if (Input.GetKeyDown(KeyCode.Keypad1)) rigidbody.position = new Vector3(-32, 0, 22);
             if (Input.GetKeyDown(KeyCode.Keypad2)) rigidbody.position = new Vector3(-12, 4, 40);
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
@@ -232,6 +257,10 @@ namespace PlayerControl {
             currPlayerState.UpdateAnimator(localVelocity);
         }
 
+        public void OnCollisionEnter(Collision collision) {
+            currPlayerState.CollisionEnter(collision);
+        }
+
         public void SetState(Id stateId) {
             PlayerControlState state;
             if (playerControlStates.TryGetValue(stateId, out state)) {
@@ -244,6 +273,14 @@ namespace PlayerControl {
 
         public void RegisterState(Id stateId, PlayerControlState state) {
             playerControlStates.Add(stateId, state);
+        }
+
+        public Vector2 GetLatestMoveInput() {
+            return this.moveInput;
+        }
+
+        public Vector2 GetLatestMouseInput() {
+            return this.mouseInput;
         }
 
         private class EmptyPlayerState : PlayerControlState {
@@ -262,6 +299,12 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions action) {
                 //Debug.Log("Empty State: UseInput");
             }
+
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
+            }
         }
+
+        public class PlayerControlStateEvent : UnityEngine.Events.UnityEvent<Id> { }
     }
 }

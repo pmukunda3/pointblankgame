@@ -12,13 +12,13 @@ namespace PlayerControl {
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
-            private Rigidbody rigidbody;
+            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Air.aiming, this);
+                player.RegisterState(StateId.Player.MoveModes.Air.aiming, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
             }
@@ -66,6 +66,10 @@ namespace PlayerControl {
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
                 if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
                 else                            animator.SetBool("aimMode", false);
+            }
+
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
             }
 
             private bool CheckGrounded() {

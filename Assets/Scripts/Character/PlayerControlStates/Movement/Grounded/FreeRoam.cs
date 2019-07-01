@@ -4,36 +4,23 @@ using UnityEngine;
 
 namespace PlayerControl {
     namespace State {
-        public class FreeRoam : PlayerControlState {
-
-            public float groundCheckDistance = 0.18f;
-            public float maxTurnSpeed = 1.0f;
-
-            public float moveSpeedMultiplier = 1.0f;
+        public class FreeRoam : Grounded {
 
             private IMovementState freeRoamMovement;
 
-            private Vector2 mouseInput;
-            private Vector2 moveInput;
-            private bool jumpRb = false;
-
-            private Rigidbody rigidbody;
-            private Vector3 groundNormal = Vector3.zero;
-            private Vector3 groundPoint = Vector3.zero;
-
-            private float lateralSpeed = 0f;
             private Vector3 direction = Vector3.zero;
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Grounded.freeRoam, this);
+                player.RegisterState(StateId.Player.MoveModes.Grounded.freeRoam, this);
 
-                rigidbody = player.GetComponent<Rigidbody>();
                 freeRoamMovement = gameObject.GetComponentInChildren<Running>() as IMovementState;
+
+                EventManager.StartListening<MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(OnFreeRoamEvent));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
-                //if (sprint) Debug.Log("Sprint Pressed");
+                base.UseInput(moveInput, mouseInput, actions);
 
                 if (actions.walk.active) {
                     if (moveInput.sqrMagnitude > 0.3f * 0.3f) {
@@ -41,16 +28,15 @@ namespace PlayerControl {
                     }
                 }
 
-                this.moveInput = moveInput;
-                this.mouseInput = mouseInput;
-
+                    // This technically isn't wrong, but the correct fix has to take into account when the character
+                    // is moving fast from something other than itself. But, the work around is to just slow the player
+                    // down for spinning while moving.
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+                rigidbody.velocity = 0.955f * (Quaternion.AngleAxis(extraRotation, Vector3.up) * rigidbody.velocity);
 
                 if (actions.sprint.active) animator.SetBool("sprint", true);
                 if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
-
-                if (actions.jump.down) jumpRb = true;
+                if (actions.crouch.down) animator.SetBool("crouch", true);
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -80,46 +66,16 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
+                base.MoveRigidbody(localRigidbodyVelocity);
+
                 if (CheckGrounded()) {
-                    rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-
-                    //MovementChange moveChange = freeRoamMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
-
-                    //if (moveChange.localVelocityOverride == localRigidbodyVelocity) {
-                    //    //rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
-                    //    // or
-                    //    rigidbody.AddForce(rigidbody.rotation * moveChange.localAcceleration, ForceMode.Acceleration);
-
-                    //    rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-                    //}
-                    //else {
-                    //    Vector3 localVelocityOverride = new Vector3(localRigidbodyVelocity.x, localRigidbodyVelocity.y, localRigidbodyVelocity.z);
-
-                    //    localVelocityOverride += moveChange.localAcceleration * Time.fixedDeltaTime;
-
-                    //    if (moveChange.localVelocityOverride.x != localRigidbodyVelocity.x) {
-                    //        localVelocityOverride.x = moveChange.localVelocityOverride.x;
-                    //    }
-                    //    if (moveChange.localVelocityOverride.y != localRigidbodyVelocity.y) {
-                    //        localVelocityOverride.y = moveChange.localVelocityOverride.y;
-                    //    }
-                    //    if (moveChange.localVelocityOverride.z != localRigidbodyVelocity.z) {
-                    //        localVelocityOverride.z = moveChange.localVelocityOverride.z;
-                    //    }
-
-                    //    rigidbody.velocity = rigidbody.rotation * localVelocityOverride;
-                    //    rigidbody.MoveRotation(Quaternion.AngleAxis((player.screenMouseRatio * player.mouseSensitivity * mouseInput.x) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
-                    //}
-
-                    if (jumpRb) {
-                        rigidbody.velocity += new Vector3(0f, 4f, 0f);
-                        animator.SetTrigger("TRI_jump");
-                        jumpRb = false;
-                    }
+                    //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
+                    rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
+                    StickToGroundHelper(0.45f);
                 }
                 else {
                     animator.SetBool("grounded", false);
-                    animator.SetTrigger("TRI_fall");
+                    animator.SetTrigger("TRG_fall");
                 }
             }
 
@@ -128,20 +84,14 @@ namespace PlayerControl {
                 animator.SetFloat("velLocalZ", moveInput.y);
             }
 
-            private bool CheckGrounded() {
-                RaycastHit hitInfo;
+            private void OnFreeRoamEvent() {
+                jumpInput = false;
+                player.weaponController.aimingWeapon = false;
+                animator.speed = 1.0f;
 
-                Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
+                this.moveInput = player.GetLatestMoveInput();
 
-                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
-                    groundNormal = hitInfo.normal;
-                    groundPoint = hitInfo.point;
-                    return true;
-                }
-                else {
-                    groundNormal = Vector3.zero;
-                    return false;
-                }
+                player.SetState(StateId.Player.MoveModes.Grounded.freeRoam);
             }
         }
     }

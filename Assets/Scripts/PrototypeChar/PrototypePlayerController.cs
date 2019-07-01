@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public class PrototypePlayerController : MonoBehaviour, IPlayerAim {
 
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     private Animator animator;
 
     public TriggerCallback climbTrigger;
@@ -49,6 +49,14 @@ public class PrototypePlayerController : MonoBehaviour, IPlayerAim {
 
     public float AimPitch() {
         return aimPitch;
+    }
+
+    public float AimYaw() {
+        return transform.eulerAngles.y;
+    }
+
+    public Quaternion AimYawQuaternion() {
+        return Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
     }
 
     private bool ctrlRbJump = false;
