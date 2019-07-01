@@ -16,17 +16,19 @@ namespace PlayerControl {
 
             private IMovementState airControlMovement;
 
-            private Rigidbody rigidbody;
+            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
             public new void Start() {
                 base.Start();
-                player.RegisterState(PlayerStateId.MoveModes.Air.falling, this);
+                player.RegisterState(StateId.Player.MoveModes.Air.falling, this);
 
                 rigidbody = player.GetComponent<Rigidbody>();
 
                 airControlMovement = gameObject.GetComponentInChildren<AirControlFromFall>() as IMovementState;
+
+                EventManager.StartListening<MecanimBehaviour.FallingEvent>(new UnityEngine.Events.UnityAction(OnFallingEvent));
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
@@ -36,6 +38,14 @@ namespace PlayerControl {
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 MovementChange moveChange = airControlMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
                 rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
+
+                float angleDiff = Quaternion.Angle(rigidbody.rotation, player.AimYawQuaternion());
+                if (angleDiff / Time.fixedDeltaTime > maxTurnSpeed) {
+                    rigidbody.MoveRotation(Quaternion.Slerp(rigidbody.rotation, player.AimYawQuaternion(), maxTurnSpeed / angleDiff * Time.fixedDeltaTime));
+                }
+                else {
+                    rigidbody.MoveRotation(player.AimYawQuaternion()); // same as Slerp(rb.rot, play.yawQuat(), 1.0)
+                }
 
                 CheckLandingDistance();
             }
@@ -47,13 +57,12 @@ namespace PlayerControl {
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
-                //if (!sprint) Debug.Log("Sprint Released");
-
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
+            }
 
-                float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
-                rigidbody.velocity = Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
             }
 
             private void CheckLandingDistance() {
@@ -62,15 +71,25 @@ namespace PlayerControl {
                 float checkDistance = Mathf.Max(landAnimationFrameTarget / landAnimationFrameRate * -rigidbody.velocity.y, groundCheckDistanceMinimum);
                 Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
 
-                if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
-                    if (rigidbody.velocity.y < -8f) {
-                        player.landingAnimation = 0;
+                //if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                if (checkDistance > 0.0f && Physics.SphereCast(player.transform.position + (Vector3.up * 0.1f), 0.1f, Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                    player.shared.lastRigidbodyVelocity = rigidbody.velocity;
+                    if (player.shared.lastRigidbodyVelocity.y > -4f) {
+                        animator.SetInteger("landMode", 0);
+                    }
+                    else if (player.shared.lastRigidbodyVelocity.y > -10f) {
+                        animator.SetInteger("landMode", 1);
                     }
                     else {
-                        player.landingAnimation = 1;
+                        animator.SetInteger("landMode", 2);
                     }
                     animator.SetBool("grounded", true);
                 }
+            }
+
+            private void OnFallingEvent() {
+                player.SetState(StateId.Player.MoveModes.Air.falling);
+                player.weaponController.aimingWeapon = false;
             }
         }
     }

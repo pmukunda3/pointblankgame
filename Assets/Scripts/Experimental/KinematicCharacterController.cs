@@ -8,7 +8,7 @@ public class KinematicCharacterController : MonoBehaviour, IPlayerAim {
     public float screenMouseRatio = 1.777f;
     public Vector3 charVelocityRun;
 
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
 
     // Start is called before the first frame update
     void Start() {
@@ -53,11 +53,19 @@ public class KinematicCharacterController : MonoBehaviour, IPlayerAim {
     }
 
     public Quaternion AimDirection() {
-        return Quaternion.Euler(-aimPitch, transform.eulerAngles.y, 0f);
+        return Quaternion.Euler(-aimPitch, rigidbody.rotation.y, 0f);
     }
 
     public float AimPitch() {
         return aimPitch;
+    }
+
+    public float AimYaw() {
+        return rigidbody.rotation.y;
+    }
+
+    public Quaternion AimYawQuaternion() {
+        return Quaternion.Euler(0f, rigidbody.rotation.y, 0f);
     }
 
     void OnCollisionEnter(Collision col) {

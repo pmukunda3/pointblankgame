@@ -106,8 +106,8 @@ public class chase_player_global_AI : MonoBehaviour
 
         ai_animator.SetFloat("Turn", normalized_angle);
 
-        Debug.Log(nav_agent.speed);
-        Debug.Log(nav_agent.velocity.magnitude);
+        //Debug.Log(nav_agent.speed);
+        //Debug.Log(nav_agent.velocity.magnitude);
         Vector3 dir = nav_agent.pathEndPosition - player.transform.position;
 
     }

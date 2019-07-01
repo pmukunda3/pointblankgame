@@ -17,5 +17,6 @@ namespace PlayerControl {
         public abstract void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity);
         public abstract void UpdateAnimator(Vector3 localRigidbodyVelocity);
         public abstract void MoveRigidbody(Vector3 localRigidbodyVelocity);
+        public abstract void CollisionEnter(Collision collision);
     }
 }

@@ -9,11 +9,10 @@ namespace PlayerControl {
             public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex) {
                 base.OnStateEnter(animator, animatorStateInfo, layerIndex);
 
-                Debug.Log("On State Enter: Aiming");
-                playerController.SetState(PlayerStateId.MoveModes.Grounded.aiming);
-
-                playerController.weaponController.aimingWeapon = true;
+                EventManager.TriggerEvent<AimingEvent>();
             }
         }
+
+        public class AimingEvent : UnityEngine.Events.UnityEvent { }
     }
 }
