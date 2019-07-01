@@ -42,8 +42,11 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
+                base.MoveRigidbody(localRigidbodyVelocity);
+
                 if (CheckGrounded()) {
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
+                    StickToGroundHelper(0.35f);
                 }
                 else {
                     animator.SetBool("grounded", false);

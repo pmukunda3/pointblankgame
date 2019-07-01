@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public class PrototypePlayerController : MonoBehaviour, IPlayerAim {
 
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     private Animator animator;
 
     public TriggerCallback climbTrigger;

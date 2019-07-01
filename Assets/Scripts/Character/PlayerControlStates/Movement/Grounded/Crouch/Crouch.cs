@@ -88,6 +88,10 @@ namespace PlayerControl {
                 animator.SetFloat("velLocalZ", 0.0f);
             }
 
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
+            }
+
             private void InitRealignCharModel() {
                 realignCharModel = true;
                 startRot = rigidbody.rotation;

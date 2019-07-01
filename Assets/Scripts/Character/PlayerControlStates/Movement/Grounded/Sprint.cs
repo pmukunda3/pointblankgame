@@ -24,11 +24,14 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
+                base.MoveRigidbody(localRigidbodyVelocity);
+
                 if (CheckGrounded()) {
                     if (Mathf.Abs(moveInput.x) > player.deadzone.x) {
                         float extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxInputTurnSpeed, maxInputTurnSpeed);
                         rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     }
+                    StickToGroundHelper(0.35f);
                 }
                 else {
                     animator.SetBool("grounded", false);

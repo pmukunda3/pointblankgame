@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace PlayerControl {
     namespace State {
         public class Jump : PlayerControlState {
@@ -36,10 +32,6 @@ namespace PlayerControl {
             private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
-
-            private float playerRotation = 0.0f;
-
-            private float timeButtonHeld = 0.0f;
 
             private float worldPositionY = 0.0f;
 
@@ -111,6 +103,10 @@ namespace PlayerControl {
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
+            }
+
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
             }
 
             private bool CheckGrounded() {

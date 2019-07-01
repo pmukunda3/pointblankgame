@@ -49,6 +49,8 @@ namespace PlayerControl {
 
         public SharedData shared;
 
+        public Vector3 maxStepSize;
+
         private new Rigidbody rigidbody;
         private Animator animator;
         private UserInput userInput;
@@ -255,6 +257,10 @@ namespace PlayerControl {
             currPlayerState.UpdateAnimator(localVelocity);
         }
 
+        public void OnCollisionEnter(Collision collision) {
+            currPlayerState.CollisionEnter(collision);
+        }
+
         public void SetState(Id stateId) {
             PlayerControlState state;
             if (playerControlStates.TryGetValue(stateId, out state)) {
@@ -292,6 +298,10 @@ namespace PlayerControl {
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions action) {
                 //Debug.Log("Empty State: UseInput");
+            }
+
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
             }
         }
 

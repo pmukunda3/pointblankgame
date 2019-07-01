@@ -6,9 +6,13 @@ namespace PlayerControl {
     namespace State {
         public class CrouchAiming : Grounded {
 
+            private IMovementState crouchDecel;
+
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.Crouch.aiming, this);
+
+                crouchDecel = gameObject.GetComponentInChildren<Crouching>() as IMovementState;
 
                 EventManager.StartListening<MecanimBehaviour.CrouchAimingEvent>(new UnityEngine.Events.UnityAction(OnCrouchAimingEvent));
             }
@@ -38,6 +42,11 @@ namespace PlayerControl {
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
+                    if (rigidbody.velocity.sqrMagnitude > 0.0001f) {
+                        MovementChange moveChange = crouchDecel.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.fixedDeltaTime);
+                        rigidbody.AddRelativeForce(moveChange.localAcceleration, ForceMode.Acceleration);
+                    }
+
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                 }
                 else {
@@ -50,6 +59,10 @@ namespace PlayerControl {
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
                 animator.SetFloat("velLocalX", moveInput.x);
                 animator.SetFloat("velLocalZ", moveInput.y);
+            }
+
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
             }
 
             private void OnCrouchAimingEvent() {

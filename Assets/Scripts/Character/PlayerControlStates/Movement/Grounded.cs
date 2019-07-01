@@ -15,6 +15,8 @@ namespace PlayerControl {
             public float jumpLateralInputClearingDamp = 12f;
             public float jumpForwardInputClearingDamp = 12f;
 
+            public Vector3 maxStepSize;
+
             protected Vector2 mouseInput;
             protected Vector2 moveInput;
             protected bool jumpInput = false;
@@ -64,18 +66,75 @@ namespace PlayerControl {
                 }
             }
 
+            public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
+                Quaternion movementDirection;
+                if (rigidbody.velocity.sqrMagnitude < 0.0001f) {
+                    movementDirection = rigidbody.rotation;
+                }
+                else {
+                    movementDirection = Quaternion.FromToRotation(new Vector3(-rigidbody.velocity.x, 0f, rigidbody.velocity.z).normalized, Vector3.forward);
+                }
+                Debug.DrawRay(rigidbody.position + Vector3.up * 0.001f, movementDirection * new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z), Color.magenta);
+                Debug.DrawRay(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward * maxStepSize.z, Color.magenta);
+            }
+
+            public override void CollisionEnter(Collision collision) {
+                RaycastHit stepTopInfo;
+                if (CheckStep(out stepTopInfo)) {
+                    Debug.Log("Stepping onto this world position: " + stepTopInfo.point.ToString("F4"));
+                    rigidbody.position += Vector3.up * stepTopInfo.point.y;
+                }
+            }
+
             protected bool CheckGrounded() {
                 RaycastHit hitInfo;
 
-                Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
+                Debug.DrawLine(rigidbody.position + (Vector3.up * 0.1f), rigidbody.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
 
-                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
+                if (Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
                     groundNormal = hitInfo.normal;
                     groundPoint = hitInfo.point;
                     return true;
                 }
                 else {
                     groundNormal = Vector3.zero;
+                    return false;
+                }
+            }
+
+            protected void StickToGroundHelper(float downwardDistance) {
+                RaycastHit hitInfo;
+
+                if (Physics.SphereCast(rigidbody.position, 0.15f, Vector3.down, out hitInfo, downwardDistance, player.raycastMask)) {
+                    if (Mathf.Abs(Vector3.Angle(hitInfo.normal, Vector3.up)) < 85f) {
+                        if (rigidbody.velocity.y < 0f) {
+                            rigidbody.velocity = Vector3.ProjectOnPlane(rigidbody.velocity, hitInfo.normal) + Vector3.up * rigidbody.velocity.y;
+                        }
+                        else {
+                            rigidbody.velocity = Vector3.ProjectOnPlane(rigidbody.velocity, hitInfo.normal);
+                        }
+                    }
+                }
+            }
+
+            protected bool CheckStep(out RaycastHit stepTopInfo) {
+                RaycastHit lowerCast;
+                RaycastHit upperCast;
+
+                Quaternion movementDirection;
+                if (rigidbody.velocity.sqrMagnitude < 0.0001f) {
+                    movementDirection = rigidbody.rotation;
+                }
+                else {
+                    movementDirection = Quaternion.FromToRotation(new Vector3(-rigidbody.velocity.x, 0f, rigidbody.velocity.z).normalized, Vector3.forward);
+                }
+
+                if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z), out lowerCast, maxStepSize.magnitude, player.raycastMask)
+                    && !Physics.Raycast(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward, out upperCast, maxStepSize.z, player.raycastMask)) {
+                    return Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.001f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask);
+                }
+                else {
+                    stepTopInfo = new RaycastHit();
                     return false;
                 }
             }

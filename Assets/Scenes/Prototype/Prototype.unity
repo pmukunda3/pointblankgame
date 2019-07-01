@@ -43091,6 +43091,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7431189260587521902, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: maxStepSize.y
+      value: 0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7431189260587521902, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: maxStepSize.z
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 7431189260587521888, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -43268,6 +43278,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1652819984, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
       propertyPath: airAccel.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379139, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: groundCheckDistance
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379139, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxStepSize.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379139, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxStepSize.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379140, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: groundCheckDistance
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379140, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxStepSize.y
+      value: 0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379140, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxStepSize.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379138, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: groundCheckDistance
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379138, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxStepSize.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159379138, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
+      propertyPath: maxStepSize.z
       value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []

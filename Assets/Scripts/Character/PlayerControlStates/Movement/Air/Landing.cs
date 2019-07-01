@@ -16,7 +16,7 @@ namespace PlayerControl {
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
-            private Rigidbody rigidbody;
+            private new Rigidbody rigidbody;
 
             private int landMode = 0;
             private float rollAnimationSpeed = 1.0f;
@@ -86,6 +86,10 @@ namespace PlayerControl {
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
                 animator.SetFloat("velLocalX", moveInput.x);
                 animator.SetFloat("velLocalZ", moveInput.y);
+            }
+
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
             }
 
             public void OnLandingEvent() {

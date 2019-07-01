@@ -61,13 +61,18 @@ namespace PlayerControl {
                 this.mouseInput = mouseInput;
             }
 
+            public override void CollisionEnter(Collision collision) {
+                // do nothing
+            }
+
             private void CheckLandingDistance() {
                 RaycastHit hitInfo;
 
                 float checkDistance = Mathf.Max(landAnimationFrameTarget / landAnimationFrameRate * -rigidbody.velocity.y, groundCheckDistanceMinimum);
                 Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
 
-                if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                //if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                if (checkDistance > 0.0f && Physics.SphereCast(player.transform.position + (Vector3.up * 0.1f), 0.1f, Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
                     player.shared.lastRigidbodyVelocity = rigidbody.velocity;
                     if (player.shared.lastRigidbodyVelocity.y > -4f) {
                         animator.SetInteger("landMode", 0);

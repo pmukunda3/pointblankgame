@@ -8,7 +8,7 @@ public class KinematicCharacterController : MonoBehaviour, IPlayerAim {
     public float screenMouseRatio = 1.777f;
     public Vector3 charVelocityRun;
 
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
 
     // Start is called before the first frame update
     void Start() {

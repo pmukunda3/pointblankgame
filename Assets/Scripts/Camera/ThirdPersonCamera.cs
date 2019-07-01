@@ -6,7 +6,7 @@ namespace CameraControl {
     [RequireComponent(typeof(Camera))]
     public class ThirdPersonCamera : MonoBehaviour {
 
-        private Camera camera;
+        private new Camera camera;
         public PlayerControl.PlayerController player;
 
         public GameObject cameraPivot;
