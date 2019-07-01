@@ -6,7 +6,6 @@ public class ProjectileWeaponController : MonoBehaviour
 {
     public GameObject Muzzle;
     public GameObject Projectile;
-    public GameObject FirePoint;
     public float MuzzleDuration;
     public float FireRate;
 
@@ -20,25 +19,32 @@ public class ProjectileWeaponController : MonoBehaviour
         clock = 0f;
         FireInterval = 1 / FireRate;
         Projectile.SetActive(false);
-        Projectile.GetComponent<ProjectileController>().dontDestroy = true; 
+        Projectile.GetComponent<ProjectileController>().dontDestroy = true;
+        Muzzle.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        clock += Time.deltaTime;
-        if (clock > MuzzleDuration)
+        if(Input.GetButton("Fire1"))
         {
-            Muzzle.SetActive(false);
+            if (clock >= 0f)
+            {
+                Muzzle.SetActive(true);
+                clock = -FireInterval;
+                NewProjectile = Instantiate(Projectile, Projectile.transform);
+                NewProjectile.transform.parent = null;
+                NewProjectile.SetActive(true);
+                NewProjectile.GetComponent<ProjectileController>().dontDestroy = false;
+            }
         }
-        if (clock > FireInterval)
+        if (clock < 0f)
         {
-            Muzzle.SetActive(true);
-            clock = 0f;
-            NewProjectile = Instantiate(Projectile, FirePoint.transform);
-            NewProjectile.transform.parent = null;
-            NewProjectile.SetActive(true);
-            NewProjectile.GetComponent<ProjectileController>().dontDestroy = false;
+            clock += Time.deltaTime;
+            if (clock >= -FireInterval + MuzzleDuration)
+            {
+                Muzzle.SetActive(false);
+            }
         }
     }
 }
