@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 /*
-Attach this script as a parent to some game objects. The script will then combine the meshes at startup.
+attach this script as a parent to some game objects. The script will then combine the meshes at startup.
 This is useful as a performance optimization since it is faster to render one big mesh than many small meshes. See the docs on graphics performance optimization for more info.
 
 Different materials will cause multiple meshes to be created, thus it is useful to share as many textures/material as you can.

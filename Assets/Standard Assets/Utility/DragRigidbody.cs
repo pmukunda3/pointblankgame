@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ namespace UnityStandardAssets.Utility
         const float k_Drag = 10.0f;
         const float k_AngularDrag = 5.0f;
         const float k_Distance = 0.2f;
-        const bool k_AttachToCenterOfMass = false;
+        const bool k_attachToCenterOfMass = false;
 
         private SpringJoint m_SpringJoint;
 

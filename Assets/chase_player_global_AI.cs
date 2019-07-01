@@ -8,7 +8,8 @@ public enum AIState
 {
     ChasePlayer,
     Patrol,
-    MeleeAttach
+    Meleeattack,
+    Dead
 
 };
 public class chase_player_global_AI : MonoBehaviour
@@ -18,18 +19,19 @@ public class chase_player_global_AI : MonoBehaviour
     public NavMeshAgent nav_agent;
     public GameObject[] patrol_points;
     public Animator ai_animator;
-    public float speed_factor;
-   
+    public float lifetime;
+
 
     public GameObject player;
     public AIState ai_state;
 
 
 
-    
+
     private void Patrol()
     {
         nav_agent.SetDestination(patrol_points[curr_point].transform.position);
+        //Debug.Log(patrol_points[curr_point].transform.position);
 
     }
 
@@ -38,19 +40,27 @@ public class chase_player_global_AI : MonoBehaviour
         nav_agent.SetDestination(player.transform.position);
     }
 
-    void Start()
+    private void meleeattack(Animator ai_animator)
     {
-        ai_state = AIState.Patrol;
+        ai_animator.SetTrigger("Attack");
+    }
+
+    private void setDeath(float time)
+    {
+        //yield WaitForSeconds(time);
+        Destroy(gameObject);
+    }
+
+    private void Start()
+    {
         ai_animator = gameObject.GetComponent<Animator>();
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
-
+        Patrol();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 vel = nav_agent.velocity * speed_factor;
-        nav_agent.velocity.Set(vel.x, vel.y, vel.z);
 
         float dist_to_player = Vector3.Distance(nav_agent.transform.position,
     player.transform.position);
@@ -63,38 +73,57 @@ public class chase_player_global_AI : MonoBehaviour
             case AIState.Patrol:
 
                 if (dist_to_player < 5)
+                {
                     ai_state = AIState.ChasePlayer;
+                }
+
                 else
                 {
-                    if(nav_agent.remainingDistance <= 0.1)
+                    if (nav_agent.remainingDistance <= 0.5)
                     {
                         curr_point = (curr_point + 1) % patrol_points.Length;
+                        Patrol();
                     }
-                    Patrol();
-
+                    //
                 }
                 break;
 
             case AIState.ChasePlayer:
-                if(dist_to_player < 1)
+                if (dist_to_player > 8)
                 {
-                    ai_state = AIState.MeleeAttach;
+                    Patrol();
+                    ai_state = AIState.Patrol;
+                }
+                else if (dist_to_player < 1)
+                {
+                    meleeattack(ai_animator);
+                    ai_state = AIState.Meleeattack;
                 }
                 else
                 {
                     chasePlayer();
                 }
-
                 break;
 
-            case AIState.MeleeAttach:
+            case AIState.Meleeattack:
+                if (dist_to_player > 2)
+                {
+                    chasePlayer();
+                    ai_state = AIState.ChasePlayer;
+                }
+                else
+                {
+                    meleeattack(ai_animator);
+                }
+                break;
 
+            case AIState.Dead:
                 break;
 
         }
+
         //update animation
-        ai_animator.SetFloat("Forward",   nav_agent.velocity.magnitude  / nav_agent.speed);
-        //
+        ai_animator.SetFloat("Forward", nav_agent.velocity.magnitude / nav_agent.speed);
         float angle = Vector3.Angle(nav_agent.velocity.normalized, this.transform.forward);
         if (nav_agent.velocity.normalized.x < this.transform.forward.x)
         {
@@ -109,8 +138,12 @@ public class chase_player_global_AI : MonoBehaviour
         Debug.Log(nav_agent.speed);
         Debug.Log(nav_agent.velocity.magnitude);
         Vector3 dir = nav_agent.pathEndPosition - player.transform.position;
-
-    }
+    }//end of switch
 
 
 }
+
+
+    //update animation
+
+

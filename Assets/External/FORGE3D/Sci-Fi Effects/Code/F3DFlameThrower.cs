@@ -5,7 +5,7 @@ namespace FORGE3D
 {
     public class F3DFlameThrower : MonoBehaviour
     {
-        public Light pLight; // Attached point light
+        public Light pLight; // attached point light
         public ParticleSystem heat; // Heat particles
 
         int lightState; // Point light state flag (fading in or out)
