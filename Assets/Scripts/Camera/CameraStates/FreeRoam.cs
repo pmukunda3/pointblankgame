@@ -41,6 +41,10 @@ namespace CameraControl {
             }
 
             public override void CameraUpdate() {
+                // do nothing
+            }
+
+            public override void CameraLateUpdate() {
                 Vector3 pitchAdjustedOffset = new Vector3(
                     offsetFuncX.Evaluate(player.AimPitch() / 90.0f) * offset.x,
                     offsetFuncY.Evaluate(player.AimPitch() / 90.0f) * offset.y,

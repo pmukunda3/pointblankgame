@@ -40,6 +40,10 @@ namespace PlayerControl {
                 // do nothing
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 if (CheckGrounded()) {
                     if (rigidbody.velocity.sqrMagnitude > 0.0001f) {

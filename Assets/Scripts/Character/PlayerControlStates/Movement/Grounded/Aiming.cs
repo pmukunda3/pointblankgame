@@ -6,7 +6,11 @@ namespace PlayerControl {
     namespace State {
         public class Aiming : Grounded {
 
-            private Vector3 velocityReset = new Vector3(0f, 1f, 0f);
+            public CameraControl.State.Aiming cameraState;
+            public WeaponManager weaponManager;
+
+            private Transform LeftHandIKTarget, RightHandIKTarget;
+            private Vector3 LookTarget;
 
             public new void Start() {
                 base.Start();
@@ -41,6 +45,24 @@ namespace PlayerControl {
                 rigidbody.velocity = playerVelocity;
             }
 
+            public override void AnimatorIK() {
+                LookTarget = cameraState.target;
+                animator.SetLookAtWeight(1f);
+                animator.SetLookAtPosition(LookTarget);
+
+                LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+                animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+                animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
+
+                RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 base.MoveRigidbody(localRigidbodyVelocity);
 
@@ -61,7 +83,6 @@ namespace PlayerControl {
 
             private void OnAimingEvent() {
                 jumpInput = false;
-                player.weaponController.aimingWeapon = true;
                 animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
 

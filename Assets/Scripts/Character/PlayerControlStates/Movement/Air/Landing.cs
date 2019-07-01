@@ -73,6 +73,10 @@ namespace PlayerControl {
                 }
             }
 
+            public override void AnimatorIK() {
+                // do nothing
+            }
+
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
                 float angleDiff = Quaternion.Angle(rigidbody.rotation, player.AimYawQuaternion());
                 if (angleDiff / Time.fixedDeltaTime > maxTurnSpeed) {
@@ -101,7 +105,6 @@ namespace PlayerControl {
                 }
 
                 player.SetState(StateId.Player.MoveModes.Air.land);
-                player.weaponController.aimingWeapon = false;
             }
         }
     }

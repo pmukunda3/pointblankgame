@@ -15,6 +15,7 @@ namespace PlayerControl {
 
         public abstract void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions);
         public abstract void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity);
+        public abstract void AnimatorIK();
         public abstract void UpdateAnimator(Vector3 localRigidbodyVelocity);
         public abstract void MoveRigidbody(Vector3 localRigidbodyVelocity);
         public abstract void CollisionEnter(Collision collision);

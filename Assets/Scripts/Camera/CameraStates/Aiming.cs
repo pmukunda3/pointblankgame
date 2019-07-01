@@ -16,6 +16,14 @@ namespace CameraControl {
             public AnimationCurve offsetFuncY;
             public AnimationCurve offsetFuncZ;
 
+            public float aimDistance = 100f;
+            public Transform weaponPivot;
+
+            public Vector3 target {
+                get;
+                private set;
+            }
+
             private ThirdPersonCamera thirdPCamera;
             private PlayerController player;
 
@@ -35,6 +43,10 @@ namespace CameraControl {
             }
 
             public override void CameraUpdate() {
+                SetTarget();
+            }
+
+            public override void CameraLateUpdate() {
                 Vector3 pitchAdjustedOffset = new Vector3(
                     offsetFuncX.Evaluate(player.AimPitch() / 90.0f) * offset.x,
                     offsetFuncY.Evaluate(player.AimPitch() / 90.0f) * offset.y,
@@ -58,9 +70,20 @@ namespace CameraControl {
                 }
             }
 
+            private void SetTarget() {
+                if (Physics.Raycast(thirdPCamera.transform.position, thirdPCamera.transform.forward, out RaycastHit hit, aimDistance)) {
+                    target = hit.point;
+                }
+                else {
+                    target = thirdPCamera.transform.position + aimDistance * thirdPCamera.transform.forward;
+                }
+                weaponPivot.LookAt(target);
+            }
+
             private void OnAimingEvent() {
                 enterState = true;
                 elapsedTime = 0.0f;
+                SetTarget();
 
                 enterStatePosition = thirdPCamera.transform.position;
                 enterStateRotation = thirdPCamera.transform.rotation;

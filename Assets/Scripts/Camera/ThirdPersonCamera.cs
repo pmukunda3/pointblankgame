@@ -26,8 +26,12 @@ namespace CameraControl {
             //    new UnityEngine.Events.UnityAction<float>(WeaponFirePrimaryCallbackTest));
         }
 
-        void LateUpdate() {
+        void Update() {
             currState.CameraUpdate();
+        }
+
+        void LateUpdate() {
+            currState.CameraLateUpdate();
         }
 
         public void SetState(Id stateId) {
