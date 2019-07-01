@@ -7,6 +7,8 @@ public class GameQuitter : MonoBehaviour
 {
     public void QuitGame()
     {
+        Debug.Log("clicked");
         Application.Quit();
+       
     }
 }
