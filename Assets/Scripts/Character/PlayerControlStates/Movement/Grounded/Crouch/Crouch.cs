@@ -108,7 +108,6 @@ namespace PlayerControl {
 
             private void OnCrouchEvent() {
                 InitRealignCharModel();
-                player.weaponController.aimingWeapon = false;
                 animator.speed = 1.0f;
 
                 this.moveInput = player.GetLatestMoveInput();

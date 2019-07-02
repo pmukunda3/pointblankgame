@@ -70,7 +70,6 @@ namespace PlayerControl {
             }
 
             private void OnCrouchAimingEvent() {
-                player.weaponController.aimingWeapon = true;
                 animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
 
