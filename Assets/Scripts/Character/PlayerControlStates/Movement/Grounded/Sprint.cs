@@ -10,6 +10,8 @@ namespace PlayerControl {
             public float moveTurnScalar = 100.0f;
             public float maxInputTurnSpeed = 0.75f;
 
+            public AnimationCurve realignTurnSpeed;
+
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.sprint, this);
@@ -31,8 +33,15 @@ namespace PlayerControl {
                 base.MoveRigidbody(localRigidbodyVelocity);
 
                 if (CheckGrounded()) {
+                    float extraRotation = 0.0f;
                     if (Mathf.Abs(moveInput.x) > player.deadzone.x) {
-                        float extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxInputTurnSpeed, maxInputTurnSpeed);
+                        extraRotation = moveTurnScalar * Mathf.Clamp(moveInput.x, -maxInputTurnSpeed, maxInputTurnSpeed);
+                    }
+                    float angleDiff = player.LookToMoveAngle();
+                    if (Mathf.Abs(angleDiff) > 1.0f) {
+                        extraRotation += Mathf.Sign(-angleDiff) * realignTurnSpeed.Evaluate((Mathf.Abs(angleDiff) / Time.fixedDeltaTime) / maxTurnSpeed) * maxTurnSpeed;
+                    }
+                    if (extraRotation != 0.0f) {
                         rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     }
                     StickToGroundHelper(0.35f);
