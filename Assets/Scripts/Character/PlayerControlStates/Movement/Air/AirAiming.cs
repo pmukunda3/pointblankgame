@@ -12,15 +12,12 @@ namespace PlayerControl {
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
-            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Air.aiming, this);
-
-                rigidbody = player.GetComponent<Rigidbody>();
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {

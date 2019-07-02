@@ -21,14 +21,11 @@ namespace PlayerControl {
             protected Vector2 moveInput;
             protected bool jumpInput = false;
 
-            protected new Rigidbody rigidbody;
             protected Vector3 groundNormal = Vector3.zero;
             protected Vector3 groundPoint = Vector3.zero;
 
             public new void Start() {
                 base.Start();
-
-                rigidbody = player.GetComponent<Rigidbody>();
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
