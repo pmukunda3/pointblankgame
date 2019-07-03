@@ -323,6 +323,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 401300979}
+  - component: {fileID: 1241218107}
+  - component: {fileID: 1241218106}
   m_Layer: 8
   m_Name: ClimbHelpers
   m_TagString: Untagged
@@ -344,6 +346,74 @@ Transform:
   m_Father: {fileID: 991164786}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1241218107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401300978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 887109fe7e1c9b04db9bc362cd2c45ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  climbSettings:
+    lowClimbRadius: 0.45
+    lowClimbLength: 0.95
+    midClimbRadius: 0.47
+    midClimbLength: 0.78
+    highClimbRadius: 0.46
+    highClimbLength: 0.63
+    lowClimbCheckOffset: {x: 0, y: 0.8, z: 0.62}
+    midClimbCheckOffset: {x: 0, y: 1.45, z: 0.6}
+    highClimbCheckOffset: {x: 0, y: 2.03, z: 0.5}
+    maxClimbHeight:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0.0625
+        outSlope: 0.0625
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 8
+        value: 1.5
+        inSlope: 0.18749991
+        outSlope: 0.18749991
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.041666687
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  numberRaycasts: 16
+  drawGizmo: 0
+--- !u!114 &1241218106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401300978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffe648175ed8cf4ba3a3207ff3af246, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stepAnimStart: 0.664
+  stepAnimEnd: 1
+  lowAnimStart: 0.156
+  lowAnimEnd: 0.494
+  midAnimStart: 0.181
+  midAnimEnd: 0.671
+  highAnimStart: 0.25
+  highAnimEnd: 0.676
 --- !u!1 &444955247
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +500,7 @@ MonoBehaviour:
   jumpLateralInputClearingDamp: 12
   jumpForwardInputClearingDamp: 12
   maxStepSize: {x: 0, y: 0, z: 0}
+  climbValidator: {fileID: 1241218107}
   realignSpeed:
     serializedVersion: 2
     m_Curve:
@@ -492,6 +563,7 @@ MonoBehaviour:
   jumpLateralInputClearingDamp: 12
   jumpForwardInputClearingDamp: 12
   maxStepSize: {x: 0, y: 0, z: 0}
+  climbValidator: {fileID: 1241218107}
 --- !u!1 &725680120
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,6 +707,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 991164786}
+  - component: {fileID: 215704871}
   m_Layer: 8
   m_Name: ClimbingMovement
   m_TagString: Untagged
@@ -657,6 +730,20 @@ Transform:
   m_Father: {fileID: 444955248}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &215704871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991164785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 677a454f14bfe604a908e12f63b09faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  climbAnimHelper: {fileID: 1241218106}
+  climbValidator: {fileID: 1241218107}
 --- !u!1 &1159379136
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,6 +799,7 @@ MonoBehaviour:
   jumpLateralInputClearingDamp: 12
   jumpForwardInputClearingDamp: 12
   maxStepSize: {x: 0, y: 0.28, z: 0.15}
+  climbValidator: {fileID: 1241218107}
 --- !u!114 &1159379139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -731,6 +819,7 @@ MonoBehaviour:
   jumpLateralInputClearingDamp: 6
   jumpForwardInputClearingDamp: 6
   maxStepSize: {x: 0, y: 0.3, z: 0.2}
+  climbValidator: {fileID: 1241218107}
   mouseTurnScalar: 0.5
   moveTurnScalar: 100
   maxInputTurnSpeed: 0.75
@@ -786,6 +875,7 @@ MonoBehaviour:
   jumpLateralInputClearingDamp: 18
   jumpForwardInputClearingDamp: 18
   maxStepSize: {x: 0, y: 0.25, z: 0.175}
+  climbValidator: {fileID: 1241218107}
   cameraState: {fileID: 0}
   weaponManager: {fileID: 8528844425777340156}
 --- !u!114 &1311224922
@@ -993,6 +1083,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  climbValidator: {fileID: 1241218107}
 --- !u!1 &1242108867
 GameObject:
   m_ObjectHideFlags: 0

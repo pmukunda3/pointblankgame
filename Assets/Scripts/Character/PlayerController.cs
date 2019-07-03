@@ -222,6 +222,7 @@ namespace PlayerControl {
             if (Input.GetKeyDown(KeyCode.Keypad2)) rigidbody.position = new Vector3(-12, 4, 40);
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
             if (Input.GetKeyDown(KeyCode.Keypad4)) rigidbody.position = new Vector3(-12, 8, 32);
+            if (Input.GetKeyDown(KeyCode.Keypad5)) rigidbody.position = new Vector3(35, 8, 70);
 
             currPlayerState.UseInput(moveInput, mouseInput, userInput.actions);
         }

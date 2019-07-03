@@ -17,6 +17,8 @@ namespace PlayerControl {
 
             public Vector3 maxStepSize;
 
+            public ClimbValidator climbValidator;
+
             protected Vector2 mouseInput;
             protected Vector2 moveInput;
             protected bool jumpInput = false;
@@ -31,6 +33,12 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
+
+                if (actions.jump.down) {
+                    if (climbValidator.ValidateClimbAttempt()) {
+                        animator.SetTrigger("TRG_climb");
+                    }
+                }
 
                 if (!jumpInput && actions.jump.down) {
                     player.shared.timeHeldJump = new Vector3(0f, 0f, 0f);
@@ -78,8 +86,10 @@ namespace PlayerControl {
             public override void CollisionEnter(Collision collision) {
                 RaycastHit stepTopInfo;
                 if (CheckStep(out stepTopInfo)) {
-                    Debug.Log("Stepping onto this world position: " + stepTopInfo.point.ToString("F4"));
-                    rigidbody.position += Vector3.up * stepTopInfo.point.y;
+                    if (stepTopInfo.point.y > rigidbody.position.y) {
+                        Debug.Log("Stepping onto this world position: " + stepTopInfo.point.ToString("F4"));
+                        rigidbody.position += Vector3.up * stepTopInfo.point.y;
+                    }
                 }
             }
 
@@ -119,16 +129,17 @@ namespace PlayerControl {
                 RaycastHit upperCast;
 
                 Quaternion movementDirection;
-                if (rigidbody.velocity.sqrMagnitude < 0.0001f) {
-                    movementDirection = rigidbody.rotation;
-                }
-                else {
+                if (Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up).sqrMagnitude > 0.001f) {
                     movementDirection = Quaternion.FromToRotation(new Vector3(-rigidbody.velocity.x, 0f, rigidbody.velocity.z).normalized, Vector3.forward);
-                }
 
-                if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z), out lowerCast, maxStepSize.magnitude, player.raycastMask)
-                    && !Physics.Raycast(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward, out upperCast, maxStepSize.z, player.raycastMask)) {
-                    return Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.001f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask);
+                    if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z), out lowerCast, maxStepSize.magnitude, player.raycastMask)
+                        && !Physics.Raycast(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward, out upperCast, maxStepSize.z, player.raycastMask)) {
+                        return Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.01f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask);
+                    }
+                    else {
+                        stepTopInfo = new RaycastHit();
+                        return false;
+                    }
                 }
                 else {
                     stepTopInfo = new RaycastHit();
