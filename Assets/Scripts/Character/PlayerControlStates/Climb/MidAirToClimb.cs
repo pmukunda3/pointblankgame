@@ -32,9 +32,11 @@ namespace PlayerControl {
 
             private void AnimationInit() {
                 elapsedTime = 0f;
-                if (climbValidator.GetClimbInfo(out climbPoint, out animation)) {
+                if (climbValidator.ClimbValid()) {
+                    this.climbPoint = climbValidator.GetClimbPoint();
+                    this.animation = climbValidator.GetClimbAnimation();
+                    climbValidator.Invalidate();
                     Debug.Log("Climb Point : " + climbPoint.ToString("F4") + ", anim # = " + animation);
-                    animator.SetInteger("climbAnim", (int)animation - 1);
                 }
             }
 
@@ -52,17 +54,13 @@ namespace PlayerControl {
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
                 if (elapsedTime > 0.05f) {
-                    if (climbPoint == Vector3.zero) {
-                        Debug.Log("climbPoint reset, for some reason");
-                        Debug.Break();
-                    }
                     climbAnimHelper.SetMatchTarget(climbPoint, animation, 0.15f);
                 }
                 elapsedTime += Time.fixedDeltaTime;
             }
 
             public override void CollisionEnter(Collision collision) {
-                Debug.Break();
+                //Debug.Break();
             }
 
             private void OnMidAirClimbEvent() {

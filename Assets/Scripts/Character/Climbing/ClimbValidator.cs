@@ -49,17 +49,29 @@ public class ClimbValidator : MonoBehaviour {
         //EventManager.StartListening<ClimbAttemptEvent>(new UnityEngine.Events.UnityAction(OnClimbAttempt));
     }
 
-    public bool GetClimbInfo(out Vector3 climbPoint, out ClimbAnimation animation) {
+    public bool ClimbValid() {
+        return climbValid;
+    }
+
+    public void Invalidate() {
+        climbValid = false;
+    }
+
+    public Vector3 GetClimbPoint() {
         if (climbValid) {
-            climbPoint = this.climbPoint;
-            animation = this.animation;
-            this.climbValid = false;
-            return true;
+            return climbPoint;
         }
         else {
-            climbPoint = Vector3.zero;
-            animation = ClimbAnimation.None;
-            return false;
+            return Vector3.zero;
+        }
+    }
+
+    public ClimbAnimation GetClimbAnimation() {
+        if (climbValid) {
+            return animation;
+        }
+        else {
+            return ClimbAnimation.None;
         }
     }
 
@@ -168,7 +180,7 @@ public class ClimbValidator : MonoBehaviour {
                         //0.15f,
                         Vector3.down,
                         out topCollider,
-                        2.0f * heightStep,
+                        2.0f, //2.0f * heightStep,
                         player.raycastMask)) {
                 return topCollider.point;
             }
@@ -212,7 +224,7 @@ public class ClimbValidator : MonoBehaviour {
 
     public bool ValidateClimbAttempt() {
         int climbVolume = (int) CheckClimbVolume();
-
+        Debug.Log("ClimbVolume = " + climbVolume);
         if (climbVolume == (int) ClimbAnimation.None) {
             this.climbValid = false;
             return this.climbValid;
@@ -220,30 +232,35 @@ public class ClimbValidator : MonoBehaviour {
 
         Vector3 climbPoint = Vector3.zero;
         switch (climbVolume) {
-            case (int) ClimbAnimation.Low:
+            case (int)ClimbAnimation.Low:
                 climbPoint = FindHeight(
                     climbSettings.lowClimbCheckOffset.y - climbSettings.lowClimbRadius,
                     climbSettings.lowClimbCheckOffset.y + climbSettings.lowClimbRadius,
-                    climbSettings.lowClimbCheckOffset.z + climbSettings.lowClimbRadius,
+                    4.0f, //climbSettings.lowClimbCheckOffset.z + climbSettings.lowClimbRadius,
                     rigidbody.velocity.magnitude
                 );
                 break;
-            case (int) ClimbAnimation.Mid:
+            case (int)ClimbAnimation.Mid:
                 climbPoint = FindHeight(
                     climbSettings.midClimbCheckOffset.y - climbSettings.midClimbRadius,
                     climbSettings.midClimbCheckOffset.y + climbSettings.midClimbRadius,
-                    climbSettings.midClimbCheckOffset.z + climbSettings.midClimbRadius,
+                    4.0f, //climbSettings.midClimbCheckOffset.z + climbSettings.midClimbRadius,
                     rigidbody.velocity.magnitude
                 );
                 break;
-            case (int) ClimbAnimation.High:
+            case (int)ClimbAnimation.High:
                 climbPoint = FindHeight(
                     climbSettings.highClimbCheckOffset.y - climbSettings.highClimbRadius,
                     climbSettings.highClimbCheckOffset.y + climbSettings.highClimbRadius,
-                    climbSettings.highClimbCheckOffset.z + climbSettings.highClimbRadius,
+                    4.0f, //climbSettings.highClimbCheckOffset.z + climbSettings.highClimbRadius,
                     rigidbody.velocity.magnitude
                 );
                 break;
+        }
+
+        if (climbPoint == Vector3.zero) {
+            this.climbValid = false;
+            return this.climbValid;
         }
 
         float verticalDiff = climbPoint.y - rigidbody.position.y;

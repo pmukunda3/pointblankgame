@@ -108,7 +108,8 @@ namespace PlayerControl {
                 this.moveInput = moveInput;
 
                 if (actions.jump.down) {
-                    if (climbValidator.ValidateClimbAttempt()) {
+                    if (!climbValidator.ClimbValid() && climbValidator.ValidateClimbAttempt()) {
+                        animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
                         animator.SetTrigger("TRG_climb");
                     }
                 }

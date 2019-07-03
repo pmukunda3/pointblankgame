@@ -36,6 +36,7 @@ namespace PlayerControl {
 
                 if (actions.jump.down) {
                     if (climbValidator.ValidateClimbAttempt()) {
+                        animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
                         animator.SetTrigger("TRG_climb");
                     }
                 }
