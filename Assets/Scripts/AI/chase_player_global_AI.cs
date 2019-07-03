@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -122,6 +123,7 @@ public class chase_player_global_AI : MonoBehaviour
 
         }
 
+        Debug.Log("AIState " + ai_state);
         //update animation
         ai_animator.SetFloat("Forward", nav_agent.velocity.magnitude / nav_agent.speed);
         float angle = Vector3.Angle(nav_agent.velocity.normalized, this.transform.forward);

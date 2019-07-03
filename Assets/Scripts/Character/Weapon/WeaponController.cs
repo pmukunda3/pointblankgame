@@ -31,6 +31,7 @@ public class WeaponController : MonoBehaviour {
     }
 
     void Update() {
+        Debug.Log(aimingWeapon);
         if (aimingWeapon) {
             Vector3 pitchAdjustedOffset = Vector3.Scale(offset,
                 new Vector3(1f, offsetFuncY.Evaluate(playerController.AimPitch() / 90.0f), offsetFuncZ.Evaluate(playerController.AimPitch() / 90.0f)));
