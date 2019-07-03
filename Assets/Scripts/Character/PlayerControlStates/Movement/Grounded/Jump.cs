@@ -29,7 +29,6 @@ namespace PlayerControl {
             private bool jumpInput = true;
             private bool leavingGround = false;
 
-            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
@@ -38,8 +37,6 @@ namespace PlayerControl {
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.jump, this);
-
-                rigidbody = player.GetComponent<Rigidbody>();
 
                 EventManager.StartListening<MecanimBehaviour.JumpEvent>(new UnityEngine.Events.UnityAction(OnJumpEvent));
             }

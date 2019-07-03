@@ -16,15 +16,12 @@ namespace PlayerControl {
 
             private IMovementState airControlMovement;
 
-            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Air.falling, this);
-
-                rigidbody = player.GetComponent<Rigidbody>();
 
                 airControlMovement = gameObject.GetComponentInChildren<AirControlFromFall>() as IMovementState;
 

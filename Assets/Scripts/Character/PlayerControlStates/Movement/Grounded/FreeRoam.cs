@@ -23,14 +23,14 @@ namespace PlayerControl {
                 base.UseInput(moveInput, mouseInput, actions);
 
                 if (actions.walk.active) {
-                    if (moveInput.sqrMagnitude > 0.3f * 0.3f) {
-                        moveInput = moveInput.normalized * 0.3f;
+                    if (this.moveInput.sqrMagnitude > 0.3f * 0.3f) {
+                        this.moveInput = this.moveInput.normalized * 0.3f;
                     }
                 }
 
-                    // This technically isn't wrong, but the correct fix has to take into account when the character
-                    // is moving fast from something other than itself. But, the work around is to just slow the player
-                    // down for spinning while moving.
+                // This technically isn't wrong, but the correct fix has to take into account when the character
+                // is moving fast from something other than itself. But, the work around is to just slow the player
+                // down for spinning while moving.
                 float extraRotation = Mathf.Clamp(mouseInput.x, -maxTurnSpeed, maxTurnSpeed);
                 rigidbody.velocity = 0.955f * (Quaternion.AngleAxis(extraRotation, Vector3.up) * rigidbody.velocity);
 

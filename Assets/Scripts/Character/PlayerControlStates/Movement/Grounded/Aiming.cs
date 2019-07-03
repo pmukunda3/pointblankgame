@@ -23,8 +23,8 @@ namespace PlayerControl {
                 base.UseInput(moveInput, mouseInput, actions);
 
                 if (actions.walk.active) {
-                    if (moveInput.sqrMagnitude > 0.3f * 0.3f) {
-                        moveInput = moveInput.normalized * 0.3f;
+                    if (this.moveInput.sqrMagnitude > 0.3535f * 0.3535f) {
+                        this.moveInput = this.moveInput.normalized * 0.3535f;
                     }
                 }
 
