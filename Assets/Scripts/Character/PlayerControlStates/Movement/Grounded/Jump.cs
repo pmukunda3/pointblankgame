@@ -24,6 +24,8 @@ namespace PlayerControl {
             public AnimationCurve verticalSpeedTimeHeld;
             public AnimationCurve verticalSpeedCharSpeed;
 
+            public ClimbValidator climbValidator;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
             private bool jumpInput = true;
@@ -104,6 +106,13 @@ namespace PlayerControl {
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
+
+                if (actions.jump.down) {
+                    if (!climbValidator.ClimbValid() && climbValidator.ValidateClimbAttempt()) {
+                        animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
+                        animator.SetTrigger("TRG_climb");
+                    }
+                }
             }
 
             public override void CollisionEnter(Collision collision) {
