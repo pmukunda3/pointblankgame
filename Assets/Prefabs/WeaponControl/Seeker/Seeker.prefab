@@ -9107,21 +9107,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: seeker_bolt_flare
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 6.4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
       propertyPath: m_LocalRotation.x
