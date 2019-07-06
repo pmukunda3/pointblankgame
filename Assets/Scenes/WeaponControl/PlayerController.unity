@@ -668,6 +668,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 308416326369592015, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: throwForce
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 308416326369592015, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: timeout
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7431189260587521892, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
       propertyPath: m_Name
@@ -737,11 +747,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4570553397258050198, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1108338758561532449, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
       propertyPath: m_IsActive
@@ -771,10 +776,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5399931928745746, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
-      propertyPath: FireRate
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 138216646066851963, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
@@ -899,7 +900,7 @@ PrefabInstance:
     - target: {fileID: 8837338519640163259, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 2.8469e-39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1223613781202013664, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
@@ -924,6 +925,31 @@ PrefabInstance:
     - target: {fileID: 5265667284279449735, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359729120188418580, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2440603861585881495, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2505087746053148618, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: throwForce
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2505087746053148618, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: throwVelocity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9035621295492940759, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1232,7 +1258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2097863677
 Transform:
   m_ObjectHideFlags: 0
@@ -1305,7 +1331,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 8.2652e-40, y: 9.1835e-41, z: 1.8e-43, w: 0}
+  m_BoundingSphereOverride: {x: NaN, y: -1.6944239e-26, z: 6.87e-43, w: 1.56e-43}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

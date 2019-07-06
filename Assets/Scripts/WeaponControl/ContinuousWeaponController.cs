@@ -6,7 +6,7 @@ public class ContinuousWeaponController : MonoBehaviour
 {
     public GameObject beam;
 
-    void Start()
+    void OnEnable()
     {
         beam.SetActive(false);
     }

@@ -607,6 +607,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sniper_beam
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 3517fb0c178e07248b731ad3aae9f06c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 3517fb0c178e07248b731ad3aae9f06c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.005
