@@ -386,11 +386,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7221522868569625152}
     m_Modifications:
-    - target: {fileID: 8528491316163059884, guid: 898514679d0ecd242b061ef35f8a1cdf,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
       propertyPath: m_Name
       value: seeker_bolt_flare
@@ -446,6 +441,27 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8528491316163059884, guid: 898514679d0ecd242b061ef35f8a1cdf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 898514679d0ecd242b061ef35f8a1cdf, type: 3}

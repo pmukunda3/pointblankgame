@@ -609,7 +609,7 @@ MonoBehaviour:
   Muzzle: {fileID: 6613150048317875976}
   Projectile: {fileID: 5518778686432333616}
   MuzzleDuration: 0.05
-  FireRate: 10
+  FireRate: 3
 --- !u!1001 &5518778686432233876
 PrefabInstance:
   m_ObjectHideFlags: 0
