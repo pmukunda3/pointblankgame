@@ -68,7 +68,7 @@ namespace PlayerControl {
                 jumpInput = false;
                 animator.SetBool("aimMode", false);
                 animator.speed = 1.0f;
-
+                player.mainCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.sprint);

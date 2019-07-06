@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace PlayerControl {
     namespace MecanimBehaviour {
@@ -11,8 +12,15 @@ namespace PlayerControl {
 
                 EventManager.TriggerEvent<MidAirToClimbEvent>();
             }
+
+            public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+                base.OnStateExit(animator, stateInfo, layerIndex);
+
+                EventManager.TriggerEvent<MidAirToClimbEventExit>();
+            }
         }
 
         public class MidAirToClimbEvent : UnityEngine.Events.UnityEvent { }
+        public class MidAirToClimbEventExit : UnityEngine.Events.UnityEvent { }
     }
 }

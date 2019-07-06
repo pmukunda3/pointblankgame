@@ -31,8 +31,11 @@ public class ClimbValidator : MonoBehaviour {
     }
 
     public ClimbCapsules climbSettings;
-
     public int numberRaycasts;
+
+    public float climbableDepth = 0.3f;
+    public float climbableSlopeAngle = 30f;
+    private float climbableSlopeRad;
 
     private new Rigidbody rigidbody;
     private PlayerController player;
@@ -47,6 +50,9 @@ public class ClimbValidator : MonoBehaviour {
         player = gameObject.GetComponentInParent<PlayerController>();
 
         //EventManager.StartListening<ClimbAttemptEvent>(new UnityEngine.Events.UnityAction(OnClimbAttempt));
+
+        climbableSlopeRad = climbableSlopeAngle * Mathf.PI;
+        Debug.Log("Climbable Slope Rise Over Run = " + climbableSlopeRad);
     }
 
     public bool ClimbValid() {
@@ -118,79 +124,80 @@ public class ClimbValidator : MonoBehaviour {
         }
     }
 
-    private Vector3 FindHeight(float minHeight, float maxHeight, float rayLength, float charSpeed) {
-        RaycastHit highestSuccessful = new RaycastHit();
-        bool foundRaycast = false;
+    private Vector3 FindHeight(float minHeight, float maxHeight, float rayLength, float climbableDepth, float charSpeed) {
+        Debug.LogFormat("minHeight={0}, maxHeight={1}, rayLength={2}, climableDepth={3}, charSpeed={4}", minHeight, maxHeight, rayLength, climbableDepth, charSpeed);
 
         Quaternion movementDirection;
-        if (Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up).sqrMagnitude < 0.001f) {
+        //if (Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up).sqrMagnitude < 0.001f) {
             movementDirection = rigidbody.rotation;
-        }
-        else {
-            movementDirection = Quaternion.FromToRotation(new Vector3(-rigidbody.velocity.x, 0f, rigidbody.velocity.z).normalized, Vector3.forward);
-            movementDirection = Quaternion.Slerp(movementDirection, rigidbody.rotation, 0.5f);
-        }
+        //}
+        //else {
+        //    movementDirection = Quaternion.FromToRotation(new Vector3(-rigidbody.velocity.x, 0f, rigidbody.velocity.z).normalized, Vector3.forward);
+        //    movementDirection = Quaternion.Slerp(movementDirection, rigidbody.rotation, 0.5f);
+        //}
 
         float heightStep = (maxHeight - minHeight) / numberRaycasts;
 
-        int n;
+        Vector3[] candidatePoints = new Vector3[numberRaycasts];
+        int highestSuccessfulIndex = 0;
+        float lastRaycastDistance = -1.0f;
         RaycastHit currentRaycastHit;
-        for (n = 0; n < numberRaycasts; ++n) {
-            if (!Physics.Raycast(rigidbody.position + (minHeight + n * heightStep) * Vector3.up,
-                movementDirection * Vector3.forward,
-                out currentRaycastHit,
-                rayLength,
-                player.raycastMask)) {
-                if (foundRaycast) {
-                    break;
+        RaycastHit lastHit = new RaycastHit();
+
+        for (int n = 0; n < numberRaycasts; ++n) {
+            Debug.DrawRay(rigidbody.position + movementDirection * ((minHeight + n * heightStep) * Vector3.up + 0.25f * Vector3.back), rayLength * (movementDirection * Vector3.forward), Color.blue, 20f, false);
+            if (Physics.SphereCast(rigidbody.position + movementDirection * ((minHeight + n * heightStep) * Vector3.up + 0.25f * Vector3.back),
+                    0.5f * heightStep,
+                    movementDirection * Vector3.forward,
+                    out currentRaycastHit,
+                    rayLength,
+                    player.raycastMask)) {
+                Debug.DrawRay(currentRaycastHit.point, 0.15f * currentRaycastHit.normal, Color.green, 20f, false);
+                lastHit = currentRaycastHit;
+                if (lastRaycastDistance >= 0.0f && currentRaycastHit.distance - lastRaycastDistance != 0.0f) {
+                    float surfaceAngleRad = Mathf.Atan2(heightStep, (currentRaycastHit.distance - lastRaycastDistance));
+                    Debug.Log(surfaceAngleRad * Mathf.Rad2Deg);
+                    if (surfaceAngleRad > 0f && surfaceAngleRad * Mathf.Rad2Deg < climbableSlopeAngle) {
+                        candidatePoints[highestSuccessfulIndex] = currentRaycastHit.point;
+                        Debug.DrawRay(currentRaycastHit.point, 0.04f * currentRaycastHit.normal, Color.red, 20f, false);
+                        ++highestSuccessfulIndex;
+                    }
+                }
+                lastRaycastDistance = currentRaycastHit.distance;
+            }
+            else {
+                if (lastRaycastDistance > 0.0f) {
+                    candidatePoints[highestSuccessfulIndex] = lastHit.point;
+                    Debug.DrawRay(lastHit.point, 0.04f * lastHit.normal, Color.red, 20f, false);
+                    ++highestSuccessfulIndex;
+                }
+                lastRaycastDistance = -1.0f;
+            }
+        }
+
+        Debug.Log(highestSuccessfulIndex);
+        Debug.Log(candidatePoints.ToString());
+
+        Vector3 finalClimbPoint = Vector3.zero;
+        for (int n = 0; n < highestSuccessfulIndex; ++n) {
+            Debug.DrawRay(candidatePoints[n] + heightStep * Vector3.up + movementDirection * (Vector3.forward * 0.04f), 2.0f * heightStep * Vector3.down, Color.cyan, 20f, false);
+            Debug.Log("Rb.pos=" + rigidbody.position.y + ", maxClimbHeight=" + climbSettings.maxClimbHeight.Evaluate(charSpeed) + " < candidatePoints[n].y=" + candidatePoints[n].y);
+            if (rigidbody.position.y + climbSettings.maxClimbHeight.Evaluate(charSpeed) > candidatePoints[n].y) {
+                Debug.DrawRay(candidatePoints[n] + heightStep * Vector3.up + movementDirection * (Vector3.forward * 0.04f), 2.0f * heightStep * Vector3.down, Color.cyan, 20f, false);
+                RaycastHit topCollider;
+                if (Physics.Raycast(
+                            candidatePoints[n] + heightStep * Vector3.up + movementDirection * (Vector3.forward * 0.04f),
+                            //0.02f,
+                            Vector3.down,
+                            out topCollider,
+                            2.0f * heightStep,
+                            player.raycastMask)) {
+                    finalClimbPoint = topCollider.point;
                 }
             }
-            else {
-                foundRaycast = true;
-                highestSuccessful = currentRaycastHit;
-            }
         }
 
-        if (!foundRaycast && n == numberRaycasts) {
-            return Vector3.zero;
-        }
-
-        if (rigidbody.position.y + climbSettings.maxClimbHeight.Evaluate(charSpeed) > highestSuccessful.point.y) {
-            Debug.DrawRay(highestSuccessful.point + (n * heightStep * Vector3.up) + movementDirection * (Vector3.forward * 0.04f), 2.0f * heightStep * Vector3.down, Color.cyan, 20f, false);
-
-            RaycastHit topCollider;
-            //if (Physics.SphereCast(
-            //        highestSuccessful.point + (n * heightStep * Vector3.up) + movementDirection * (Vector3.forward * 0.04f),
-            //        0.15f,
-            //        Vector3.down,
-            //        out topCollider,
-            //        2.0f * heightStep,
-            //        player.raycastMask)) {
-            //    GameObject sphere0 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            //    sphere0.transform.position = highestSuccessful.point;
-            //    sphere0.transform.localScale *= 0.05f;
-            //    return topCollider.point;
-            //}
-            //else {
-            //    return Vector3.zero;
-            //}
-
-            if (Physics.Raycast(
-                        highestSuccessful.point + (n * heightStep * Vector3.up) + movementDirection * (Vector3.forward * 0.04f),
-                        //0.15f,
-                        Vector3.down,
-                        out topCollider,
-                        2.0f, //2.0f * heightStep,
-                        player.raycastMask)) {
-                return topCollider.point;
-            }
-            else {
-                return Vector3.zero;
-            }
-        }
-        else {
-            return Vector3.zero;
-        }
+        return finalClimbPoint;
     }
 
     private bool OverlapCapsuleInFront(float radius, float length, Vector3 offset) {
@@ -220,6 +227,11 @@ public class ClimbValidator : MonoBehaviour {
             Gizmos.DrawWireSphere(rigidbody.position + rigidbody.rotation * (climbSettings.highClimbCheckOffset + (climbSettings.highClimbLength * 0.5f * Vector3.right)),
                 climbSettings.highClimbRadius);
         }
+
+        if (climbPoint != Vector3.zero) {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(climbPoint, 0.04f);
+        }
     }
 
     public bool ValidateClimbAttempt() {
@@ -233,26 +245,32 @@ public class ClimbValidator : MonoBehaviour {
         Vector3 climbPoint = Vector3.zero;
         switch (climbVolume) {
             case (int)ClimbAnimation.Low:
+                Debug.Log("ClimbVolume = Low");
                 climbPoint = FindHeight(
                     climbSettings.lowClimbCheckOffset.y - climbSettings.lowClimbRadius,
                     climbSettings.lowClimbCheckOffset.y + climbSettings.lowClimbRadius,
-                    4.0f, //climbSettings.lowClimbCheckOffset.z + climbSettings.lowClimbRadius,
+                    0.25f + climbSettings.lowClimbCheckOffset.z + climbSettings.lowClimbRadius,
+                    climbableDepth,
                     rigidbody.velocity.magnitude
                 );
                 break;
             case (int)ClimbAnimation.Mid:
+                Debug.Log("ClimbVolume = Mid");
                 climbPoint = FindHeight(
                     climbSettings.midClimbCheckOffset.y - climbSettings.midClimbRadius,
                     climbSettings.midClimbCheckOffset.y + climbSettings.midClimbRadius,
-                    4.0f, //climbSettings.midClimbCheckOffset.z + climbSettings.midClimbRadius,
+                    0.25f + climbSettings.midClimbCheckOffset.z + climbSettings.midClimbRadius,
+                    climbableDepth,
                     rigidbody.velocity.magnitude
                 );
                 break;
             case (int)ClimbAnimation.High:
+                Debug.Log("ClimbVolume = High");
                 climbPoint = FindHeight(
                     climbSettings.highClimbCheckOffset.y - climbSettings.highClimbRadius,
                     climbSettings.highClimbCheckOffset.y + climbSettings.highClimbRadius,
-                    4.0f, //climbSettings.highClimbCheckOffset.z + climbSettings.highClimbRadius,
+                    0.25f + climbSettings.highClimbCheckOffset.z + climbSettings.highClimbRadius,
+                    climbableDepth,
                     rigidbody.velocity.magnitude
                 );
                 break;
@@ -263,19 +281,30 @@ public class ClimbValidator : MonoBehaviour {
             return this.climbValid;
         }
 
+        Debug.LogFormat("Rigidbody.pos = {0}, climbPoint = {1}", rigidbody.position.ToString("F4"), climbPoint.ToString("F4"));
+
         float verticalDiff = climbPoint.y - rigidbody.position.y;
         Debug.Log("climb vertical diff = " + verticalDiff);
-        if (verticalDiff > climbSettings.highClimbCheckOffset.y) {
+        if (verticalDiff > climbSettings.highClimbCheckOffset.y - climbSettings.highClimbRadius) {
             this.animation = ClimbAnimation.High;
         }
-        else if (verticalDiff > climbSettings.midClimbCheckOffset.y) {
+        else if (verticalDiff > climbSettings.midClimbCheckOffset.y - climbSettings.midClimbRadius) {
             this.animation = ClimbAnimation.Mid;
         }
-        else if (verticalDiff > climbSettings.lowClimbCheckOffset.y) {
+        else if (verticalDiff > climbSettings.lowClimbCheckOffset.y - climbSettings.lowClimbRadius) {
             this.animation = ClimbAnimation.Low;
         }
-        else {
+        else if (verticalDiff > 0.0f) {
             this.animation = ClimbAnimation.Step;
+        }
+        else {
+            this.animation = ClimbAnimation.None;
+        }
+
+        if (this.animation == ClimbAnimation.None) {
+            this.climbPoint = Vector3.zero;
+            this.climbValid = false;
+            return this.climbValid;
         }
 
         this.climbPoint = climbPoint;

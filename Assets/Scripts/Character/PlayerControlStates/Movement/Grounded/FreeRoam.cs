@@ -91,7 +91,7 @@ namespace PlayerControl {
             private void OnFreeRoamEvent() {
                 jumpInput = false;
                 animator.speed = 1.0f;
-
+                player.mainCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.freeRoam);

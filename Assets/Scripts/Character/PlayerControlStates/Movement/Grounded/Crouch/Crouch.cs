@@ -109,7 +109,7 @@ namespace PlayerControl {
             private void OnCrouchEvent() {
                 InitRealignCharModel();
                 animator.speed = 1.0f;
-
+                player.mainCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.Crouch.freeLook);

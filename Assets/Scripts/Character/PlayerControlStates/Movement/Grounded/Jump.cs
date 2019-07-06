@@ -160,7 +160,7 @@ namespace PlayerControl {
             private void OnJumpEvent() {
                 jumpInput = true;
                 animator.speed = 1.0f;
-
+                player.mainCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.jump);

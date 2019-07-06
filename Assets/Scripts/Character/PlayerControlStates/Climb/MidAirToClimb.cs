@@ -20,6 +20,7 @@ namespace PlayerControl {
                 player.RegisterState(StateId.Player.MoveModes.Climb.midAirToClimb, this);
 
                 EventManager.StartListening<MecanimBehaviour.MidAirToClimbEvent>(new UnityEngine.Events.UnityAction(OnMidAirClimbEvent));
+                EventManager.StartListening<MecanimBehaviour.MidAirToClimbEventExit>(new UnityEngine.Events.UnityAction(OnMidAirClimbEventExit));
             }
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
@@ -35,13 +36,14 @@ namespace PlayerControl {
                 if (climbValidator.ClimbValid()) {
                     this.climbPoint = climbValidator.GetClimbPoint();
                     this.animation = climbValidator.GetClimbAnimation();
-                    climbValidator.Invalidate();
                     Debug.Log("Climb Point : " + climbPoint.ToString("F4") + ", anim # = " + animation);
+                    climbValidator.Invalidate();
                 }
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
                 rigidbody.velocity = animator.velocity;
+                //rigidbody.MovePosition(rigidbody.position + animator.deltaPosition);
             }
 
             public override void AnimatorIK() {
@@ -67,8 +69,17 @@ namespace PlayerControl {
                 animator.speed = 1.0f;
                 this.moveInput = player.GetLatestMoveInput();
                 AnimationInit();
+                //rigidbody.isKinematic = true;
+                rigidbody.useGravity = false;
+                player.mainCollider.enabled = false;
 
                 player.SetState(StateId.Player.MoveModes.Climb.midAirToClimb);
+            }
+
+            private void OnMidAirClimbEventExit() {
+                //rigidbody.isKinematic = false;
+                rigidbody.useGravity = true;
+                player.mainCollider.enabled = true;
             }
         }
     }
