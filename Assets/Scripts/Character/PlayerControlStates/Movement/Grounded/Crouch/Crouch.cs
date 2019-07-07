@@ -42,7 +42,7 @@ namespace PlayerControl {
                     animator.SetBool("sprint", true);
                     animator.SetBool("crouch", false);
                 }
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
                 if (actions.crouch.down) animator.SetBool("crouch", false);
                 if (actions.jump.down) animator.SetBool("crouch", false);
 

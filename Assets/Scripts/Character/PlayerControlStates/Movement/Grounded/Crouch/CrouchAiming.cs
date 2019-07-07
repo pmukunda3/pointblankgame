@@ -31,7 +31,7 @@ namespace PlayerControl {
                     animator.SetBool("crouch", false);
                 }
 
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", false);
+                if (actions.aim.down) animator.SetBool("aimMode", false);
                 if (actions.crouch.down) animator.SetBool("crouch", false);
                 if (actions.jump.down) animator.SetBool("crouch", false);
             }

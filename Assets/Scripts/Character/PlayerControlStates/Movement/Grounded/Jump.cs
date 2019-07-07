@@ -107,7 +107,7 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
 
-                if (actions.jump.down) {
+                if (actions.climbUp.down) {
                     if (!climbValidator.ClimbValid() && climbValidator.ValidateClimbAttempt()) {
                         animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
                         animator.SetTrigger("TRG_climb");

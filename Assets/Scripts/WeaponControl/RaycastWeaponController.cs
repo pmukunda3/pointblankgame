@@ -15,6 +15,7 @@ public class RaycastWeaponController : MonoBehaviour
     private GameObject NewImpact;
     private Color initColor, beamColor;
     private float clock, fireInterval, t, alpha;
+    private UserInput userInput;
 
     // Start is called before the first frame update
     void Start()
@@ -23,12 +24,13 @@ public class RaycastWeaponController : MonoBehaviour
         initColor = lineRenderer.endColor;
         Beam.SetActive(false);
         fireInterval = 1 / fireRate;
+        userInput = gameObject.GetComponentInParent<UserInput>();
     }
 
     // Update is called once per frame
     void Update()
     {        
-        if (Input.GetButton("Fire1"))
+        if (userInput.actions.primaryFire.active)
         {
             if (clock >= 0f)
             {                

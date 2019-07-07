@@ -6,19 +6,22 @@ public class ContinuousWeaponController : MonoBehaviour
 {
     public GameObject beam;
 
+    private UserInput userInput;
+
     void Start()
     {
+        userInput = gameObject.GetComponentInParent<UserInput>();
         beam.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(userInput.actions.primaryFire.down)
         {
             beam.SetActive(true);
         }
-        if(Input.GetButtonUp("Fire1"))
+        if(userInput.actions.primaryFire.up)
         {
             beam.SetActive(false);
         }

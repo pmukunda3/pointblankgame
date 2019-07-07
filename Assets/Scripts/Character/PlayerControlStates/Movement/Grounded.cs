@@ -34,7 +34,7 @@ namespace PlayerControl {
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
 
-                if (actions.jump.down) {
+                if (actions.climbUp.down) {
                     if (climbValidator.ValidateClimbAttempt()) {
                         animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
                         animator.SetTrigger("TRG_climb");
@@ -88,7 +88,7 @@ namespace PlayerControl {
                 RaycastHit stepTopInfo;
                 if (CheckStep(out stepTopInfo)) {
                     if (stepTopInfo.point.y > rigidbody.position.y) {
-                        Debug.Log("Stepping onto this world position: " + stepTopInfo.point.ToString("F4"));
+                        Debug.Log("Stepping onto this world position: " + stepTopInfo.point.ToString("F4") + ", Rb.pos = " + rigidbody.position);
                         rigidbody.position += Vector3.up * stepTopInfo.point.y;
                     }
                 }
@@ -133,9 +133,15 @@ namespace PlayerControl {
                 if (Vector3.ProjectOnPlane(rigidbody.velocity, Vector3.up).sqrMagnitude > 0.001f) {
                     movementDirection = Quaternion.FromToRotation(new Vector3(-rigidbody.velocity.x, 0f, rigidbody.velocity.z).normalized, Vector3.forward);
 
-                    if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z), out lowerCast, maxStepSize.magnitude, player.raycastMask)
+                    Vector3 lowerCastDirection = new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z);
+
+                    if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * lowerCastDirection, out lowerCast, lowerCastDirection.magnitude, player.raycastMask)
                         && !Physics.Raycast(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward, out upperCast, maxStepSize.z, player.raycastMask)) {
-                        return Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.01f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask);
+                        Debug.DrawRay(lowerCast.point, lowerCast.normal * 0.05f, Color.magenta, 20f);
+                        Debug.DrawRay(upperCast.point, upperCast.normal * 0.05f, Color.cyan, 20f);
+                        bool retValue = Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.01f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask);
+                        Debug.DrawRay(stepTopInfo.point, stepTopInfo.normal * 0.05f, Color.black, 20f);
+                        return retValue;
                     }
                     else {
                         stepTopInfo = new RaycastHit();

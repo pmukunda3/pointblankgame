@@ -12,6 +12,7 @@ public class ProjectileWeaponController : MonoBehaviour
     private float clock;
     private float FireInterval;
     private GameObject NewProjectile;
+    private UserInput userInput;
 
     // Start is called before the first frame update
     void Start()
@@ -21,12 +22,13 @@ public class ProjectileWeaponController : MonoBehaviour
         Projectile.SetActive(false);
         Projectile.GetComponent<ProjectileController>().dontDestroy = true;
         Muzzle.SetActive(false);
+        userInput = gameObject.GetComponentInParent<UserInput>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButton("Fire1"))
+        if(userInput.actions.primaryFire.active)
         {
             if (clock >= 0f)
             {

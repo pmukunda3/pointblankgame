@@ -11,6 +11,8 @@ namespace PlayerControl {
             public float landAnimationFrameRate = 30f;
             public float maxTurnSpeed = 0.2f;
 
+            public CapsuleCollider legsCollider;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
@@ -70,10 +72,11 @@ namespace PlayerControl {
                 RaycastHit hitInfo;
 
                 float checkDistance = Mathf.Max(landAnimationFrameTarget / landAnimationFrameRate * -rigidbody.velocity.y, groundCheckDistanceMinimum);
-                Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
+                Debug.DrawLine(rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)),
+                    rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
 
-                //if (checkDistance > 0.0f && Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
-                if (checkDistance > 0.0f && Physics.SphereCast(player.transform.position + (Vector3.up * 0.1f), 0.1f, Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                //if (checkDistance > 0.0f && Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                if (checkDistance > 0.0f && Physics.SphereCast(rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)), 0.1f, Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
                     player.shared.lastRigidbodyVelocity = rigidbody.velocity;
                     if (player.shared.lastRigidbodyVelocity.y > -4f) {
                         animator.SetInteger("landMode", 0);

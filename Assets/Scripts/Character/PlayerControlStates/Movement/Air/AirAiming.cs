@@ -65,7 +65,7 @@ namespace PlayerControl {
                 rigidbody.velocity = Quaternion.AngleAxis(0.25f * player.screenMouseRatio * player.mouseSensitivity * extraRotation * Time.deltaTime, Vector3.up) * rigidbody.velocity;
 
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
                 else                            animator.SetBool("aimMode", false);
             }
 

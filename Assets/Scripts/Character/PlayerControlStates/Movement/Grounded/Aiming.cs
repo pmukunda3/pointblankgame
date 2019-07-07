@@ -29,7 +29,7 @@ namespace PlayerControl {
                 }
 
                 if (actions.sprint.down) animator.SetBool("sprint", true);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", false);
+                if (actions.aim.down) animator.SetBool("aimMode", false);
                 if (actions.crouch.down) animator.SetBool("crouch", true);
 
                 // TODO: movement input will cause character to get up

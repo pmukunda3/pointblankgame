@@ -35,7 +35,7 @@ namespace PlayerControl {
                 rigidbody.velocity = 0.955f * (Quaternion.AngleAxis(extraRotation, Vector3.up) * rigidbody.velocity);
 
                 if (actions.sprint.active) animator.SetBool("sprint", true);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
                 if (actions.crouch.down) animator.SetBool("crouch", true);
             }
 

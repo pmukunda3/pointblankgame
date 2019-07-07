@@ -11,6 +11,8 @@ public class WeaponManager : MonoBehaviour
         private set;
     }
 
+    private UserInput userInput;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +24,14 @@ public class WeaponManager : MonoBehaviour
         i = 0;
         activeWeapon = transform.GetChild(i).gameObject;
         activeWeapon.SetActive(true);
+
+        userInput = gameObject.GetComponentInParent<UserInput>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Change Weapon"))
+        if (userInput.actions.changeWeapon.down)
         {
             activeWeapon.SetActive(false);
             i = ++i % n;
