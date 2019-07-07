@@ -38,7 +38,6 @@ public class RaycastWeaponController : MonoBehaviour
                 lineRenderer.startColor = beamColor;
                 lineRenderer.endColor = beamColor;
                 lineRenderer.SetPosition(0, Vector3.zero);
-                Debug.Log(lineRenderer.GetPosition(0));
                 if (Physics.Raycast(Beam.transform.position, Beam.transform.forward, out RaycastHit hit, range))
                 {
                     lineRenderer.SetPosition(1, new Vector3(0,0,hit.distance));
