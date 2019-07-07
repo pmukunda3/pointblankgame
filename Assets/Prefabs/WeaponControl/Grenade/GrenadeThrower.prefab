@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grenade: {fileID: 4213981288706496063}
-  throwForce: 100
+  throwVelocity: 10
 --- !u!1001 &6115565846477624708
 PrefabInstance:
   m_ObjectHideFlags: 0
