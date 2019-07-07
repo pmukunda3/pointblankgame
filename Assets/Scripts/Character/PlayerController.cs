@@ -52,7 +52,7 @@ namespace PlayerControl {
 
         public Vector3 maxStepSize;
 
-        public Collider mainCollider;
+        public CapsuleCollider legsCollider;
 
         private new Rigidbody rigidbody;
         private Animator animator;

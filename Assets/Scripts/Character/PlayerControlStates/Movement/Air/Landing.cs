@@ -94,7 +94,7 @@ namespace PlayerControl {
 
             public void OnLandingEvent() {
                 player.shared.lastRigidbodyVelocity = rigidbody.velocity;
-                player.mainCollider.enabled = true;
+                player.legsCollider.enabled = true;
                 landMode = animator.GetInteger("landMode");
                 if (landMode == 1) {
                     Debug.Log((Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity).z);

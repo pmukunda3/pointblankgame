@@ -13,6 +13,7 @@ namespace PlayerControl {
             private Vector3 climbPoint;
             private new ClimbValidator.ClimbAnimation animation;
 
+            private bool kinematicControl = false;
             private float elapsedTime = 0f;
 
             public new void Start() {
@@ -42,8 +43,12 @@ namespace PlayerControl {
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
-                rigidbody.velocity = animator.velocity;
-                //rigidbody.MovePosition(rigidbody.position + animator.deltaPosition);
+                if (kinematicControl) {
+                    rigidbody.MovePosition(rigidbody.position + animator.deltaPosition);
+                }
+                else {
+                    rigidbody.velocity = animator.velocity;
+                }
             }
 
             public override void AnimatorIK() {
@@ -51,7 +56,13 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                // do nothing, all movement will be done by the animation
+                //if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > climbAnimHelper.GetAnimEnd(animation)) {
+                //    kinematicControl = false;
+                //}
+                //else {
+                //    kinematicControl = true;
+                //}
+                elapsedTime += Time.fixedDeltaTime;
             }
 
             public override void UpdateAnimator(Vector3 localRigidbodyVelocity) {
@@ -69,17 +80,19 @@ namespace PlayerControl {
                 animator.speed = 1.0f;
                 this.moveInput = player.GetLatestMoveInput();
                 AnimationInit();
-                //rigidbody.isKinematic = true;
-                rigidbody.useGravity = false;
-                player.mainCollider.enabled = false;
+                rigidbody.isKinematic = true;
+                kinematicControl = true;
+                //rigidbody.useGravity = false;
+                player.legsCollider.enabled = false;
 
                 player.SetState(StateId.Player.MoveModes.Climb.midAirToClimb);
             }
 
             private void OnMidAirClimbEventExit() {
-                //rigidbody.isKinematic = false;
-                rigidbody.useGravity = true;
-                player.mainCollider.enabled = true;
+                rigidbody.isKinematic = false;
+                kinematicControl = false;
+                //rigidbody.useGravity = true;
+                player.legsCollider.enabled = true;
             }
         }
     }

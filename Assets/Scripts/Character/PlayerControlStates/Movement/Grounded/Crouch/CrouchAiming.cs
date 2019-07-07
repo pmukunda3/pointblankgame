@@ -72,7 +72,7 @@ namespace PlayerControl {
             private void OnCrouchAimingEvent() {
                 animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
-                player.mainCollider.enabled = true;
+                player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.Crouch.aiming);

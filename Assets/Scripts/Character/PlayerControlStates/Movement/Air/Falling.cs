@@ -92,7 +92,7 @@ namespace PlayerControl {
             }
 
             private void OnFallingEvent() {
-                player.mainCollider.enabled = true;
+                player.legsCollider.enabled = true;
                 player.SetState(StateId.Player.MoveModes.Air.falling);
             }
         }

@@ -16,6 +16,7 @@ namespace PlayerControl {
             public float jumpForwardInputClearingDamp = 12f;
 
             public Vector3 maxStepSize;
+            public float maxGroundedMoveAngle;
 
             public ClimbValidator climbValidator;
 
@@ -113,14 +114,27 @@ namespace PlayerControl {
             protected void StickToGroundHelper(float downwardDistance) {
                 RaycastHit hitInfo;
 
-                if (Physics.SphereCast(rigidbody.position, 0.15f, Vector3.down, out hitInfo, downwardDistance, player.raycastMask)) {
-                    if (Mathf.Abs(Vector3.Angle(hitInfo.normal, Vector3.up)) < 85f) {
+                if (Physics.SphereCast(rigidbody.position + player.legsCollider.center + (Vector3.up * (0.02f - 0.5f * player.legsCollider.height + player.legsCollider.radius)),
+                        player.legsCollider.radius,
+                        Vector3.down,
+                        out hitInfo,
+                        downwardDistance,
+                        player.raycastMask)) {
+                    if (Vector3.Angle(hitInfo.normal, Vector3.up) < maxGroundedMoveAngle) {
                         if (rigidbody.velocity.y < 0f) {
                             rigidbody.velocity = Vector3.ProjectOnPlane(rigidbody.velocity, hitInfo.normal) + Vector3.up * rigidbody.velocity.y;
                         }
                         else {
                             rigidbody.velocity = Vector3.ProjectOnPlane(rigidbody.velocity, hitInfo.normal);
                         }
+                    }
+                    else {
+                        Debug.Log("Push Away on slope angle = " + Vector3.Angle(hitInfo.normal, Vector3.up));
+                        //Vector3 slidingDownForce = Vector3.ProjectOnPlane(hitInfo.normal, Vector3.up) - Vector3.Project(hitInfo.normal, Vector3.up);
+                        Vector3 slidingDownForce = Quaternion.AngleAxis(90f, Vector3.Cross(hitInfo.normal, Vector3.ProjectOnPlane(hitInfo.normal, Vector3.up))) * hitInfo.normal;
+                        Debug.DrawLine(rigidbody.position, rigidbody.position + hitInfo.normal, Color.white);
+                        Debug.DrawLine(rigidbody.position, rigidbody.position + slidingDownForce, Color.black);
+                        rigidbody.AddForce(slidingDownForce * 10f);
                     }
                 }
             }
