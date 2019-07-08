@@ -107,7 +107,7 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
 
-                if (actions.jump.down) {
+                if (actions.climbUp.down) {
                     if (!climbValidator.ClimbValid() && climbValidator.ValidateClimbAttempt()) {
                         animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
                         animator.SetTrigger("TRG_climb");
@@ -160,7 +160,7 @@ namespace PlayerControl {
             private void OnJumpEvent() {
                 jumpInput = true;
                 animator.speed = 1.0f;
-
+                player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.jump);

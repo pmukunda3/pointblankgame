@@ -38,6 +38,7 @@ namespace CameraControl {
                 thirdPCamera.RegisterState(StateId.Camera.Grounded.freeRoam, this);
 
                 EventManager.StartListening<PlayerControl.MecanimBehaviour.FreeRoamEvent>(new UnityEngine.Events.UnityAction(OnFreeRoamEvent));
+                EventManager.StartListening<PlayerControl.MecanimBehaviour.MidAirToClimbEvent>(new UnityEngine.Events.UnityAction(OnFreeRoamEvent));
             }
 
             public override void CameraUpdate() {

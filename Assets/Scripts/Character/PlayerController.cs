@@ -41,6 +41,7 @@ namespace PlayerControl {
         public const float EPSILON = 1e-6f;
 
         public float mouseSensitivity = 5.0f;
+        public float mouseAimSensitivity = 1.2f;
         public float screenMouseRatio = 1.777f;
 
         public Vector2 deadzone = new Vector2(0.01f, 0.01f);
@@ -50,6 +51,8 @@ namespace PlayerControl {
         public SharedData shared;
 
         public Vector3 maxStepSize;
+
+        public CapsuleCollider legsCollider;
 
         private new Rigidbody rigidbody;
         private Animator animator;
@@ -190,7 +193,7 @@ namespace PlayerControl {
                     y = Input.GetAxis("Mouse Y")
                 };
 
-                aimPitch += mouseSensitivity * mouseInput.y;
+                aimPitch += mouseAimSensitivity * mouseInput.y;
                 if (aimPitch > 80f) {
                     aimPitch = 80f;
                 }
@@ -198,7 +201,7 @@ namespace PlayerControl {
                     aimPitch = -80f;
                 }
 
-                aimYaw += mouseSensitivity * mouseInput.x;
+                aimYaw += mouseAimSensitivity * mouseInput.x;
 
                 if (aimYaw < -180f) aimYaw += 360f;
                 else if (aimYaw > 180f) aimYaw -= 360f;

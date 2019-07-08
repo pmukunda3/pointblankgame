@@ -37,4 +37,34 @@ public class ClimbAnimationHelper : MonoBehaviour
                 break;
         }
     }
+
+    public float GetAnimEnd(ClimbValidator.ClimbAnimation animation) {
+        switch (animation) {
+            case ClimbValidator.ClimbAnimation.Step:
+                return stepAnimEnd;
+            case ClimbValidator.ClimbAnimation.Low:
+                return lowAnimEnd;
+            case ClimbValidator.ClimbAnimation.Mid:
+                return midAnimEnd;
+            case ClimbValidator.ClimbAnimation.High:
+                return highAnimEnd;
+            default:
+                return 1.0f;
+        }
+    }
+
+    public float GetAnimStart(ClimbValidator.ClimbAnimation animation) {
+        switch (animation) {
+            case ClimbValidator.ClimbAnimation.Step:
+                return stepAnimStart;
+            case ClimbValidator.ClimbAnimation.Low:
+                return lowAnimStart;
+            case ClimbValidator.ClimbAnimation.Mid:
+                return midAnimStart;
+            case ClimbValidator.ClimbAnimation.High:
+                return highAnimStart;
+            default:
+                return 0.0f;
+        }
+    }
 }

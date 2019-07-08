@@ -61,14 +61,14 @@ namespace PlayerControl {
                 base.UseInput(moveInput, mouseInput, actions);
 
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
             }
 
             private void OnSprintEvent() {
                 jumpInput = false;
                 animator.SetBool("aimMode", false);
                 animator.speed = 1.0f;
-
+                player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.sprint);

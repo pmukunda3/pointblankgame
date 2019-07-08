@@ -13,7 +13,7 @@ public class UserInput : MonoBehaviour {
     public KeyCode secondaryFireKey;
     public KeyCode reloadKey;
     public KeyCode climbUpKey;
-    public KeyCode grabLedgeKey;
+    public KeyCode changeWeaponKey;
 
     [System.Serializable]
     public struct KeyState {
@@ -30,10 +30,11 @@ public class UserInput : MonoBehaviour {
         public KeyState use;
         public KeyState primaryFire;
         public KeyState jump;
-        public KeyState secondaryFire;
+        public KeyState aim;
         public KeyState reload;
         public KeyState climbUp;
         public KeyState grabLedge;
+        public KeyState changeWeapon;
     }
 
     private Actions _actions;
@@ -67,9 +68,9 @@ public class UserInput : MonoBehaviour {
         _actions.jump.up = Input.GetKeyUp(jumpKey);
         _actions.jump.active = Input.GetKey(jumpKey);
 
-        _actions.secondaryFire.down = Input.GetKeyDown(secondaryFireKey);
-        _actions.secondaryFire.up = Input.GetKeyUp(secondaryFireKey);
-        _actions.secondaryFire.active = Input.GetKey(secondaryFireKey);
+        _actions.aim.down = Input.GetKeyDown(secondaryFireKey);
+        _actions.aim.up = Input.GetKeyUp(secondaryFireKey);
+        _actions.aim.active = Input.GetKey(secondaryFireKey);
 
         _actions.reload.down = Input.GetKeyDown(reloadKey);
         _actions.reload.up = Input.GetKeyUp(reloadKey);
@@ -79,8 +80,8 @@ public class UserInput : MonoBehaviour {
         _actions.climbUp.up = Input.GetKeyUp(climbUpKey);
         _actions.climbUp.active = Input.GetKey(climbUpKey);
 
-        _actions.grabLedge.down = Input.GetKeyDown(grabLedgeKey);
-        _actions.grabLedge.up = Input.GetKeyUp(grabLedgeKey);
-        _actions.grabLedge.active = Input.GetKey(grabLedgeKey);
+        _actions.changeWeapon.down = Input.GetKeyDown(changeWeaponKey);
+        _actions.changeWeapon.up = Input.GetKeyUp(changeWeaponKey);
+        _actions.changeWeapon.active = Input.GetKey(changeWeaponKey);
     }
 }
