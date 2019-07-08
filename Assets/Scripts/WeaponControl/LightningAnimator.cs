@@ -97,6 +97,12 @@ public class LightningAnimator : MonoBehaviour
         // Raycast
         if (Physics.Raycast(ray, out hitPoint, MaxBeamLength, layerMask))
         {
+            Exploder ex = hitPoint.collider.gameObject.GetComponent<Exploder>();
+            if (ex != null)
+            {
+                ex.Explode();
+            }
+
             // Get current beam length
             beamLength = Vector3.Distance(transform.position, hitPoint.point);
 

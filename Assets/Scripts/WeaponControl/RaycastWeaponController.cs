@@ -40,6 +40,11 @@ public class RaycastWeaponController : MonoBehaviour
                 lineRenderer.SetPosition(0, Vector3.zero);
                 if (Physics.Raycast(Beam.transform.position, Beam.transform.forward, out RaycastHit hit, range))
                 {
+                    Exploder ex = hit.collider.gameObject.GetComponent<Exploder>();
+                    if (ex != null)
+                    {
+                        ex.Explode();
+                    }
                     lineRenderer.SetPosition(1, new Vector3(0,0,hit.distance));
                     Vector3 pos = hit.point + hit.normal * impactOffset;
                     Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);

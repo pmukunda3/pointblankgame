@@ -5,19 +5,24 @@ using UnityEngine;
 public class Landmine : MonoBehaviour
 {
     public float delay;
-    public float triggerRadius;
+    public Vector3 triggerSize;
+    //public Collider trigger;
 
-    private BoxCollider objCollider; 
-    private SphereCollider trigger;
+    private BoxCollider col; 
     private bool plopped;
     private bool armed;
     private float clock;
+
+    private float Circumradius(float r, float h)
+    { 
+        return ((r*r)+(h*h))/(2*h);
+    }
 
     void Plop(Vector3 point, Vector3 normal)
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
-        objCollider.enabled = false;
+        col.enabled = false;
         transform.position = point;
         transform.rotation = Quaternion.FromToRotation(Vector3.up,normal);
         clock = 0f;
@@ -26,18 +31,16 @@ public class Landmine : MonoBehaviour
 
     void Arm()
     {
-        trigger.enabled = true;
+        col.size = triggerSize;
+        col.isTrigger = true;
+        col.enabled = true;
         armed = true;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        objCollider = GetComponent<BoxCollider>();
-        objCollider.enabled = true;
-        trigger = GetComponent<SphereCollider>();
-        trigger.radius = triggerRadius;
-        trigger.enabled = false;
+        col = GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
@@ -64,10 +67,13 @@ public class Landmine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null)
+        if(armed)
         {
-            gameObject.GetComponent<Exploder>().Explode();
-        }
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                gameObject.GetComponent<Exploder>().Explode();
+            }
+        }        
     }
 }

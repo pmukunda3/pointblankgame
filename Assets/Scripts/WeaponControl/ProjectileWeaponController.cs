@@ -18,8 +18,6 @@ public class ProjectileWeaponController : MonoBehaviour
     {
         clock = 0f;
         FireInterval = 1 / FireRate;
-        Projectile.SetActive(false);
-        Projectile.GetComponent<ProjectileController>().dontDestroy = true;
         Muzzle.SetActive(false);
     }
 
@@ -35,7 +33,6 @@ public class ProjectileWeaponController : MonoBehaviour
                 NewProjectile = Instantiate(Projectile, Muzzle.transform);
                 NewProjectile.transform.parent = null;
                 NewProjectile.SetActive(true);
-                NewProjectile.GetComponent<ProjectileController>().dontDestroy = false;
             }
         }
         if (clock < 0f)

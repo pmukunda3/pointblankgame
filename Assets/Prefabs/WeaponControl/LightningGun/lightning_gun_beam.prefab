@@ -335,7 +335,7 @@ MonoBehaviour:
   beamScale: 1
   AnimateUV: 1
   UVTime: -6
-  Oscillate: 1
+  Oscillate: 0
   Amplitude: 0.3
   OscillateTime: 0.05
   rayImpact: {fileID: 400010}

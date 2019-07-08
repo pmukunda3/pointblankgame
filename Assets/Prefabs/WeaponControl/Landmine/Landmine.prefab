@@ -14081,7 +14081,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2969165443231204166}
   - component: {fileID: 2347812267817977599}
-  - component: {fileID: 1701526904235445842}
   - component: {fileID: 7968811835589201053}
   - component: {fileID: 1936327833960459185}
   - component: {fileID: 8944061333770871538}
@@ -14121,19 +14120,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.06, z: 0.3}
   m_Center: {x: 0, y: 0.03, z: 0}
---- !u!135 &1701526904235445842
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3786706539252317684}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7968811835589201053
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14163,7 +14149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delay: 3
-  triggerRadius: 2
+  triggerSize: {x: 2, y: 1, z: 2}
 --- !u!114 &8944061333770871538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14177,7 +14163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 6317740525665345648}
-  blastRadius: 10
+  blastRadius: 5
   blastForce: 1000
 --- !u!1 &4046939404645459890
 GameObject:
