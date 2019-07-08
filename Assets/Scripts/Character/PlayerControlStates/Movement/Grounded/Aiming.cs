@@ -7,7 +7,6 @@ namespace PlayerControl {
         public class Aiming : Grounded {
 
             public CameraControl.State.Aiming cameraState;
-            public WeaponManager weaponManager;
 
             private Transform LeftHandIKTarget, RightHandIKTarget;
             private Vector3 LookTarget;
@@ -27,6 +26,11 @@ namespace PlayerControl {
                         this.moveInput = this.moveInput.normalized * 0.3535f;
                     }
                 }
+
+                if (actions.primaryFire.down) weaponManager.FireWeaponDown();
+                if (actions.primaryFire.up) weaponManager.FireWeaponUp();
+
+                if (actions.primaryFire.active) weaponManager.FireWeapon();
 
                 if (actions.sprint.down) animator.SetBool("sprint", true);
                 if (actions.aim.down) animator.SetBool("aimMode", false);

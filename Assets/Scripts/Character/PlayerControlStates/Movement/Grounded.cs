@@ -19,6 +19,7 @@ namespace PlayerControl {
             public float maxGroundedMoveAngle;
 
             public ClimbValidator climbValidator;
+            public WeaponManager weaponManager;
 
             protected Vector2 mouseInput;
             protected Vector2 moveInput;
@@ -34,6 +35,8 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
+
+                if (actions.changeWeapon.down) weaponManager.ChangeWeapon();
 
                 if (actions.climbUp.down) {
                     if (climbValidator.ValidateClimbAttempt()) {

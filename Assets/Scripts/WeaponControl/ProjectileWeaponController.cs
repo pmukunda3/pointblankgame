@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileWeaponController : MonoBehaviour
+public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
 {
     public GameObject Muzzle;
     public GameObject Projectile;
@@ -28,18 +28,6 @@ public class ProjectileWeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(userInput.actions.primaryFire.active)
-        {
-            if (clock >= 0f)
-            {
-                Muzzle.SetActive(true);
-                clock = -FireInterval;
-                NewProjectile = Instantiate(Projectile, Projectile.transform);
-                NewProjectile.transform.parent = null;
-                NewProjectile.SetActive(true);
-                NewProjectile.GetComponent<ProjectileController>().dontDestroy = false;
-            }
-        }
         if (clock < 0f)
         {
             clock += Time.deltaTime;
@@ -48,5 +36,24 @@ public class ProjectileWeaponController : MonoBehaviour
                 Muzzle.SetActive(false);
             }
         }
+    }
+
+    public void FireWeapon() {
+        if (clock >= 0f) {
+            Muzzle.SetActive(true);
+            clock = -FireInterval;
+            NewProjectile = Instantiate(Projectile, Projectile.transform);
+            NewProjectile.transform.parent = null;
+            NewProjectile.SetActive(true);
+            NewProjectile.GetComponent<ProjectileController>().dontDestroy = false;
+        }
+    }
+
+    public void FireWeaponDown() {
+        // do nothing
+    }
+
+    public void FireWeaponUp() {
+        // do nothing
     }
 }

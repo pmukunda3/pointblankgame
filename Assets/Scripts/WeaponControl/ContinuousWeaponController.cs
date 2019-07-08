@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContinuousWeaponController : MonoBehaviour
+public class ContinuousWeaponController : MonoBehaviour, IWeaponFire
 {
     public GameObject beam;
 
@@ -14,16 +14,15 @@ public class ContinuousWeaponController : MonoBehaviour
         beam.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(userInput.actions.primaryFire.down)
-        {
-            beam.SetActive(true);
-        }
-        if(userInput.actions.primaryFire.up)
-        {
-            beam.SetActive(false);
-        }
+    public void FireWeapon() {
+        // do nothing
+    }
+
+    public void FireWeaponDown() {
+        beam.SetActive(true);
+    }
+
+    public void FireWeaponUp() {
+        beam.SetActive(false);
     }
 }
