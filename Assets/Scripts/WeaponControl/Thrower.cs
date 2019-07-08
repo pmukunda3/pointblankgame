@@ -15,7 +15,7 @@ public class Thrower : MonoBehaviour
         newObject = Instantiate(throwObject, transform);
         newObject.transform.parent = null;
         newObject.SetActive(true);        
-        rb = newObject.GetComponent<Rigidbody>();
+        rb = newObject.GetComponentInParent<Rigidbody>();
         rb.AddRelativeForce(new Vector3(0,0,throwVelocity),ForceMode.VelocityChange);       
     }
 

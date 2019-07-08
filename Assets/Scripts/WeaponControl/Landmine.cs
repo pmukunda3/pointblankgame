@@ -20,7 +20,7 @@ public class Landmine : MonoBehaviour
 
     void Plop(Vector3 point, Vector3 normal)
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
+        Rigidbody rb = GetComponentInParent<Rigidbody>();
         rb.isKinematic = true;
         col.enabled = false;
         transform.position = point;
@@ -69,7 +69,7 @@ public class Landmine : MonoBehaviour
     {
         if(armed)
         {
-            Rigidbody rb = other.GetComponent<Rigidbody>();
+            Rigidbody rb = other.GetComponentInParent<Rigidbody>();
             if (rb != null)
             {
                 gameObject.GetComponent<Exploder>().Explode();

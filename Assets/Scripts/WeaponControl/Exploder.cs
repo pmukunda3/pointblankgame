@@ -32,7 +32,7 @@ public class Exploder : MonoBehaviour
                 }
                 else
                 {
-                    Rigidbody rb = hit.GetComponent<Rigidbody>();
+                    Rigidbody rb = hit.GetComponentInParent<Rigidbody>();
                     if (rb != null)
                         rb.AddExplosionForce(blastForce, explosionPos, blastRadius, 0F);
                 }
