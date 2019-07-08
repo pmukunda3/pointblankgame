@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5706585198350265667}
   - component: {fileID: 2818505089279011378}
   m_Layer: 0
-  m_Name: SM_Wep_Grenade_Ball_01
+  m_Name: Representative
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

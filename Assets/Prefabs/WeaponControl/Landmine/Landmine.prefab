@@ -14084,6 +14084,7 @@ GameObject:
   - component: {fileID: 1701526904235445842}
   - component: {fileID: 7968811835589201053}
   - component: {fileID: 1936327833960459185}
+  - component: {fileID: 8944061333770871538}
   m_Layer: 0
   m_Name: Landmine
   m_TagString: Untagged
@@ -14129,7 +14130,7 @@ SphereCollider:
   m_GameObject: {fileID: 3786706539252317684}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -14163,6 +14164,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delay: 3
   triggerRadius: 2
+--- !u!114 &8944061333770871538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786706539252317684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ecf861e600cb2449af1a7b0336891d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   explosionEffect: {fileID: 6317740525665345648}
   blastRadius: 10
   blastForce: 1000

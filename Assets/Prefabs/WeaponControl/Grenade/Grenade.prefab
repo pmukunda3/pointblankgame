@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1110819221393397377}
   - component: {fileID: 1101635789056852259}
   m_Layer: 0
-  m_Name: SM_Wep_Grenade_Ball_01
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42465,6 +42465,7 @@ GameObject:
   - component: {fileID: 5083911732937118218}
   - component: {fileID: 5924818435533179708}
   - component: {fileID: 7876147953454332226}
+  - component: {fileID: 6231018300480141910}
   m_Layer: 0
   m_Name: Grenade
   m_TagString: Untagged
@@ -42516,7 +42517,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!114 &7876147953454332226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42530,6 +42531,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeout: 3
+--- !u!114 &6231018300480141910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7973002034782733243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ecf861e600cb2449af1a7b0336891d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   explosionEffect: {fileID: 4272975600061566457}
-  blastRadius: 10
+  blastRadius: 6
   blastForce: 1000
