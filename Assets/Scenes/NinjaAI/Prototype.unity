@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44239196, g: 0.49144733, b: 0.5713099, a: 1}
+  m_IndirectSpecularColor: {r: 0.44239214, g: 0.49144804, b: 0.5713104, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2931,13 +2931,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04ea1b6b5ff4dcb43bab58781bfa4200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climbTrigger: {fileID: 1203197306}
-  climbCrestTrigger: {fileID: 1027152915}
-  landTrigger: {fileID: 8714920}
-  mouseSensitivity: 100
-  screenMouseRatio: 1.777
-  charVelocityRun: {x: 2.6, y: 0, z: 3.6}
-  charVelocityClimb: {x: 1.5, y: 1, z: 0}
 --- !u!54 &163338596
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6351,7 +6344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 149790, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 408730, guid: 7737647c22c1fc64a88d5cd030c352ce, type: 3}
       propertyPath: m_LocalPosition.x
@@ -43110,5 +43103,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1745082259}
+    - target: {fileID: 8963539433529210080, guid: 5cd7bf410c30b419f9ed2c1de722dfcc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cd7bf410c30b419f9ed2c1de722dfcc, type: 3}

@@ -2,25 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContinuousWeaponController : MonoBehaviour
+public class ContinuousWeaponController : MonoBehaviour, IWeaponFire
 {
     public GameObject beam;
+
+    private UserInput userInput;
 
     void OnEnable()
     {
         beam.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        if(Input.GetButtonDown("Fire1"))
-        {
-            beam.SetActive(true);
-        }
-        if(Input.GetButtonUp("Fire1"))
-        {
-            beam.SetActive(false);
-        }
+        userInput = gameObject.GetComponentInParent<UserInput>();      
+    }
+
+    public void FireWeapon() {
+        // do nothing
+    }
+
+    public void FireWeaponDown() {
+        beam.SetActive(true);
+    }
+
+    public void FireWeaponUp() {
+        beam.SetActive(false);
     }
 }

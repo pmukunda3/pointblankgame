@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Thrower : MonoBehaviour
+public class Thrower : MonoBehaviour, IWeaponFire
 {
     public GameObject throwObject;
     public float throwVelocity;
@@ -14,17 +14,23 @@ public class Thrower : MonoBehaviour
     {
         newObject = Instantiate(throwObject, transform);
         newObject.transform.parent = null;
-        newObject.SetActive(true);        
+        newObject.SetActive(true);
         rb = newObject.GetComponentInParent<Rigidbody>();
-        rb.AddRelativeForce(new Vector3(0,0,throwVelocity),ForceMode.VelocityChange);       
+        rb.AddRelativeForce(new Vector3(0, 0, throwVelocity), ForceMode.VelocityChange);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void FireWeapon()
     {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Throw();
-        }
+        // do nothing;
+    }
+
+    public void FireWeaponDown()
+    {
+        Throw();
+    }
+
+    public void FireWeaponUp()
+    {
+        // do nothing;
     }
 }

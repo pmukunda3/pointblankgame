@@ -7,7 +7,6 @@ namespace PlayerControl {
         public class Aiming : Grounded {
 
             public CameraControl.State.Aiming cameraState;
-            public WeaponManager weaponManager;
 
             private Transform LeftHandIKTarget, RightHandIKTarget;
             private Vector3 LookTarget;
@@ -28,8 +27,13 @@ namespace PlayerControl {
                     }
                 }
 
+                if (actions.primaryFire.down) weaponManager.FireWeaponDown();
+                if (actions.primaryFire.up) weaponManager.FireWeaponUp();
+
+                if (actions.primaryFire.active) weaponManager.FireWeapon();
+
                 if (actions.sprint.down) animator.SetBool("sprint", true);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", false);
+                if (actions.aim.down) animator.SetBool("aimMode", false);
                 if (actions.crouch.down) animator.SetBool("crouch", true);
 
                 // TODO: movement input will cause character to get up
@@ -85,7 +89,7 @@ namespace PlayerControl {
                 jumpInput = false;
                 animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
-
+                player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.aiming);

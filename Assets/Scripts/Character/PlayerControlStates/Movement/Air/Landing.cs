@@ -16,16 +16,12 @@ namespace PlayerControl {
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
-            private new Rigidbody rigidbody;
-
             private int landMode = 0;
             private float rollAnimationSpeed = 1.0f;
 
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Air.land, this);
-
-                rigidbody = player.GetComponent<Rigidbody>();
 
                 EventManager.StartListening<MecanimBehaviour.LandEvent>(new UnityEngine.Events.UnityAction(OnLandingEvent));
             }
@@ -98,6 +94,7 @@ namespace PlayerControl {
 
             public void OnLandingEvent() {
                 player.shared.lastRigidbodyVelocity = rigidbody.velocity;
+                player.legsCollider.enabled = true;
                 landMode = animator.GetInteger("landMode");
                 if (landMode == 1) {
                     Debug.Log((Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity).z);

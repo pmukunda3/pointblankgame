@@ -35,7 +35,7 @@ namespace PlayerControl {
                 rigidbody.velocity = 0.955f * (Quaternion.AngleAxis(extraRotation, Vector3.up) * rigidbody.velocity);
 
                 if (actions.sprint.active) animator.SetBool("sprint", true);
-                if (actions.secondaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
                 if (actions.crouch.down) animator.SetBool("crouch", true);
             }
 
@@ -91,7 +91,7 @@ namespace PlayerControl {
             private void OnFreeRoamEvent() {
                 jumpInput = false;
                 animator.speed = 1.0f;
-
+                player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.freeRoam);

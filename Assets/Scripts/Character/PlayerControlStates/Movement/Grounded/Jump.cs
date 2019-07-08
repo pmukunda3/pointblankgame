@@ -24,12 +24,13 @@ namespace PlayerControl {
             public AnimationCurve verticalSpeedTimeHeld;
             public AnimationCurve verticalSpeedCharSpeed;
 
+            public ClimbValidator climbValidator;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
             private bool jumpInput = true;
             private bool leavingGround = false;
 
-            private new Rigidbody rigidbody;
             private Vector3 groundNormal = Vector3.zero;
             private Vector3 groundPoint = Vector3.zero;
 
@@ -38,8 +39,6 @@ namespace PlayerControl {
             public new void Start() {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.jump, this);
-
-                rigidbody = player.GetComponent<Rigidbody>();
 
                 EventManager.StartListening<MecanimBehaviour.JumpEvent>(new UnityEngine.Events.UnityAction(OnJumpEvent));
             }
@@ -107,6 +106,13 @@ namespace PlayerControl {
 
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
+
+                if (actions.climbUp.down) {
+                    if (!climbValidator.ClimbValid() && climbValidator.ValidateClimbAttempt()) {
+                        animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
+                        animator.SetTrigger("TRG_climb");
+                    }
+                }
             }
 
             public override void CollisionEnter(Collision collision) {
@@ -154,7 +160,7 @@ namespace PlayerControl {
             private void OnJumpEvent() {
                 jumpInput = true;
                 animator.speed = 1.0f;
-
+                player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
 
                 player.SetState(StateId.Player.MoveModes.Grounded.jump);
