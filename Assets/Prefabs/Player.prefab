@@ -1937,16 +1937,6 @@ PrefabInstance:
       propertyPath: InitialModule.startRotationY.minMaxState
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7518255409739541823, guid: 7fe07ef14a77bcd4aa5484f722be8f30,
-        type: 3}
-      propertyPath: impactOffset
-      value: 0.04
-      objectReference: {fileID: 0}
-    - target: {fileID: 7158139549755852354, guid: 7fe07ef14a77bcd4aa5484f722be8f30,
-        type: 3}
-      propertyPath: impactOffset
-      value: 0.1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fe07ef14a77bcd4aa5484f722be8f30, type: 3}
 --- !u!114 &8528844425777340156 stripped

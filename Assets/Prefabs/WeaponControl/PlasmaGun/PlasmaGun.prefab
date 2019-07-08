@@ -19514,7 +19514,7 @@ MonoBehaviour:
   Impact: {fileID: 4070774411035133367}
   velocity: 100
   range: 100
-  impactOffset: 0.5
+  impactOffset: 0.2
 --- !u!1 &911353159162518046
 GameObject:
   m_ObjectHideFlags: 0
@@ -20211,22 +20211,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 19800010, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
-      propertyPath: InitialModule.startRotationX.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800010, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
-      propertyPath: InitialModule.startRotationY.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800008, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
-      propertyPath: InitialModule.startRotationX.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800008, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
-      propertyPath: InitialModule.startRotationY.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 19800002, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
       propertyPath: InitialModule.startRotationX.minMaxState
       value: 3
@@ -20240,6 +20224,22 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800010, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800010, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800008, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800008, guid: a6a22ab65aeadcc489ffdb817d86eb83, type: 3}
       propertyPath: InitialModule.startRotationY.minMaxState
       value: 3
       objectReference: {fileID: 0}

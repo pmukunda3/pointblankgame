@@ -531,7 +531,7 @@ MonoBehaviour:
   Impact: {fileID: 4783460718256364759}
   velocity: 200
   range: 100
-  impactOffset: 0.5
+  impactOffset: 0.2
 --- !u!1 &6484686886779263015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,22 +1073,6 @@ PrefabInstance:
       propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
-      propertyPath: looping
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
-      propertyPath: prewarm
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
-      propertyPath: InitialModule.startSizeY.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
-      propertyPath: InitialModule.startSizeZ.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
       propertyPath: InitialModule.startSizeY.minMaxState
       value: 3
@@ -1112,6 +1096,22 @@ PrefabInstance:
     - target: {fileID: 19800004, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
       propertyPath: prewarm
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63dff90b37d2f5a4c85b7626e08a2b8b, type: 3}

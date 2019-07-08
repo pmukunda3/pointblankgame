@@ -23892,7 +23892,7 @@ MonoBehaviour:
   beamDuration: 0.5
   fireRate: 1
   range: 100
-  impactOffset: 0.5
+  impactOffset: 0.2
 --- !u!114 &1111217716026370988
 MonoBehaviour:
   m_ObjectHideFlags: 0
