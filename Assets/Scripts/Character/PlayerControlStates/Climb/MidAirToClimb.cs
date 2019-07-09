@@ -56,12 +56,18 @@ namespace PlayerControl {
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
-                //if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > climbAnimHelper.GetAnimEnd(animation)) {
-                //    kinematicControl = false;
-                //}
-                //else {
-                //    kinematicControl = true;
-                //}
+                if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > climbAnimHelper.GetAnimEnd(animation)) {
+                    if (kinematicControl) {
+                        kinematicControl = false;
+                        rigidbody.isKinematic = kinematicControl;
+                    }
+                }
+                else {
+                    if (!kinematicControl) {
+                        kinematicControl = true;
+                        rigidbody.isKinematic = kinematicControl;
+                    }
+                }
                 elapsedTime += Time.fixedDeltaTime;
             }
 
