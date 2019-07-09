@@ -14,6 +14,8 @@ public class UserInput : MonoBehaviour {
     public KeyCode reloadKey;
     public KeyCode climbUpKey;
     public KeyCode changeWeaponKey;
+    public KeyCode throwItemKey;
+    public KeyCode changeItemKey;
 
     [System.Serializable]
     public struct KeyState {
@@ -35,6 +37,8 @@ public class UserInput : MonoBehaviour {
         public KeyState climbUp;
         public KeyState grabLedge;
         public KeyState changeWeapon;
+        public KeyState throwItem;
+        public KeyState changeItem;
     }
 
     private Actions _actions;
@@ -83,5 +87,13 @@ public class UserInput : MonoBehaviour {
         _actions.changeWeapon.down = Input.GetKeyDown(changeWeaponKey);
         _actions.changeWeapon.up = Input.GetKeyUp(changeWeaponKey);
         _actions.changeWeapon.active = Input.GetKey(changeWeaponKey);
+
+        _actions.throwItem.down = Input.GetKeyDown(throwItemKey);
+        _actions.throwItem.up = Input.GetKeyUp(throwItemKey);
+        _actions.throwItem.active = Input.GetKey(throwItemKey);
+
+        _actions.changeItem.down = Input.GetKeyDown(changeItemKey);
+        _actions.changeItem.up = Input.GetKeyUp(changeItemKey);
+        _actions.changeItem.active = Input.GetKey(changeItemKey);
     }
 }

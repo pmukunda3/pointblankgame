@@ -27,10 +27,11 @@ namespace PlayerControl {
                     }
                 }
 
-                if (actions.primaryFire.down) weaponManager.FireWeaponDown();
+                if (actions.primaryFire.down) weaponManager.FireWeaponDown();                
                 if (actions.primaryFire.up) weaponManager.FireWeaponUp();
-
                 if (actions.primaryFire.active) weaponManager.FireWeapon();
+
+                if (actions.throwItem.down) animator.SetTrigger("Throw");
 
                 if (actions.sprint.down) animator.SetBool("sprint", true);
                 if (actions.aim.down) animator.SetBool("aimMode", false);
@@ -60,11 +61,18 @@ namespace PlayerControl {
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
                 animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
 
-                RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
-                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-                animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
-                animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
+                if (animator.GetCurrentAnimatorStateInfo(1).IsName("Throwing"))
+                {
+                    thrower.AnimatorIK();
+                }
+                else
+                { 
+                    RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
+                }
             }
 
             public override void MoveRigidbody(Vector3 localRigidbodyVelocity) {
