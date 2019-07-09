@@ -9,6 +9,8 @@ namespace PlayerControl {
             public ClimbAnimationHelper climbAnimHelper;
             public ClimbValidator climbValidator;
 
+            public Vector3 wallRaycastStart;
+
             private Vector2 moveInput;
             private Vector3 climbPoint;
             private new ClimbValidator.ClimbAnimation animation;
@@ -68,6 +70,11 @@ namespace PlayerControl {
                         rigidbody.isKinematic = kinematicControl;
                     }
                 }
+
+                if (kinematicControl) {
+                    MoveToWallOffset();
+                }
+
                 elapsedTime += Time.fixedDeltaTime;
             }
 
@@ -76,6 +83,19 @@ namespace PlayerControl {
                     climbAnimHelper.SetMatchTarget(climbPoint, animation, 0.15f);
                 }
                 elapsedTime += Time.fixedDeltaTime;
+            }
+
+            private void MoveToWallOffset() {
+                RaycastHit wallHit;
+
+                Debug.DrawRay(rigidbody.position + rigidbody.rotation * (wallRaycastStart - 0.25f * Vector3.forward), rigidbody.rotation * Vector3.forward * 1.2f, Color.red, 20f);
+                if (Physics.SphereCast(rigidbody.position + rigidbody.rotation * (wallRaycastStart - 0.25f * Vector3.forward), 0.15f, rigidbody.rotation * Vector3.forward, out wallHit, 1.2f, player.raycastMask)) {
+                    Debug.DrawRay(wallHit.point, (rigidbody.position + wallRaycastStart) - wallHit.point , Color.magenta, 20f);
+                    if (Vector3.Dot(wallHit.normal, (rigidbody.position + wallRaycastStart) - wallHit.point) < 0) {
+                        //rigidbody.MovePosition(rigidbody.position + wallHit.normal * ((rigidbody.position + wallRaycastStart) - wallHit.point).magnitude);
+                        rigidbody.position += wallHit.normal * ((rigidbody.position + wallRaycastStart) - wallHit.point).magnitude;
+                    }
+                }
             }
 
             public override void CollisionEnter(Collision collision) {

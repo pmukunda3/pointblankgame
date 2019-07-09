@@ -46,8 +46,6 @@ namespace PlayerControl {
 
         public Vector2 deadzone = new Vector2(0.01f, 0.01f);
 
-        public WeaponController weaponController;
-
         public SharedData shared;
 
         public Vector3 maxStepSize;
@@ -226,6 +224,7 @@ namespace PlayerControl {
             if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
             if (Input.GetKeyDown(KeyCode.Keypad4)) rigidbody.position = new Vector3(-12, 8, 32);
             if (Input.GetKeyDown(KeyCode.Keypad5)) rigidbody.position = new Vector3(35, 8, 70);
+            if (Input.GetKeyDown(KeyCode.Keypad6)) rigidbody.position = new Vector3(48, 0, 70);
 
             currPlayerState.UseInput(moveInput, mouseInput, userInput.actions);
         }

@@ -692,6 +692,7 @@ MonoBehaviour:
   landAnimationFrameRate: 30
   maxTurnSpeed: 60
   legsCollider: {fileID: 7431189261897494635}
+  climbValidator: {fileID: 1241218107}
 --- !u!114 &725680123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,6 +823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   climbAnimHelper: {fileID: 1241218106}
   climbValidator: {fileID: 1241218107}
+  wallRaycastStart: {x: 0, y: 1.162, z: -0.23}
 --- !u!1 &1159379136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1481,6 @@ MonoBehaviour:
   mouseAimSensitivity: 1.2
   screenMouseRatio: 1.777
   deadzone: {x: 0.01, y: 0.01}
-  weaponController: {fileID: 0}
   shared:
     lastRigidbodyVelocity: {x: 0, y: 0, z: 0}
     timeHeldJump: {x: 0, y: 0, z: 0}
@@ -1799,7 +1800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftFoot: {fileID: 8661325436734451680}
   rightFoot: {fileID: 718780659830152963}
-  heightThreshold: 0.25
+  heightThreshold: 0.15
 --- !u!1001 &819655857
 PrefabInstance:
   m_ObjectHideFlags: 0

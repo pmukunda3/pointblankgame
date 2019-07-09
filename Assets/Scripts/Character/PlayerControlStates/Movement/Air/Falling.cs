@@ -13,6 +13,8 @@ namespace PlayerControl {
 
             public CapsuleCollider legsCollider;
 
+            public ClimbValidator climbValidator;
+
             private Vector2 mouseInput;
             private Vector2 moveInput;
 
@@ -62,6 +64,15 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
                 this.mouseInput = mouseInput;
+
+                if (actions.climbUp.down) {
+                    if (rigidbody.velocity.y > -3.0f) {
+                        if (!climbValidator.ClimbValid() && climbValidator.ValidateClimbAttempt()) {
+                            animator.SetInteger("climbAnim", (int)climbValidator.GetClimbAnimation() - 1);
+                            animator.SetTrigger("TRG_climb");
+                        }
+                    }
+                }
             }
 
             public override void CollisionEnter(Collision collision) {

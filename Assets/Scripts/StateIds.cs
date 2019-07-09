@@ -86,10 +86,14 @@ public static class StateId {
 
     public static class Camera {
         public static readonly Id grounded = 1;
+        public static readonly Id climbing = 2;
         public static class Grounded {
             public static readonly Id aim = grounded[1];
             public static readonly Id freeRoam = grounded[2];
             public static readonly Id sprint = grounded[3];
+        }
+        public static class Climbing {
+            public static readonly Id ledgeClimb = climbing[0];
         }
     }
 }

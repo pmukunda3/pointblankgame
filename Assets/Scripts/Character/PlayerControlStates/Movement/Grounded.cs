@@ -131,14 +131,15 @@ namespace PlayerControl {
                             rigidbody.velocity = Vector3.ProjectOnPlane(rigidbody.velocity, hitInfo.normal);
                         }
                     }
-                    else {
-                        Debug.Log("Push Away on slope angle = " + Vector3.Angle(hitInfo.normal, Vector3.up));
-                        //Vector3 slidingDownForce = Vector3.ProjectOnPlane(hitInfo.normal, Vector3.up) - Vector3.Project(hitInfo.normal, Vector3.up);
-                        Vector3 slidingDownForce = Quaternion.AngleAxis(90f, Vector3.Cross(hitInfo.normal, Vector3.ProjectOnPlane(hitInfo.normal, Vector3.up))) * hitInfo.normal;
-                        Debug.DrawLine(rigidbody.position, rigidbody.position + hitInfo.normal, Color.white);
-                        Debug.DrawLine(rigidbody.position, rigidbody.position + slidingDownForce, Color.black);
-                        rigidbody.AddForce(slidingDownForce * 10f);
-                    }
+                        // TODO: Fix the code for slopes that are too steep.
+                    //else {
+                    //    Debug.Log("Push Away on slope angle = " + Vector3.Angle(hitInfo.normal, Vector3.up));
+                    //    //Vector3 slidingDownForce = Vector3.ProjectOnPlane(hitInfo.normal, Vector3.up) - Vector3.Project(hitInfo.normal, Vector3.up);
+                    //    Vector3 slidingDownForce = Quaternion.AngleAxis(90f, Vector3.Cross(hitInfo.normal, Vector3.ProjectOnPlane(hitInfo.normal, Vector3.up))) * hitInfo.normal;
+                    //    Debug.DrawLine(rigidbody.position, rigidbody.position + hitInfo.normal, Color.white);
+                    //    Debug.DrawLine(rigidbody.position, rigidbody.position + slidingDownForce, Color.black);
+                    //    rigidbody.AddForce(slidingDownForce * 10f);
+                    //}
                 }
             }
 

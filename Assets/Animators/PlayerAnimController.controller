@@ -2972,14 +2972,14 @@ AnimatorStateMachine:
   - {fileID: 2684319261254890524}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -6055422446777502139}
-    second: []
-  - first: {fileID: -6312632003927328175}
-    second:
-    - {fileID: 6250800075435973978}
   - first: {fileID: -6783772599159946126}
     second:
     - {fileID: 2404001793048891680}
+  - first: {fileID: -6312632003927328175}
+    second:
+    - {fileID: 6250800075435973978}
+  - first: {fileID: -6055422446777502139}
+    second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 260, z: 0}
   m_EntryPosition: {x: 50, y: 130, z: 0}
@@ -4427,7 +4427,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Climb Medium
-  m_Speed: 1.2
+  m_Speed: 1.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6116037951174985165}

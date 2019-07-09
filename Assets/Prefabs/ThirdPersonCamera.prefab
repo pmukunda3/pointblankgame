@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5862783469329633396}
   - component: {fileID: 593617504}
   - component: {fileID: 593617505}
+  - component: {fileID: 1829316398}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09091f359ca74d45b5b7a0621310fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.5, y: -1, z: -0.9}
+  offset: {x: 0.5, y: -1, z: -1}
   cameraAimEnterDistance:
     serializedVersion: 2
     m_Curve:
@@ -170,6 +171,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  aimDistance: 100
+  weaponPivot: {fileID: 0}
 --- !u!114 &593617504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ab93a5f9f7b7748b2f085eaf4a34e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.24, y: 1, z: -1.1}
+  offset: {x: 0.24, y: 1, z: -1.25}
   cameraDampTime: 8
   offsetFuncX:
     serializedVersion: 2
@@ -316,6 +319,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  lookDiffFuncZ:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &593617505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723a2f1605e655645821ba6fcfbaa518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.4, y: 1, z: -1.22}
+  offset: {x: 0.4, y: 1, z: -1.4}
   maxSpeed: 8
   maxTurnSpeed: 120
   cameraDampTime: 10
@@ -431,6 +440,144 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1829316398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5862783469329633354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a292fbc832441f4dbf8a1a2ad0a7636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.24, y: 1, z: 1}
+  enterStateTime: 0.25
+  offsetFuncX:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  offsetFuncY:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: -1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.0064318543
+      outSlope: -0.0064318543
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.36666667
+    - serializedVersion: 3
+      time: 1
+      value: 2
+      inSlope: 6
+      outSlope: 6
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.08333331
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  offsetFuncZ:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: -1
+      inSlope: -0.100000024
+      outSlope: -0.100000024
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0
+      value: -1.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: -1
+      inSlope: 0.100000024
+      outSlope: 0.100000024
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  offsetFuncPitch:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: 90
+      inSlope: -191.74606
+      outSlope: -191.74606
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12172872
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.1252691
+      outSlope: 0.1252691
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.6064723
+    - serializedVersion: 3
+      time: 1
+      value: -90
+      inSlope: -178.77368
+      outSlope: -178.77368
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.09269726
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cameraDampTime: 6
 --- !u!1 &5862783470168625251
 GameObject:
   m_ObjectHideFlags: 0
