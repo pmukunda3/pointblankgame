@@ -420,15 +420,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   climbSettings:
-    lowClimbRadius: 0.62
+    lowClimbRadius: 0.35
     lowClimbLength: 0.43
-    midClimbRadius: 0.65
+    midClimbRadius: 0.4
     midClimbLength: 0.34
-    highClimbRadius: 0.62
+    highClimbRadius: 0.35
     highClimbLength: 0.34
-    lowClimbCheckOffset: {x: 0, y: -0.78, z: 0.68}
-    midClimbCheckOffset: {x: 0, y: -0.13, z: 0.78}
-    highClimbCheckOffset: {x: 0, y: 0.45, z: 0.69}
+    lowClimbCheckOffset: {x: 0, y: -0.89, z: 0.68}
+    midClimbCheckOffset: {x: 0, y: -0.39, z: 0.72}
+    highClimbCheckOffset: {x: 0, y: 0.22, z: 0.75}
     maxClimbHeight:
       serializedVersion: 2
       m_Curve:
@@ -462,11 +462,44 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    climbPitchFunc:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -1
+        value: 45
+        inSlope: -45
+        outSlope: -45
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: -52.5
+        outSlope: -52.5
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: -60
+        inSlope: -60
+        outSlope: -60
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   numberRaycasts: 16
   pivot: {fileID: 7431189260335186170}
-  climbableDepth: 0.3
+  climbableDepth: 0.45
   climbableSlopeAngle: 30
-  drawGizmo: 0
+  drawGizmo: 1
 --- !u!114 &1241218106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1493,6 +1526,7 @@ MonoBehaviour:
     timeHeldJump: {x: 0, y: 0, z: 0}
   maxStepSize: {x: 0, y: 0.28, z: 0.3}
   legsCollider: {fileID: 7431189261897494635}
+  screenControl: 1
   currPlayerState: {fileID: 0}
 --- !u!114 &1644425778348867457
 MonoBehaviour:
@@ -2440,6 +2474,11 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 7431189260587521889}
+    - target: {fileID: 662399322960146332, guid: 690e8664b16fed84eada896736f1375e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 662399322960146332, guid: 690e8664b16fed84eada896736f1375e,
         type: 3}
       propertyPath: m_LocalPosition.y
