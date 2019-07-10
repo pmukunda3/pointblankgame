@@ -60,8 +60,11 @@ public class Landmine : MonoBehaviour
     {
         if(!plopped)
         {
-            ContactPoint contact = collision.GetContact(0);
-            Plop(contact.point, contact.normal);            
+            if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Static Level Geometry"))
+            {
+                ContactPoint contact = collision.GetContact(0);
+                Plop(contact.point, contact.normal);
+            }                       
         }
     }
 

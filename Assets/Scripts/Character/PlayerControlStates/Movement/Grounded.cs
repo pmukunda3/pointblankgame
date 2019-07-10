@@ -20,6 +20,7 @@ namespace PlayerControl {
 
             public ClimbValidator climbValidator;
             public WeaponManager weaponManager;
+            public Thrower thrower;
 
             protected Vector2 mouseInput;
             protected Vector2 moveInput;
@@ -37,6 +38,7 @@ namespace PlayerControl {
                 this.mouseInput = mouseInput;
 
                 if (actions.changeWeapon.down) weaponManager.ChangeWeapon();
+                if (actions.changeItem.down) thrower.ChangeItem();
 
                 if (actions.climbUp.down) {
                     if (climbValidator.ValidateClimbAttempt()) {

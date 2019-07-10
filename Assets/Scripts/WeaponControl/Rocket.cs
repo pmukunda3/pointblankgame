@@ -6,6 +6,7 @@ public class Rocket : MonoBehaviour
 {
     public float velocity = 100f;
     public float range = 100f;
+    public float impactOffset = 0.2f;
 
     private Exploder exploder;
     private RaycastHit hit;
@@ -29,7 +30,7 @@ public class Rocket : MonoBehaviour
         }
         if (Physics.Raycast(transform.position, transform.forward, out hit, velocity * Time.deltaTime))
         {
-            transform.position = hit.point - 0.5f * transform.forward;
+            transform.position = hit.point - impactOffset * transform.forward;
             exploder.Explode();
         }
         transform.Translate(0, 0, velocity * Time.deltaTime);
