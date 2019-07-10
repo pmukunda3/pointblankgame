@@ -12,10 +12,15 @@ public class Thrower : MonoBehaviour
         get;
         private set;
     }
+    public Animator animator;
+    public bool useIK;
 
     private GameObject newObject;
     private Rigidbody rb;
     private int i, n;
+    private Vector3 IKTargetPosition;
+    private Quaternion IKTargetRotation;
+    private float IKWeight;
 
     void Start()
     {
@@ -42,6 +47,16 @@ public class Thrower : MonoBehaviour
 
     public void AnimatorIK()
     {
-        
+        if (useIK)
+        {
+            IKTargetPosition = activeItem.transform.position - 0.1f*Vector3.up;
+            IKTargetRotation = activeItem.transform.rotation * Quaternion.Euler(-90, 0, 0);
+            IKWeight = animator.GetFloat("RightHandIKWeight");
+
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, IKWeight);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, IKTargetPosition);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightHand, IKWeight);
+            animator.SetIKRotation(AvatarIKGoal.RightHand, IKTargetRotation);
+        }
     }
 }

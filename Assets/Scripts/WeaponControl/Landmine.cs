@@ -6,7 +6,6 @@ public class Landmine : MonoBehaviour
 {
     public float delay;
     public Vector3 triggerSize;
-    public int staticLayerIndex;
     //public Collider trigger;
 
     private BoxCollider col; 

@@ -61,7 +61,9 @@ namespace PlayerControl {
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
                 animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
 
-                if (animator.GetCurrentAnimatorStateInfo(1).IsName("Throwing"))
+
+                // Thrower can override right hand IK
+                if (animator.GetCurrentAnimatorStateInfo(animator.GetLayerIndex("Throwing")).IsName("Throwing"))
                 {
                     thrower.AnimatorIK();
                 }
