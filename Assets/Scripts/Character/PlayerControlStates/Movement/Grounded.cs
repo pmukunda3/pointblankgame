@@ -11,9 +11,7 @@ namespace PlayerControl {
 
             public float moveSpeedMultiplier = 1.0f;
 
-            public float maxTimeButtonHold = 0.5f;
-            public float jumpLateralInputClearingDamp = 12f;
-            public float jumpForwardInputClearingDamp = 12f;
+            public float maxTimeButtonHold = 3f / 60.0f;
 
             public Vector3 maxStepSize;
             public float maxGroundedMoveAngle;
@@ -54,26 +52,17 @@ namespace PlayerControl {
                 else if (actions.jump.active) {
                     if (player.shared.timeHeldJump.y < maxTimeButtonHold) {
                         player.shared.timeHeldJump.y += Time.deltaTime;
-
-                        if (Mathf.Abs(moveInput.x) > 0.4f) {
-                            player.shared.timeHeldJump.x += Time.deltaTime;
-                        }
-                        else {
-                            player.shared.timeHeldJump.x = Mathf.Lerp(player.shared.timeHeldJump.x, 0.0f, jumpLateralInputClearingDamp * Time.deltaTime);
-                        }
-                        if (Mathf.Abs(moveInput.y) > 0.4f) {
-                            player.shared.timeHeldJump.z += Time.deltaTime;
-                        }
-                        else {
-                            player.shared.timeHeldJump.z = Mathf.Lerp(player.shared.timeHeldJump.x, 0.0f, jumpForwardInputClearingDamp * Time.deltaTime);
-                        }
+                        if (Mathf.Abs(moveInput.x) > 0.4f) player.shared.timeHeldJump.x += Time.deltaTime;
+                        if (Mathf.Abs(moveInput.y) > 0.4f) player.shared.timeHeldJump.z += Time.deltaTime;
                     }
                     else {
+                        player.shared.timeHeldJump /= maxTimeButtonHold;
                         Debug.Log("JUMP := true");
                         animator.SetTrigger("TRG_jump");
                     }
                 }
                 else if (jumpInput) {
+                    player.shared.timeHeldJump /= maxTimeButtonHold;
                     animator.SetTrigger("TRG_jump");
                 }
             }

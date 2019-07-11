@@ -29,7 +29,9 @@ namespace PlayerControl {
             public override void UseInput(Vector2 moveInput, Vector2 mouseInput, UserInput.Actions actions) {
                 this.moveInput = moveInput;
 
-                if (actions.sprint.down) animator.SetBool("sprint", true);
+                if (actions.sprint.active) animator.SetBool("sprint", true);
+                else animator.SetBool("sprint", false);
+
                 if (actions.aim.down) animator.SetBool("aimMode", false);
                 if (actions.crouch.down) animator.SetBool("crouch", true);
             }

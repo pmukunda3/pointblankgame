@@ -2156,6 +2156,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: landMode
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: jump
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3251804736086081914}
   m_Solo: 0
@@ -3025,14 +3028,14 @@ AnimatorStateMachine:
   - {fileID: 2684319261254890524}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -6783772599159946126}
-    second:
-    - {fileID: 2404001793048891680}
+  - first: {fileID: -6055422446777502139}
+    second: []
   - first: {fileID: -6312632003927328175}
     second:
     - {fileID: 6250800075435973978}
-  - first: {fileID: -6055422446777502139}
-    second: []
+  - first: {fileID: -6783772599159946126}
+    second:
+    - {fileID: 2404001793048891680}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 260, z: 0}
   m_EntryPosition: {x: 50, y: 130, z: 0}
@@ -6086,6 +6089,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: jumpGroundCheck
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: jump
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2195535346704596107}
   m_Solo: 0
@@ -6140,6 +6146,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 7
     m_ConditionEvent: landMode
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: jump
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: -8762113710582352391}
   m_DstState: {fileID: 0}

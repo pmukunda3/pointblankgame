@@ -497,7 +497,7 @@ MonoBehaviour:
       m_RotationOrder: 4
   numberRaycasts: 16
   pivot: {fileID: 7431189260335186170}
-  climbableDepth: 0.45
+  climbableDepth: 0.55
   climbableSlopeAngle: 30
   drawGizmo: 1
 --- !u!114 &1241218106
@@ -603,8 +603,6 @@ MonoBehaviour:
   maxTurnSpeed: 1
   moveSpeedMultiplier: 1
   maxTimeButtonHold: 0.5
-  jumpLateralInputClearingDamp: 12
-  jumpForwardInputClearingDamp: 12
   maxStepSize: {x: 0, y: 0, z: 0}
   maxGroundedMoveAngle: 0
   climbValidator: {fileID: 1241218107}
@@ -669,8 +667,6 @@ MonoBehaviour:
   maxTurnSpeed: 1
   moveSpeedMultiplier: 1
   maxTimeButtonHold: 0.5
-  jumpLateralInputClearingDamp: 12
-  jumpForwardInputClearingDamp: 12
   maxStepSize: {x: 0, y: 0, z: 0}
   maxGroundedMoveAngle: 0
   climbValidator: {fileID: 1241218107}
@@ -706,7 +702,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1652819983}
-  - {fileID: 6302120418489600761}
   m_Father: {fileID: 444955248}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -812,6 +807,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   airAccel: {x: 1.2, y: 0, z: 0.2}
   localVelocityLimit: {x: 2.5, y: 0, z: 3.5}
+  jumpVerticalPush:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 9
+      inSlope: -0.044753954
+      outSlope: -0.044753954
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.35416666
+    - serializedVersion: 3
+      time: 0.5
+      value: 7
+      inSlope: -0.0011205256
+      outSlope: -0.0011205256
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.32358915
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &991164785
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,9 +929,7 @@ MonoBehaviour:
   groundCheckDistance: 0.4
   maxTurnSpeed: 1
   moveSpeedMultiplier: 1
-  maxTimeButtonHold: 0.5
-  jumpLateralInputClearingDamp: 12
-  jumpForwardInputClearingDamp: 12
+  maxTimeButtonHold: 0.05
   maxStepSize: {x: 0, y: 0.28, z: 0.15}
   maxGroundedMoveAngle: 30
   climbValidator: {fileID: 1241218107}
@@ -931,11 +948,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundCheckDistance: 0.45
-  maxTurnSpeed: 90
+  maxTurnSpeed: 95
   moveSpeedMultiplier: 1.1
-  maxTimeButtonHold: 0.75
-  jumpLateralInputClearingDamp: 6
-  jumpForwardInputClearingDamp: 6
+  maxTimeButtonHold: 0.05
   maxStepSize: {x: 0, y: 0.3, z: 0.2}
   maxGroundedMoveAngle: 45
   climbValidator: {fileID: 1241218107}
@@ -992,9 +1007,7 @@ MonoBehaviour:
   groundCheckDistance: 0.3
   maxTurnSpeed: 1
   moveSpeedMultiplier: 1.05
-  maxTimeButtonHold: 0.25
-  jumpLateralInputClearingDamp: 18
-  jumpForwardInputClearingDamp: 18
+  maxTimeButtonHold: 0.05
   maxStepSize: {x: 0, y: 0.25, z: 0.175}
   maxGroundedMoveAngle: 30
   climbValidator: {fileID: 1241218107}
@@ -1019,7 +1032,10 @@ MonoBehaviour:
   maxMouseInput: 4
   mouseTurnScalar: 0.25
   moveTurnScalar: 100
-  maxTimeButtonHold: 0.5
+  maxTimeButtonHold: 0.2
+  maxTimeUngrounded: 0.05
+  jumpLateralInputClearingDamp: 12
+  jumpForwardInputClearingDamp: 12
   forwardSpeedToJumpAnimation:
     serializedVersion: 2
     m_Curve:
@@ -1076,7 +1092,7 @@ MonoBehaviour:
       outWeight: 0.13227473
     - serializedVersion: 3
       time: 1
-      value: 2.5
+      value: 1
       inSlope: -0.028146511
       outSlope: -0.028146511
       tangentMode: 0
@@ -1116,20 +1132,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0.017822625
-      outSlope: 0.017822625
-      tangentMode: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.13227473
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 1.3
-      inSlope: -0.028146511
-      outSlope: -0.028146511
-      tangentMode: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.15079409
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1139,7 +1155,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -0.011791229
+      value: 0
       inSlope: 2
       outSlope: 2
       tangentMode: 0
@@ -1163,21 +1179,21 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0.017822625
-      outSlope: 0.017822625
+      value: 0.5
+      inSlope: 0.10613215
+      outSlope: 0.10613215
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.13227473
+      outWeight: 0.16666667
     - serializedVersion: 3
       time: 1
-      value: 1.3
-      inSlope: -0.028146511
-      outSlope: -0.028146511
+      value: 1
+      inSlope: 0.0029588137
+      outSlope: 0.0029588137
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.15079409
+      inWeight: 0.43140042
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1187,21 +1203,30 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 3
-      inSlope: 0.15
-      outSlope: 0.15
-      tangentMode: 34
+      value: 1.75
+      inSlope: 0.39999962
+      outSlope: 0.39999962
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0.08932887
+    - serializedVersion: 3
+      time: 2.0989854
+      value: 2.0921123
+      inSlope: 0.015829466
+      outSlope: 0.015829466
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.54343027
+      outWeight: 0.3567406
     - serializedVersion: 3
       time: 5
-      value: 3.75
-      inSlope: 0.15
-      outSlope: 0.15
-      tangentMode: 34
+      value: 2.35
+      inSlope: 0.27169842
+      outSlope: 0.27169842
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.0933582
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1327,51 +1352,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   airAccel: {x: 0.3, y: 0, z: 0.4}
---- !u!1 &3693680687040455133
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6302120418489600761}
-  - component: {fileID: 5481569095535769818}
-  m_Layer: 8
-  m_Name: AirControlFromJump
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6302120418489600761
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3693680687040455133}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 725680121}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5481569095535769818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3693680687040455133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83971f9860920f24c859533bb833a0c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  airAccel: {x: 1.2, y: 0, z: 0.2}
-  localVelocityLimit: {x: 2.5, y: 0, z: 3.5}
 --- !u!114 &382584645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2032,6 +2012,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7431189261234371075}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: b9a2e89a4bc46a145a6f22121fada02e,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b9a2e89a4bc46a145a6f22121fada02e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -6152642445363808020, guid: b9a2e89a4bc46a145a6f22121fada02e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4690928341198969543, guid: b9a2e89a4bc46a145a6f22121fada02e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b9a2e89a4bc46a145a6f22121fada02e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2086,26 +2086,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: b9a2e89a4bc46a145a6f22121fada02e,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerCharacter
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: b9a2e89a4bc46a145a6f22121fada02e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: -6152642445363808020, guid: b9a2e89a4bc46a145a6f22121fada02e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4690928341198969543, guid: b9a2e89a4bc46a145a6f22121fada02e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6982299554950003786, guid: b9a2e89a4bc46a145a6f22121fada02e,
         type: 3}
@@ -2450,15 +2430,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7431189260794293073}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &718780659830152963 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7987552239307699282, guid: b9a2e89a4bc46a145a6f22121fada02e,
-    type: 3}
-  m_PrefabInstance: {fileID: 7431189260794293073}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2475387204903288907 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: b9a2e89a4bc46a145a6f22121fada02e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7431189260794293073}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &718780659830152963 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7987552239307699282, guid: b9a2e89a4bc46a145a6f22121fada02e,
     type: 3}
   m_PrefabInstance: {fileID: 7431189260794293073}
   m_PrefabAsset: {fileID: 0}
@@ -2469,11 +2449,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1339983819}
     m_Modifications:
-    - target: {fileID: 6002875813124572625, guid: 690e8664b16fed84eada896736f1375e,
+    - target: {fileID: 214980174233626069, guid: 690e8664b16fed84eada896736f1375e,
         type: 3}
-      propertyPath: animator
-      value: 
-      objectReference: {fileID: 7431189260587521889}
+      propertyPath: m_Name
+      value: Thrower
+      objectReference: {fileID: 0}
     - target: {fileID: 662399322960146332, guid: 690e8664b16fed84eada896736f1375e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2529,11 +2509,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 214980174233626069, guid: 690e8664b16fed84eada896736f1375e,
+    - target: {fileID: 6002875813124572625, guid: 690e8664b16fed84eada896736f1375e,
         type: 3}
-      propertyPath: m_Name
-      value: Thrower
-      objectReference: {fileID: 0}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 7431189260587521889}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 690e8664b16fed84eada896736f1375e, type: 3}
 --- !u!4 &8277649482657774805 stripped
