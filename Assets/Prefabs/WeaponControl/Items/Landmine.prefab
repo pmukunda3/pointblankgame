@@ -14148,8 +14148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e8f6e31ca8bf474ea29be5479452d34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 1
+  delay: 1.5
   triggerSize: {x: 3, y: 0.6, z: 3}
+  mesh: {fileID: 3028047415165332306}
 --- !u!114 &8944061333770871538
 MonoBehaviour:
   m_ObjectHideFlags: 0
