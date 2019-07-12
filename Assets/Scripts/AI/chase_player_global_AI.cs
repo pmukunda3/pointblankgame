@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 
 public enum AIState
@@ -15,6 +16,7 @@ public enum AIState
 };
 public class chase_player_global_AI : MonoBehaviour
 {
+    UnityEvent aiEvent;
     private int curr_point = 0;
     // Start is called before the first frame update
     public NavMeshAgent nav_agent;
@@ -54,6 +56,9 @@ public class chase_player_global_AI : MonoBehaviour
 
     private void Start()
     {
+
+
+
         ai_animator = gameObject.GetComponent<Animator>();
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
         Patrol();
