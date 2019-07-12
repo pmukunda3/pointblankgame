@@ -46,7 +46,7 @@ namespace PlayerControl {
                     }
                     StickToGroundHelper(0.35f);
                 }
-                else {
+                else if (!jumpInput) {
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }
