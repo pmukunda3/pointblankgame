@@ -15,8 +15,7 @@ public class CharacterOverheat : MonoBehaviour
     void Start()
     {
         MaxHeat = 20f;
-        //full health at start of game
-        CurrHeat = MaxHeat;
+        CurrHeat = 0;
         overheatBar.value = CalculateOverheat();
 
     }
@@ -33,9 +32,9 @@ public class CharacterOverheat : MonoBehaviour
 
     void DealDamage(float damageValue)
     {
-        CurrHeat -= damageValue;
+        CurrHeat += damageValue;
         overheatBar.value = CalculateOverheat();
-        if (CurrHeat <= 0)
+        if (CurrHeat >= 20f)
         {
             Die();
         }
@@ -47,7 +46,7 @@ public class CharacterOverheat : MonoBehaviour
     }
     void Die()
     {
-        CurrHeat = 0;
+        CurrHeat = 0f;
         Debug.Log("overheated");
     }
 }
