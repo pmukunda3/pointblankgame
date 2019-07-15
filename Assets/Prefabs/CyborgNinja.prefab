@@ -2076,8 +2076,9 @@ GameObject:
   - component: {fileID: 8963539433529210082}
   - component: {fileID: 8963539433529210081}
   - component: {fileID: 8963539433529210080}
+  - component: {fileID: 7133412354765253886}
   m_Layer: 0
-  m_Name: cyborgNinja
+  m_Name: CyborgNinja
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2180,12 +2181,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nav_agent: {fileID: 8963539433529210081}
-  patrol_points:
-  - {fileID: 0}
-  - {fileID: 0}
+  patrol_prefab: {fileID: 5897433248511902562, guid: 5bf0cd66e6fce44a187a7cac264f43c9,
+    type: 3}
   ai_animator: {fileID: 9020764635974322796}
   lifetime: 0
-  player: {fileID: 0}
+  player: {fileID: 7431189260587521892, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
   ai_state: 0
 --- !u!195 &8963539433529210081
 NavMeshAgent:
@@ -2216,7 +2216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8962687841866830020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
   m_Name: 
@@ -2229,6 +2229,21 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.1
+--- !u!114 &7133412354765253886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8962687841866830020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29d2a770bd6948e1bab4cbce2ef6f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ai_animator: {fileID: 9020764635974322796}
+  health: 100
+  maxHealth: 100
 --- !u!1 &8962688770047362552
 GameObject:
   m_ObjectHideFlags: 0
