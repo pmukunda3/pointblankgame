@@ -49,5 +49,7 @@ public class ProjectileController : MonoBehaviour
         NewImpact.transform.parent = null;
         NewImpact.SetActive(true);
         Destroy(gameObject);
+        EventManager.TriggerEvent<HitEnemyEvent, GameObject, float, GameObject>(
+hit.collider.gameObject, 10, NewImpact);
     }
 }
