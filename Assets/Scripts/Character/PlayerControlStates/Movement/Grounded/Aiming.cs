@@ -15,6 +15,8 @@ namespace PlayerControl {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.aiming, this);
 
+                if (cameraState == null) cameraState = GameObject.FindGameObjectWithTag("thirdPersonCameraStates").GetComponent<CameraControl.State.Aiming>();
+
                 EventManager.StartListening<MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(OnAimingEvent));
             }
 
