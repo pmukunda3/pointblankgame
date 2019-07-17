@@ -80,6 +80,7 @@ public class NinjaEventManager : MonoBehaviour
         if (hit_obj == gameObject)
         {
             health -= hit_point;
+
             if(health > 0)
             {
 
