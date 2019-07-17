@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerControl;
 
 namespace CameraControl {
     namespace State {
@@ -19,7 +18,6 @@ namespace CameraControl {
             public AnimationCurve lookDiffFuncZ;
 
             private ThirdPersonCamera thirdPCamera;
-            private PlayerController player;
 
             private float minDistance;
 
@@ -28,7 +26,6 @@ namespace CameraControl {
 
             public void Start() {
                 thirdPCamera = gameObject.GetComponentInParent<ThirdPersonCamera>();
-                player = thirdPCamera.player;
 
                 thirdPCamera.RegisterState(StateId.Camera.Grounded.sprint, this);
 
@@ -43,10 +40,10 @@ namespace CameraControl {
 
             public override void CameraLateUpdate() {
                 Vector3 pitchAdjustedOffset = new Vector3(
-                    (offsetFuncX.Evaluate(player.AimPitch() / 90.0f) + lookDiffFuncX.Evaluate(player.LookToMoveAngle())) * offset.x,
-                    offsetFuncY.Evaluate(player.AimPitch() / 90.0f) * offset.y,
-                    (offsetFuncZ.Evaluate(player.AimPitch() / 90.0f) + lookDiffFuncZ.Evaluate(player.LookToMoveAngle())) * offset.z);
-                Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + player.AimDirection() * pitchAdjustedOffset;
+                    (offsetFuncX.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) + lookDiffFuncX.Evaluate(thirdPCamera.player.LookToMoveAngle())) * offset.x,
+                    offsetFuncY.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.y,
+                    (offsetFuncZ.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) + lookDiffFuncZ.Evaluate(thirdPCamera.player.LookToMoveAngle())) * offset.z);
+                Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + thirdPCamera.player.AimDirection() * pitchAdjustedOffset;
 
                 previousPosition = thirdPCamera.transform.position;
                 previousRotation = thirdPCamera.transform.rotation;
@@ -57,11 +54,11 @@ namespace CameraControl {
 
                 float cameraPlayerDistance = Vector3.Distance(newPosition, thirdPCamera.cameraPivot.transform.position);
                 if (cameraPlayerDistance < minDistance) {
-                    newPosition += (((80f - Mathf.Abs(player.AimPitch())) / 80f) * (minDistance - cameraPlayerDistance))
+                    newPosition += (((80f - Mathf.Abs(thirdPCamera.player.AimPitch())) / 80f) * (minDistance - cameraPlayerDistance))
                         * (newPositionFlat - cameraPositionFlat).normalized;
                 }
 
-                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, player.AimDirection(), cameraDampTime * Time.deltaTime);
+                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, thirdPCamera.player.AimDirection(), cameraDampTime * Time.deltaTime);
                 thirdPCamera.transform.position = newPosition;
             }
 
