@@ -515,7 +515,7 @@ MonoBehaviour:
   stepAnimStart: 0.664
   stepAnimEnd: 1
   lowAnimStart: 0.156
-  lowAnimEnd: 0.494
+  lowAnimEnd: 0.666
   midAnimStart: 0.181
   midAnimEnd: 0.671
   highAnimStart: 0.25
@@ -1203,16 +1203,16 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 2
-      inSlope: 0.3113205
-      outSlope: 0.3113205
+      value: 2.2
+      inSlope: 0.19086413
+      outSlope: 0.19086413
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.0992543
+      outWeight: 0.13864093
     - serializedVersion: 3
       time: 2.0989854
-      value: 2.2
+      value: 2.35
       inSlope: 0.015829466
       outSlope: 0.015829466
       tangentMode: 0
@@ -1561,22 +1561,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -20.01894
-      value: 20
-      inSlope: -6.7425437
-      outSlope: -6.7425437
+      time: -30
+      value: 100
+      inSlope: -18.735004
+      outSlope: -18.735004
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.04348225
+      outWeight: 0.026515102
     - serializedVersion: 3
       time: -10
       value: 0
-      inSlope: -0.21517608
-      outSlope: -0.21517608
+      inSlope: -2.547677
+      outSlope: -2.547677
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.10018514
+      inWeight: 0.08901515
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
