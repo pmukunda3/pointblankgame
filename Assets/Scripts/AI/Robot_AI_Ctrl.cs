@@ -25,13 +25,13 @@ public class Robot_AI_Ctrl : MonoBehaviour
     // Start is called before the first frame update
     public NavMeshAgent nav_agent;
     public GameObject[] patrol_points;
-    private Animator ai_animator;
+    public Animator ai_animator;
     public float lifetime;
     private int DeathwaitCnt = 0;
     public float MarginFromPlayerXY = 1.5f;
     public float AttackEnableDistance = 10.0f;
     public GameObject WeaponCtrl;
-    private WeaponManager Weapon;
+    public ProjectileWeaponController Weapon;
 
 
     public GameObject player;
@@ -68,6 +68,8 @@ public class Robot_AI_Ctrl : MonoBehaviour
     private void shoot()
     {
         Weapon.FireWeapon();
+        EventManager.TriggerEvent<WeaponFirePrimary>();
+
     }
 
 
@@ -96,10 +98,10 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     private void Start()
     {
-        ai_animator = gameObject.GetComponent<Animator>();
+        //ai_animator = gameObject.GetComponent<Animator>();
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
 
-        Weapon = WeaponCtrl.GetComponent<WeaponManager>();
+        //Weapon = WeaponCtrl.GetComponent<WeaponManager>();
 
         ai_animator.SetBool("Idle", false);
         Patrol();
@@ -136,7 +138,8 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 {
                     if (nav_agent.remainingDistance <= 0.5)
                     {
-                        curr_point = (curr_point + 1) % patrol_points.Length;
+                        //curr_point = (curr_point + 1) % patrol_points.Length;
+                        curr_point = Random.Range(0, patrol_points.Length);
                         Patrol();
                     }
                     //
