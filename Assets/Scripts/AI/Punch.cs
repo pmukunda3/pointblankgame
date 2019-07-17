@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PlayerControl;
 using UnityEngine;
 
 public class Punch : MonoBehaviour
@@ -8,11 +9,10 @@ public class Punch : MonoBehaviour
 
     void OnTriggerEnter(Collider hit_obj)
     {
-        Debug.Log("Hitting something");
-        Debug.Log(hit_obj);
         if (hit_obj.gameObject.layer == LayerMask.NameToLayer("Player Character"))
         {
             Debug.Log("It hit the player");
+            EventManager.TriggerEvent<PlayerDamageEvent,int>(1);
         }
 
     }
