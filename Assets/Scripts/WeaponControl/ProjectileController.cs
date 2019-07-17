@@ -8,7 +8,7 @@ public class ProjectileController : MonoBehaviour
     public float velocity = 100f;
     public float range = 50f;
     public float impactOffset;
-
+    public float damage = 10f;
     private GameObject NewImpact;
     private RaycastHit hit;
     private float timeout;
@@ -50,6 +50,6 @@ public class ProjectileController : MonoBehaviour
         NewImpact.SetActive(true);
         Destroy(gameObject);
         EventManager.TriggerEvent<HitEnemyEvent, GameObject, float, GameObject>(
-hit.collider.gameObject, 10, NewImpact);
+hit.collider.gameObject, damage, NewImpact);
     }
 }
