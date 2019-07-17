@@ -97,7 +97,7 @@ namespace PlayerControl {
 
             private void OnAimingEvent() {
                 jumpInput = false;
-                //animator.SetBool("sprint", false);
+                animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
                 player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
