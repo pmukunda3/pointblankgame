@@ -33,7 +33,7 @@ public class ProjectileController : MonoBehaviour
         {
             OnHit(hit);
         }
-        transform.Translate(0, 0, velocity * Time.deltaTime);
+        transform.Translate(0,0,velocity * Time.deltaTime);
     }
 
     void OnHit(RaycastHit hit)
