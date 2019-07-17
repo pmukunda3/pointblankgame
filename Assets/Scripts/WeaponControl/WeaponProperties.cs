@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponIK : MonoBehaviour
+public class WeaponProperties : MonoBehaviour
 {
+    public bool twoHanded = true;
     public Transform LeftHandIKTarget, RightHandIKTarget;
 }

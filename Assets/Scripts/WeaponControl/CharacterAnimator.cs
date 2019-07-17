@@ -35,13 +35,13 @@ public class CharacterAnimator : MonoBehaviour
         animator.SetLookAtWeight(1f);
         animator.SetLookAtPosition(LookTarget);
 
-        LeftHandIKTarget = Weapon.GetComponent<WeaponManager>().activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+        LeftHandIKTarget = Weapon.GetComponent<WeaponManager>().activeWeapon.GetComponent<WeaponProperties>().LeftHandIKTarget;
         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
         animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
         animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
         animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
 
-        RightHandIKTarget = Weapon.GetComponent<WeaponManager>().activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;        
+        RightHandIKTarget = Weapon.GetComponent<WeaponManager>().activeWeapon.GetComponent<WeaponProperties>().RightHandIKTarget;        
         animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
         animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
         animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);

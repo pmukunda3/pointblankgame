@@ -1,54 +1,100 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using PlayerControl.MecanimBehaviour;
 
 public class WeaponManager : MonoBehaviour, IWeaponFire
 {
-    private int i, n;
+    public GameObject UnaimedWeapons;
+    public GameObject AimedWeapons;
+    public Animator animator;
     public GameObject activeWeapon
     {
         get;
         private set;
     }
 
-    private UserInput userInput;
-    private IWeaponFire currentWeapon;
+    private int i, n;
+    private IWeaponFire fireInterface;
+    private UnityAction aimOn, aimOff;
 
-    // Start is called before the first frame update
-    void Start()
+    public void AimOff()
     {
-        n = transform.childCount;
-        for (i = 0; i < n; i++)
-        {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-        i = 0;
-        activeWeapon = transform.GetChild(i).gameObject;
-        activeWeapon.SetActive(true);
-        currentWeapon = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+        AimedWeapons.SetActive(false);
+        UnaimedWeapons.SetActive(true);
+    }
 
-        userInput = gameObject.GetComponentInParent<UserInput>();
+    public void AimOn()
+    {
+        UnaimedWeapons.SetActive(false);
+        AimedWeapons.SetActive(true);
     }
 
     // Update is called once per frame
     public void ChangeWeapon()
     {
+        UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(false);
         activeWeapon.SetActive(false);
         i = ++i % n;
-        activeWeapon = transform.GetChild(i).gameObject;
+        UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(true);
+        activeWeapon = AimedWeapons.transform.GetChild(i).gameObject;
         activeWeapon.SetActive(true);
-        currentWeapon = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+        fireInterface = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+
+        if (activeWeapon.GetComponent<WeaponProperties>().twoHanded)
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 1f);
+        }
+        else
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 0f);
+        }
+
     }
 
     public void FireWeapon() {
-        currentWeapon.FireWeapon();
+        fireInterface.FireWeapon();
     }
 
     public void FireWeaponDown() {
-        currentWeapon.FireWeaponDown();
+        fireInterface.FireWeaponDown();
     }
 
     public void FireWeaponUp() {
-        currentWeapon.FireWeaponUp();
+        fireInterface.FireWeaponUp();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        aimOn = new UnityAction(AimOn);
+        aimOff = new UnityAction(AimOff);
+        EventManager.StartListening<AimingEvent>(aimOn);
+        EventManager.StartListening<FreeRoamEvent>(aimOff);
+        EventManager.StartListening<SprintEvent>(aimOff);
+        EventManager.StartListening<JumpEvent>(aimOff);
+        EventManager.StartListening<FallingEvent>(aimOff);
+
+        n = AimedWeapons.transform.childCount;
+        for (i = 0; i < n; i++)
+        {
+            UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(false);
+            AimedWeapons.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        i = 0;
+        UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(true);
+        activeWeapon = AimedWeapons.transform.GetChild(i).gameObject;
+        activeWeapon.SetActive(true);
+        fireInterface = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+
+        if (activeWeapon.GetComponent<WeaponProperties>().twoHanded)
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 1f);
+        }
+        else
+        {
+            animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 0f);
+        }
     }
 }
