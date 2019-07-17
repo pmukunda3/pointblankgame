@@ -6,6 +6,7 @@ public class Landmine : MonoBehaviour
 {
     public float delay;
     public Vector3 triggerSize;
+    public MeshRenderer mesh;
     //public Collider trigger;
 
     private BoxCollider col; 
@@ -31,6 +32,7 @@ public class Landmine : MonoBehaviour
 
     void Arm()
     {
+        mesh.material.SetColor("_EmissionColor", Color.red);
         col.size = triggerSize;
         col.isTrigger = true;
         col.enabled = true;

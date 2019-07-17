@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 
 public enum AIState
@@ -15,10 +16,12 @@ public enum AIState
 };
 public class chase_player_global_AI : MonoBehaviour
 {
+    UnityEvent aiEvent;
     private int curr_point = 0;
     // Start is called before the first frame update
     public NavMeshAgent nav_agent;
-    public GameObject[] patrol_points;
+    public GameObject patrol_prefab;
+
     public Animator ai_animator;
     public float lifetime;
 
@@ -26,7 +29,7 @@ public class chase_player_global_AI : MonoBehaviour
     public GameObject player;
     public AIState ai_state;
 
-
+    private List<GameObject> patrol_points;
 
 
     private void Patrol()
@@ -54,8 +57,26 @@ public class chase_player_global_AI : MonoBehaviour
 
     private void Start()
     {
+
+
+
         ai_animator = gameObject.GetComponent<Animator>();
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
+        player = GameObject.FindWithTag("Player");
+
+        Debug.Log("Patrol prefab is ");
+        Debug.Log(patrol_prefab.transform);
+
+        //set up patrol point based on patrol prefab
+        patrol_points = new List<GameObject>();
+        foreach (Transform t in patrol_prefab.transform)
+        {
+            Debug.Log(patrol_points);
+            Debug.Log(t);
+            Debug.Log(t.gameObject);
+            patrol_points.Add(t.gameObject);
+        }
+
         Patrol();
     }
 
@@ -82,7 +103,7 @@ public class chase_player_global_AI : MonoBehaviour
                 {
                     if (nav_agent.remainingDistance <= 0.5)
                     {
-                        curr_point = (curr_point + 1) % patrol_points.Length;
+                        curr_point = (curr_point + 1) % patrol_points.Count;
                         Patrol();
                     }
                     //
@@ -123,7 +144,7 @@ public class chase_player_global_AI : MonoBehaviour
 
         }
 
-        Debug.Log("AIState " + ai_state);
+
         //update animation
         ai_animator.SetFloat("Forward", nav_agent.velocity.magnitude / nav_agent.speed);
         float angle = Vector3.Angle(nav_agent.velocity.normalized, this.transform.forward);

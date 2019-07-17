@@ -55,7 +55,7 @@ namespace PlayerControl {
                 animator.SetLookAtWeight(1f);
                 animator.SetLookAtPosition(LookTarget);
 
-                LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+                LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponProperties>().LeftHandIKTarget;
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
                 animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
@@ -69,7 +69,7 @@ namespace PlayerControl {
                 }
                 else
                 { 
-                    RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+                    RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponProperties>().RightHandIKTarget;
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
                     animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
@@ -97,7 +97,7 @@ namespace PlayerControl {
 
             private void OnAimingEvent() {
                 jumpInput = false;
-                animator.SetBool("sprint", false);
+                //animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
                 player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();
