@@ -28,16 +28,22 @@ public class Robot_AI_Ctrl : MonoBehaviour
     private Animator ai_animator;
     public float lifetime;
     private int DeathwaitCnt = 0;
+    public float MarginFromPlayerXY = 1.5f;
+    public float AttackEnableDistance = 10.0f;
+    public GameObject WeaponCtrl;
+    private WeaponManager Weapon;
 
 
     public GameObject player;
     private RobotState ai_state;
+   
 
 
 
 
     private void Patrol()
     {
+
         nav_agent.SetDestination(patrol_points[curr_point].transform.position);
 
 
@@ -45,7 +51,8 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     private void chasePlayer()
     {
-        nav_agent.SetDestination(player.transform.position);
+        Vector3 offset = new Vector3(MarginFromPlayerXY, 0, MarginFromPlayerXY);
+        nav_agent.SetDestination(player.transform.position-offset);
     }
 
     private void meleeattack(Animator ai_animator)
@@ -58,10 +65,42 @@ public class Robot_AI_Ctrl : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void shoot()
+    {
+        Weapon.FireWeapon();
+    }
+
+
+//    public override void AnimatorIK()
+//    {
+        //LookTarget = cameraState.target;
+        //animator.SetLookAtWeight(1f);
+        //animator.SetLookAtPosition(LookTarget);
+
+//        LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+        //animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+        //animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
+        //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+        //animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
+
+//        RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+        //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+        //    animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
+        //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+        //    animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
+        
+  //  }
+
+
+
+
     private void Start()
     {
         ai_animator = gameObject.GetComponent<Animator>();
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
+
+        Weapon = WeaponCtrl.GetComponent<WeaponManager>();
+
         ai_animator.SetBool("Idle", false);
         Patrol();
     }
@@ -87,9 +126,10 @@ public class Robot_AI_Ctrl : MonoBehaviour
             case RobotState.Patrol:
                 ai_animator.SetBool("Idle", false);
 
-                if (dist_to_player < 5)
+                if (dist_to_player < AttackEnableDistance)
                 {
                     ai_state = RobotState.ChasePlayer;
+                    transform.LookAt(player.transform.position);
                 }
 
                 else
@@ -105,15 +145,16 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
             case RobotState.ChasePlayer:
                 ai_animator.SetBool("Idle", false);
-                if (dist_to_player > 8)
+                if (dist_to_player > AttackEnableDistance+0.5)
                 {
                     Patrol();
                     ai_state = RobotState.Patrol;
                 }
-                else if (dist_to_player < 1)
+                else if (dist_to_player < MarginFromPlayerXY+2)
                 {
                     meleeattack(ai_animator);
                     ai_state = RobotState.Meleeattack;
+                    transform.LookAt(player.transform.position);
                 }
                 else
                 {
@@ -123,7 +164,8 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
             case RobotState.Meleeattack:
                 ai_animator.SetBool("Idle", false);
-                if (dist_to_player > 1)
+                transform.LookAt(player.transform.position);
+                if (dist_to_player > MarginFromPlayerXY + 2.1)
                 {
                     chasePlayer();
                     ai_state = RobotState.ChasePlayer;
@@ -131,7 +173,9 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 else
                 {
                     meleeattack(ai_animator);
-                    ai_animator.SetFloat("Shoot", 1-dist_to_player);
+                    ai_animator.SetFloat("Shoot", 0.5f);
+                    shoot();
+
                 }
                 break;
 
@@ -155,7 +199,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 break;
 
         }
-        Debug.Log(dist_to_player);
+        //Debug.Log(dist_to_player);
         Debug.Log(ai_state);
         //update animation
         ai_animator.SetFloat("Forward", nav_agent.velocity.magnitude / nav_agent.speed);
