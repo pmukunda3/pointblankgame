@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d0c03f39285a4fcbb3df95919bf718c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 1556386677}
+  overheatBar: {fileID: 1556386677}
 --- !u!1 &1761450815
 GameObject:
   m_ObjectHideFlags: 0
