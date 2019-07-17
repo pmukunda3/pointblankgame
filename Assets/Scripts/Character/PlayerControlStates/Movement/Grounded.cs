@@ -94,7 +94,7 @@ namespace PlayerControl {
 
                 Debug.DrawLine(rigidbody.position + (Vector3.up * 0.1f), rigidbody.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
 
-                if (Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
+                if (Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask, QueryTriggerInteraction.Ignore)) {
                     groundNormal = hitInfo.normal;
                     groundPoint = hitInfo.point;
                     return true;
@@ -113,7 +113,8 @@ namespace PlayerControl {
                         Vector3.down,
                         out hitInfo,
                         downwardDistance,
-                        player.raycastMask)) {
+                        player.raycastMask,
+                        QueryTriggerInteraction.Ignore)) {
                     if (Vector3.Angle(hitInfo.normal, Vector3.up) < maxGroundedMoveAngle) {
                         if (rigidbody.velocity.y < 0f) {
                             rigidbody.velocity = Vector3.ProjectOnPlane(rigidbody.velocity, hitInfo.normal) + Vector3.up * rigidbody.velocity.y;
@@ -144,11 +145,11 @@ namespace PlayerControl {
 
                     Vector3 lowerCastDirection = new Vector3(0f, maxStepSize.y * 0.5f, maxStepSize.z);
 
-                    if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * lowerCastDirection, out lowerCast, lowerCastDirection.magnitude, player.raycastMask)
-                        && !Physics.Raycast(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward, out upperCast, maxStepSize.z, player.raycastMask)) {
+                    if (Physics.Raycast(rigidbody.position + Vector3.up * 0.001f, movementDirection * lowerCastDirection, out lowerCast, lowerCastDirection.magnitude, player.raycastMask, QueryTriggerInteraction.Ignore)
+                        && !Physics.Raycast(rigidbody.position + Vector3.up * maxStepSize.y, movementDirection * Vector3.forward, out upperCast, maxStepSize.z, player.raycastMask, QueryTriggerInteraction.Ignore)) {
                         Debug.DrawRay(lowerCast.point, lowerCast.normal * 0.05f, Color.magenta, 20f);
                         Debug.DrawRay(upperCast.point, upperCast.normal * 0.05f, Color.cyan, 20f);
-                        bool retValue = Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.01f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask);
+                        bool retValue = Physics.Raycast(new Vector3(lowerCast.point.x, rigidbody.position.y + maxStepSize.y, lowerCast.point.z) + movementDirection * (Vector3.forward * 0.01f), Vector3.down, out stepTopInfo, maxStepSize.y, player.raycastMask, QueryTriggerInteraction.Ignore);
                         Debug.DrawRay(stepTopInfo.point, stepTopInfo.normal * 0.05f, Color.black, 20f);
                         return retValue;
                     }

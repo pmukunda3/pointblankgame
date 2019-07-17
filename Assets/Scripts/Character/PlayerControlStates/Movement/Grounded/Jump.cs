@@ -158,7 +158,7 @@ namespace PlayerControl {
 
                 Debug.DrawLine(rigidbody.position + (Vector3.up * 0.1f), rigidbody.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
 
-                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
+                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask, QueryTriggerInteraction.Ignore)) {
                     groundNormal = hitInfo.normal;
                     groundPoint = hitInfo.point;
                     return true;
@@ -177,12 +177,12 @@ namespace PlayerControl {
                     float groundUnderCheckDistance = groundCheckDistance + rigidbody.position.y - worldPositionY + groundUnderEpsilon;
                     Debug.DrawLine(rigidbody.position + (Vector3.up * 0.1f), rigidbody.position + (Vector3.up * 0.1f) + (Vector3.down * groundUnderCheckDistance), Color.red);
 
-                    bool underChar = Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out underCharHitInfo, groundUnderCheckDistance, player.raycastMask);
+                    bool underChar = Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out underCharHitInfo, groundUnderCheckDistance, player.raycastMask, QueryTriggerInteraction.Ignore);
 
                     Vector3 endDirection = rigidbody.rotation * new Vector3(0f, -groundUnderCheckDistance, localRigidbodyVelocity.z * CalculateT(rigidbody.position.y, worldPositionY, rigidbody.velocity.y, Physics.gravity.y));
                     Debug.DrawLine(rigidbody.position + (Vector3.up * 0.1f), rigidbody.position + (Vector3.up * 0.1f) + endDirection, Color.red);
 
-                    bool forwardChar = Physics.SphereCast(rigidbody.position + (Vector3.up * 0.1f), 0.3f, endDirection, out forwardCharHitInfo, endDirection.magnitude, player.raycastMask);
+                    bool forwardChar = Physics.SphereCast(rigidbody.position + (Vector3.up * 0.1f), 0.3f, endDirection, out forwardCharHitInfo, endDirection.magnitude, player.raycastMask, QueryTriggerInteraction.Ignore);
                     if (forwardChar) {
                         Debug.DrawRay(forwardCharHitInfo.point, forwardCharHitInfo.normal * 0.1f, Color.blue, 2f);
                     }

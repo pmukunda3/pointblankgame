@@ -78,7 +78,7 @@ namespace PlayerControl {
 
                 Debug.DrawLine(player.transform.position + (Vector3.up * 0.1f), player.transform.position + (Vector3.up * 0.1f) + (Vector3.down * groundCheckDistance), Color.yellow);
 
-                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask)) {
+                if (Physics.Raycast(player.transform.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, groundCheckDistance, player.raycastMask, QueryTriggerInteraction.Ignore)) {
                     groundNormal = hitInfo.normal;
                     groundPoint = hitInfo.point;
                     return true;

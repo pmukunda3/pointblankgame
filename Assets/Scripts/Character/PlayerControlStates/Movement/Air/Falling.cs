@@ -86,8 +86,8 @@ namespace PlayerControl {
                 Debug.DrawLine(rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)),
                     rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)) + (Vector3.down * (checkDistance + 0.1f)), Color.yellow);
 
-                //if (checkDistance > 0.0f && Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
-                if (checkDistance > 0.0f && Physics.Raycast(rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask)) {
+                //if (checkDistance > 0.0f && Physics.Raycast(rigidbody.position + (Vector3.up * 0.1f), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask, QueryTriggerInteraction.Ignore)) {
+                if (checkDistance > 0.0f && Physics.Raycast(rigidbody.position + legsCollider.center + (Vector3.up * (0.1f - 0.5f * legsCollider.height)), Vector3.down, out hitInfo, (checkDistance + 0.1f), player.raycastMask, QueryTriggerInteraction.Ignore)) {
                     player.shared.lastRigidbodyVelocity = rigidbody.velocity;
                     if (player.shared.lastRigidbodyVelocity.y > -4f) {
                         animator.SetInteger("landMode", 0);

@@ -71,7 +71,7 @@ namespace CameraControl {
             }
 
             private void SetTarget() {
-                if (Physics.Raycast(thirdPCamera.transform.position, thirdPCamera.transform.forward, out RaycastHit hit, aimDistance)) {
+                if (Physics.Raycast(thirdPCamera.transform.position, thirdPCamera.transform.forward, out RaycastHit hit, aimDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)) {
                     target = hit.point;
                 }
                 else {

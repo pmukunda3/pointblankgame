@@ -91,7 +91,7 @@ namespace PlayerControl {
                 RaycastHit wallHit;
 
                 Debug.DrawRay(rigidbody.position + rigidbody.rotation * (wallRaycastStart - 0.25f * Vector3.forward), rigidbody.rotation * Vector3.forward * 1.2f, Color.red, 20f);
-                if (Physics.SphereCast(rigidbody.position + rigidbody.rotation * (wallRaycastStart - 0.25f * Vector3.forward), 0.15f, rigidbody.rotation * Vector3.forward, out wallHit, 1.2f, player.raycastMask)) {
+                if (Physics.SphereCast(rigidbody.position + rigidbody.rotation * (wallRaycastStart - 0.25f * Vector3.forward), 0.15f, rigidbody.rotation * Vector3.forward, out wallHit, 1.2f, player.raycastMask, QueryTriggerInteraction.Ignore)) {
                     Debug.DrawRay(wallHit.point, (rigidbody.position + wallRaycastStart) - wallHit.point , Color.magenta, 20f);
                     if (Vector3.Dot(wallHit.normal, (rigidbody.position + wallRaycastStart) - wallHit.point) < 0) {
                         //rigidbody.MovePosition(rigidbody.position + wallHit.normal * ((rigidbody.position + wallRaycastStart) - wallHit.point).magnitude);

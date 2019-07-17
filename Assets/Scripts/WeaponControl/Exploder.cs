@@ -22,7 +22,7 @@ public class Exploder : MonoBehaviour
         {
             exploded = true;
             Vector3 explosionPos = transform.position;
-            Collider[] colliders = Physics.OverlapSphere(explosionPos, blastRadius);
+            Collider[] colliders = Physics.OverlapSphere(explosionPos, blastRadius, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             foreach (Collider hit in colliders)
             {
                 Exploder ex = hit.GetComponent<Exploder>();

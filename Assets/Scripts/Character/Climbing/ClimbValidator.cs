@@ -155,7 +155,8 @@ public class ClimbValidator : MonoBehaviour {
                     movementDirection * Vector3.forward,
                     out currentRaycastHit,
                     rayLength,
-                    player.raycastMask)) {
+                    player.raycastMask,
+                    QueryTriggerInteraction.Ignore)) {
                 Debug.DrawRay(currentRaycastHit.point, 0.15f * currentRaycastHit.normal, Color.green, 20f, false);
 
                 if (lastRaycastDistance >= 0.0f && currentRaycastHit.distance - lastRaycastDistance != 0.0f) {
@@ -201,7 +202,8 @@ public class ClimbValidator : MonoBehaviour {
                             Vector3.down,
                             out topCollider,
                             2.0f * heightStep,
-                            player.raycastMask)) {
+                            player.raycastMask,
+                            QueryTriggerInteraction.Ignore)) {
                     finalClimbCandidatePoints[finalPointIndex] = topCollider.point;
                     finalClimbCandidatePointsNormals[finalPointIndex] = candidateNormals[n];
                     ++finalPointIndex;
@@ -221,7 +223,7 @@ public class ClimbValidator : MonoBehaviour {
         int collidersSize = Physics.OverlapCapsuleNonAlloc(
             rigidbody.position + pivot.localPosition + (offset.y * Vector3.up) + finalAimDirection * (Vector3.Scale(offsetMask, offset) + (length * 0.5f * Vector3.left)),
             rigidbody.position + pivot.localPosition + (offset.y * Vector3.up) + finalAimDirection * (Vector3.Scale(offsetMask, offset) + (length * 0.5f * Vector3.right)),
-            radius, overlapBuffer, player.raycastMask);
+            radius, overlapBuffer, player.raycastMask, QueryTriggerInteraction.Ignore);
 
         return (collidersSize != 0);
     }
