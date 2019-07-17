@@ -37,6 +37,8 @@ namespace CameraControl {
                 thirdPCamera = gameObject.GetComponentInParent<ThirdPersonCamera>();
                 player = thirdPCamera.player;
 
+                if (weaponPivot == null) weaponPivot = GameObject.FindGameObjectWithTag("weaponPivot").transform;
+
                 thirdPCamera.RegisterState(StateId.Camera.Grounded.aim, this);
 
                 EventManager.StartListening<PlayerControl.MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(OnAimingEvent));
