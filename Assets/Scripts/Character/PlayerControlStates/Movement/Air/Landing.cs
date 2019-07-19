@@ -101,6 +101,10 @@ namespace PlayerControl {
                     rollAnimationSpeed = rollAnimationSpeedCurve.Evaluate((Quaternion.Inverse(rigidbody.rotation) * rigidbody.velocity).z);
                 }
 
+                if (player.shared.lastRigidbodyVelocity.y < -10f) {
+                    EventManager.TriggerEvent<PlayerFallDamageEvent, float>(player.shared.lastRigidbodyVelocity.y);
+                }
+
                 player.SetState(StateId.Player.MoveModes.Air.land);
             }
         }
