@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 public class Exploder : MonoBehaviour
 {
 
@@ -34,7 +34,20 @@ public class Exploder : MonoBehaviour
                 {
                     Rigidbody rb = hit.GetComponentInParent<Rigidbody>();
                     if (rb != null)
+
+                    {
+                        if (rb.gameObject.CompareTag("AI"))
+                        {
+                            EventManager.TriggerEvent<RagdollEvent, GameObject>(rb.gameObject
+                            );
+                        }
+
                         rb.AddExplosionForce(blastForce, explosionPos, blastRadius, 0F);
+                    }
+
+
+
+
                 }
             }
             newExplosion = Instantiate(explosionEffect, transform);

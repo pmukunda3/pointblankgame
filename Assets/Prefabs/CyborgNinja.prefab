@@ -804,7 +804,7 @@ GameObject:
   - component: {fileID: 7133412354765253886}
   m_Layer: 0
   m_Name: CyborgNinja
-  m_TagString: Untagged
+  m_TagString: AI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1522,7 +1522,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8967802515801597204}
   - component: {fileID: 5138815336529372350}
-  - component: {fileID: 5193629260308557257}
+  - component: {fileID: 7509645087879077071}
   m_Layer: 0
   m_Name: Hand_R
   m_TagString: Untagged
@@ -1561,7 +1561,7 @@ CapsuleCollider:
   m_Height: 0.1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5193629260308557257
+--- !u!114 &7509645087879077071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1570,7 +1570,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8964135916250491412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b919e5605f8cf4c68b2d32c395867da4, type: 3}
+  m_Script: {fileID: 11500000, guid: 08d392e777fdd4a5a924b51c52fc9cfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8964144886632150440
