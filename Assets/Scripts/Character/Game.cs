@@ -6,13 +6,17 @@ using UnityEngine.Events;
 namespace PlayerControl {
     public class Game : MonoBehaviour {
 
+        public CharacterOverheat overheat;
+        public CharacterHealth health;
+
         public AnimationCurve fallDamageCurve;
 
-        private int healthPoints = 100;
         private UnityAction<int> damageAction;
         private UnityAction<float> fallDamageAction;
 
         public void Start() {
+            health.MaxHealth = 100f;
+
             damageAction = new UnityAction<int>(TakeDamage);
             fallDamageAction = new UnityAction<float>(FallDamage);
 
@@ -26,22 +30,24 @@ namespace PlayerControl {
         }
 
         public void FallDamage(float verticalVelocity) {
-            int damage = Mathf.RoundToInt(fallDamageCurve.Evaluate(verticalVelocity));
+            float damage = Mathf.Round(fallDamageCurve.Evaluate(verticalVelocity));
+            
+            if (health.CurrHealth - damage <= 1) {
+                damage = health.CurrHealth - 1;
+            }
 
-            if (healthPoints - damage <= 1) {
-                healthPoints = 1;
-            }
-            else {
-                healthPoints -= damage;
-            }
+            Debug.Log("Player takes " + damage + " damage");
+
+            health.DealDamage(damage);
         }
 
         public void TakeDamage(int amount) {
-            healthPoints -= amount;
+            health.DealDamage(amount);
+            health.CurrHealth -= amount;
 
-            if (healthPoints <= 0) {
-                EventManager.TriggerEvent<PlayerDeathEvent>();
-            }
+            //if (healthPoints <= 0) {
+            //    EventManager.TriggerEvent<PlayerDeathEvent>();
+            //}
         }
     }
 

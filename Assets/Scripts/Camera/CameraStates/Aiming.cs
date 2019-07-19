@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerControl;
 
 namespace CameraControl {
     namespace State {
@@ -25,7 +24,6 @@ namespace CameraControl {
             }
 
             private ThirdPersonCamera thirdPCamera;
-            private PlayerController player;
 
             private Vector3 enterStatePosition;
             private Quaternion enterStateRotation;
@@ -35,7 +33,6 @@ namespace CameraControl {
 
             public void Start() {
                 thirdPCamera = gameObject.GetComponentInParent<ThirdPersonCamera>();
-                player = thirdPCamera.player;
 
                 if (weaponPivot == null) weaponPivot = GameObject.FindGameObjectWithTag("weaponPivot").transform;
 
@@ -50,15 +47,15 @@ namespace CameraControl {
 
             public override void CameraLateUpdate() {
                 Vector3 pitchAdjustedOffset = new Vector3(
-                    offsetFuncX.Evaluate(player.AimPitch() / 90.0f) * offset.x,
-                    offsetFuncY.Evaluate(player.AimPitch() / 90.0f) * offset.y,
-                    offsetFuncZ.Evaluate(player.AimPitch() / 90.0f) * offset.z);
-                Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + player.AimDirection() * pitchAdjustedOffset;
+                    offsetFuncX.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.x,
+                    offsetFuncY.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.y,
+                    offsetFuncZ.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.z);
+                Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + thirdPCamera.player.AimDirection() * pitchAdjustedOffset;
 
                 //Vector3 cameraAlignProjection = Vector3.Project(transform.position - desiredLocation, player.AimDirection() * -Vector3.forward);
 
                 if (enterState) {
-                    thirdPCamera.transform.rotation = Quaternion.Slerp(enterStateRotation, player.AimDirection() * Quaternion.Euler(2f, 0f, 0f), cameraAimEnterDistance.Evaluate(elapsedTime / enterStateTime));
+                    thirdPCamera.transform.rotation = Quaternion.Slerp(enterStateRotation, thirdPCamera.player.AimDirection() * Quaternion.Euler(2f, 0f, 0f), cameraAimEnterDistance.Evaluate(elapsedTime / enterStateTime));
                     thirdPCamera.transform.position = Vector3.Lerp(enterStatePosition, desiredLocation, cameraAimEnterDistance.Evaluate(elapsedTime / enterStateTime));
 
                     elapsedTime += Time.deltaTime;
@@ -67,7 +64,7 @@ namespace CameraControl {
                     }
                 }
                 else {
-                    thirdPCamera.transform.rotation = player.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
+                    thirdPCamera.transform.rotation = thirdPCamera.player.AimDirection() * Quaternion.Euler(2f, 0f, 0f);
                     thirdPCamera.transform.position = desiredLocation;
                 }
             }

@@ -84,7 +84,7 @@ namespace PlayerControl {
                 if (CheckStep(out stepTopInfo)) {
                     if (stepTopInfo.point.y > rigidbody.position.y) {
                         Debug.Log("Stepping onto this world position: " + stepTopInfo.point.ToString("F4") + ", Rb.pos = " + rigidbody.position);
-                        rigidbody.position += Vector3.up * stepTopInfo.point.y;
+                        rigidbody.position += Vector3.up * (stepTopInfo.point.y - rigidbody.position.y);
                     }
                 }
             }

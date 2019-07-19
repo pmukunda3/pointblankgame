@@ -6,38 +6,32 @@ using UnityEngine.UI;
 public class CharacterHealth : MonoBehaviour
 {
     public float CurrHealth { get; set; }
-    public float MaxHealth { get; set; }
+    public float MaxHealth {
+        get { return maxHealth; }
+        set {
+            maxHealth = value;
+            Init();
+        }
+    }
 
-    public Slider healthBar;  
+    public Slider healthBar;
 
+    private float maxHealth = 20f;
 
-    // Start is called before the first frame update
-    void Start()
+    void Init()
     {
-        MaxHealth = 20f;
         //full health at start of game
         CurrHealth = MaxHealth;
         healthBar.value = CalculateHealth();  
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            DealDamage(6);
-        }
-
-    }
-
-    void DealDamage(float damageValue)
+    public void DealDamage(float damageValue)
     {
         CurrHealth -= damageValue;
         healthBar.value = CalculateHealth(); 
         if(CurrHealth <= 0)
         {
-            Die();
+            EventManager.TriggerEvent<PlayerControl.PlayerDeathEvent>();
         }
     }
 

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1829316398}
   m_Layer: 0
   m_Name: States
-  m_TagString: Untagged
+  m_TagString: thirdPersonCameraStates
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

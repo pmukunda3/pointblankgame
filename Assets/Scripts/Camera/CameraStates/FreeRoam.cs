@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerControl;
 
 namespace CameraControl {
     namespace State {
@@ -24,14 +23,12 @@ namespace CameraControl {
             private float minDistance;
 
             private ThirdPersonCamera thirdPCamera;
-            private PlayerController player;
 
             private Vector3 previousPosition;
             private Quaternion previousRotation;
 
             public void Start() {
                 thirdPCamera = gameObject.GetComponentInParent<ThirdPersonCamera>();
-                player = thirdPCamera.player;
 
                 minDistance = Vector3.ProjectOnPlane(offset, Vector3.up).magnitude * 0.9f;
 
@@ -47,18 +44,18 @@ namespace CameraControl {
 
             public override void CameraLateUpdate() {
                 Vector3 pitchAdjustedOffset = new Vector3(
-                    offsetFuncX.Evaluate(player.AimPitch() / 90.0f) * offset.x,
-                    offsetFuncY.Evaluate(player.AimPitch() / 90.0f) * offset.y,
-                    offsetFuncZ.Evaluate(player.AimPitch() / 90.0f) * offset.z);
+                    offsetFuncX.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.x,
+                    offsetFuncY.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.y,
+                    offsetFuncZ.Evaluate(thirdPCamera.player.AimPitch() / 90.0f) * offset.z);
 
                 //TODO: project the camera onto the vector behind the player character to maintain a minimum distance away from the player character.
-                Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + player.AimDirection() * pitchAdjustedOffset;
+                Vector3 desiredLocation = thirdPCamera.cameraPivot.transform.position + thirdPCamera.player.AimDirection() * pitchAdjustedOffset;
 
                 previousPosition = thirdPCamera.transform.position;
                 previousRotation = thirdPCamera.transform.rotation;
 
                     // This ultimately proved to be a really bad way to move the camera
-                float angleDiff = Quaternion.Angle(previousRotation, player.AimDirection());
+                float angleDiff = Quaternion.Angle(previousRotation, thirdPCamera.player.AimDirection());
                 float distance = Vector3.Distance(previousPosition, desiredLocation);
 
                 float slerpT;
@@ -84,11 +81,11 @@ namespace CameraControl {
 
                 float cameraPlayerDistance = Vector3.Distance(newPosition, thirdPCamera.cameraPivot.transform.position);
                 if (cameraPlayerDistance < minDistance) {
-                    newPosition += (((80f - Mathf.Abs(player.AimPitch())) / 80f) * (minDistance - cameraPlayerDistance))
+                    newPosition += (((80f - Mathf.Abs(thirdPCamera.player.AimPitch())) / 80f) * (minDistance - cameraPlayerDistance))
                         * (newPositionFlat - cameraPositionFlat).normalized;
                 }
 
-                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, player.AimDirection(), cameraDampTime * Time.deltaTime);
+                thirdPCamera.transform.rotation = Quaternion.SlerpUnclamped(previousRotation, thirdPCamera.player.AimDirection(), cameraDampTime * Time.deltaTime);
                 thirdPCamera.transform.position = newPosition;
 
                 if (Input.GetKeyDown(KeyCode.P)) Debug.Break();
