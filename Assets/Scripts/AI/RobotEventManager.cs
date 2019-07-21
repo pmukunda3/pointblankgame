@@ -90,22 +90,22 @@ public class RobotEventManager : MonoBehaviour
             else
             {
                 // disable nav
-                ////gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                gameObject.GetComponent<NavMeshAgent>().enabled = false;
 
                 // trigger animation
-                ////ai_animator.SetTrigger("Death");
+                ai_animator.SetTrigger("Death");
 
                 // enable ragdoll
                 //SetKinematic(false);
 
 
                 // add force
-                ////Rigidbody rb = GetComponent<Rigidbody>(); ;
-                ////rb.AddForce(impact.transform.position);
+                Rigidbody rb = GetComponent<Rigidbody>(); ;
+                rb.AddForce(impact.transform.position);
                 //rb.AddTorque(impact.transform.rotation);
 
 
-                ////Destroy(gameObject, 5);
+                Destroy(gameObject, 5);
             }
 
         }
