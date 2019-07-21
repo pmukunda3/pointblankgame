@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
 {
-    public GameObject Muzzle;
-    public GameObject Projectile;
-    public float MuzzleDuration;
-    public float FireRate;
+    public float muzzleDuration, fireRate;
+    public AudioClip gunshotSound;
 
-    private float clock;
-    private float FireInterval;
-    private GameObject NewProjectile;
+    private GameObject muzzle, projectile, newProjectile;
+    private float clock,fireInterval;
     private UserInput userInput;
 
     // Start is called before the first frame update
     void Start()
     {
+        muzzle = transform.Find("Muzzle").gameObject;
+        projectile = transform.Find("Projectile").gameObject;
         clock = 0f;
-        FireInterval = 1 / FireRate;
-        Muzzle.SetActive(false);
+        fireInterval = 1 / fireRate;
+        muzzle.SetActive(false);
         userInput = gameObject.GetComponentInParent<UserInput>();
     }
 
@@ -29,9 +28,9 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
         if (clock < 0f)
         {
             clock += Time.deltaTime;
-            if (clock >= -FireInterval + MuzzleDuration)
+            if (clock >= -fireInterval + muzzleDuration)
             {
-                Muzzle.SetActive(false);
+                muzzle.SetActive(false);
             }
         }
     }
@@ -39,11 +38,12 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
     public void FireWeapon() {
         if (clock >= 0f)
         {
-            Muzzle.SetActive(true);
-            clock = -FireInterval;
-            NewProjectile = Instantiate(Projectile, Muzzle.transform);
-            NewProjectile.transform.parent = null;
-            NewProjectile.SetActive(true);
+            clock = -fireInterval;
+            AudioSource.PlayClipAtPoint(gunshotSound, muzzle.transform.position,1f);
+            muzzle.SetActive(true);
+            newProjectile = Instantiate(projectile, muzzle.transform);
+            newProjectile.transform.parent = null;
+            newProjectile.SetActive(true);
         }
     }
 

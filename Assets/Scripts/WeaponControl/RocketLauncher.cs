@@ -6,18 +6,19 @@ public class RocketLauncher : MonoBehaviour, IWeaponFire
 {
     public MeshRenderer rocketMesh;
     public GameObject rocket;
-    public Transform FirePoint;
-    public float FireRate;
+    public Transform firePoint;
+    public float fireRate;
+    public AudioClip fireSound;
 
     private float clock;
-    private float FireInterval;
-    private GameObject NewRocket;
+    private float fireInterval;
+    private GameObject newRocket;
 
     // Start is called before the first frame update
     void Start()
     {
         clock = 0f;
-        FireInterval = 1 / FireRate;
+        fireInterval = 1 / fireRate;
     }
 
     // Update is called once per frame
@@ -42,11 +43,12 @@ public class RocketLauncher : MonoBehaviour, IWeaponFire
     {
         if (clock >= 0f)
         {
-            clock = -FireInterval;
+            clock = -fireInterval;
+            AudioSource.PlayClipAtPoint(fireSound, firePoint.transform.position, 1f);
             rocketMesh.enabled = false;
-            NewRocket = Instantiate(rocket, FirePoint.transform);
-            NewRocket.transform.parent = null;
-            NewRocket.SetActive(true);
+            newRocket = Instantiate(rocket, firePoint.transform);
+            newRocket.transform.parent = null;
+            newRocket.SetActive(true);
         }
     }
 

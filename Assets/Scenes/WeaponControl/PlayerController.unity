@@ -1577,6 +1577,121 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5709365963363231950, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6303996022335219421, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4088747018259061294, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547872311383303479, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547872311383303479, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 2.3510647e-38
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547872311383303479, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547872311383303479, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 2.3510647e-38
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915321500962846727, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8795371093869111960, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839173735304336190, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915321500962846726, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: gunshotSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ba7b41f0ffe196e4bbc50e8da2e758e3, type: 3}
+    - target: {fileID: 1107966998187003687, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: explosionSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 52407aeb04aecc24eaf0ccbf0e7ca68d, type: 3}
+    - target: {fileID: 6151800169092445470, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: explosionSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 52407aeb04aecc24eaf0ccbf0e7ca68d, type: 3}
+    - target: {fileID: 463138793003465323, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2412268816263811385, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: fireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 60cb593594324e54584e0a1450214c91, type: 3}
+    - target: {fileID: 4309310026660148964, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: m_Name
+      value: Projectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149726751725045311, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: muzzleDuration
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149726751725045311, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: fireRate
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149726751725045311, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: gunshotSound
+      value: 
+      objectReference: {fileID: 8300000, guid: fcf351172faa7244a943b531cec7cddb, type: 3}
+    - target: {fileID: 8466165213215438763, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: muzzleDuration
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466165213215438763, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: fireRate
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466165213215438763, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: gunshotSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 67adb195e9b0e644fbcecc0d6d1ff530, type: 3}
+    - target: {fileID: 3861904819147128067, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: explosionSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ec898338dfa1439419317625de624d59, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41cb56f8a69e4b041a35b8a8294fd3e3, type: 3}
 --- !u!1 &1576208025
