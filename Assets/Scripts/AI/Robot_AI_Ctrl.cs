@@ -16,6 +16,7 @@ public enum RobotState
     Patrol,
     Meleeattack,
     DeadWait,
+    InVehicle,
     Destroy
 
 };
@@ -32,11 +33,13 @@ public class Robot_AI_Ctrl : MonoBehaviour
     public float AttackEnableDistance = 10.0f;
     public GameObject WeaponCtrl;
     public ProjectileWeaponController Weapon;
+    public bool RobotInVehicle = false;
+    private bool dropLocationReached =false;
 
 
     public GameObject player;
     private RobotState ai_state;
-   
+    
 
 
 
@@ -72,26 +75,37 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     }
 
+    private void SetRobotInvehicle()
+    {
+        RobotInVehicle = true;
 
-//    public override void AnimatorIK()
-//    {
-        //LookTarget = cameraState.target;
-        //animator.SetLookAtWeight(1f);
-        //animator.SetLookAtPosition(LookTarget);
+    }
 
-//        LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
-        //animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
-        //animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
-        //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
-        //animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
+    private void SetDropLocationReached()
+    {
+        dropLocationReached = true;
 
-//        RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
-        //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-        //    animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
-        //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
-        //    animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
-        
-  //  }
+    }
+
+    //    public override void AnimatorIK()
+    //    {
+    //LookTarget = cameraState.target;
+    //animator.SetLookAtWeight(1f);
+    //animator.SetLookAtPosition(LookTarget);
+
+    //        LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+    //animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+    //animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
+    //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+    //animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
+
+    //        RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+    //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+    //    animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
+    //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+    //    animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
+
+    //  }
 
 
 
@@ -103,14 +117,14 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
         //Weapon = WeaponCtrl.GetComponent<WeaponManager>();
 
-        ai_animator.SetBool("Idle", false);
+        ai_animator.SetBool("Idle", true);
         Patrol();
     }
 
     // Update is called once per frame
     void Update()
     {
-        ai_animator.SetBool("Idle", false);
+        //ai_animator.SetBool("Idle", true);
         float dist_to_player = Vector3.Distance(nav_agent.transform.position,
     player.transform.position);
 
@@ -122,7 +136,24 @@ public class Robot_AI_Ctrl : MonoBehaviour
         switch (ai_state)
         {
             case RobotState.Idle:
-                ai_state = RobotState.Patrol;
+                ai_animator.SetBool("Idle", true);
+                if (RobotInVehicle == true)
+                {
+                    ai_state = RobotState.InVehicle;
+                }
+                else
+                {
+                    ai_state = RobotState.InVehicle;
+                }
+
+                break;
+
+            case RobotState.InVehicle:
+                ai_animator.SetBool("Idle", true);
+                if (dropLocationReached == true)
+                {
+                    ai_state = RobotState.Idle;
+                }
                 break;
 
             case RobotState.Patrol:

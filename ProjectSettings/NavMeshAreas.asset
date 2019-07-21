@@ -106,8 +106,8 @@ NavMeshProjectSettings:
   - serializedVersion: 2
     agentTypeID: 1479372276
     agentRadius: 0.5
-    agentHeight: 2
-    agentSlope: 45
+    agentHeight: 4
+    agentSlope: 52.3
     agentClimb: 0.5
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
@@ -122,4 +122,4 @@ NavMeshProjectSettings:
   m_SettingNames:
   - Humanoid
   - New Agent
-  - New Agent 1
+  - Robot
