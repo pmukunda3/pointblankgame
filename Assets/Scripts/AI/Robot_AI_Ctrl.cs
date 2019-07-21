@@ -143,7 +143,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 }
                 else
                 {
-                    ai_state = RobotState.InVehicle;
+                    ai_state = RobotState.Patrol;
                 }
 
                 break;
