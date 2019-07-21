@@ -84,7 +84,7 @@ public class NinjaEventManager : MonoBehaviour
             SetKinematic(false);
             ai_animator.enabled = false;
             nav_agent.enabled = false;
-
+            Destroy(gameObject, 2);
         }
 
     }

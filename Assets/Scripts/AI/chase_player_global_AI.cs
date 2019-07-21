@@ -77,7 +77,7 @@ public class chase_player_global_AI : MonoBehaviour
             patrol_points.Add(t.gameObject);
         }
 
-        Patrol();
+        chasePlayer();
     }
 
     // Update is called once per frame
@@ -94,7 +94,7 @@ public class chase_player_global_AI : MonoBehaviour
         {
             case AIState.Patrol:
 
-                if (dist_to_player < 5)
+                if (dist_to_player < 500)
                 {
                     ai_state = AIState.ChasePlayer;
                 }
@@ -111,12 +111,12 @@ public class chase_player_global_AI : MonoBehaviour
                 break;
 
             case AIState.ChasePlayer:
-                if (dist_to_player > 8)
+                if (dist_to_player > 800)
                 {
                     Patrol();
                     ai_state = AIState.Patrol;
                 }
-                else if (dist_to_player < 1)
+                else if (dist_to_player < 2)
                 {
                     meleeattack(ai_animator);
                     ai_state = AIState.Meleeattack;
@@ -128,7 +128,7 @@ public class chase_player_global_AI : MonoBehaviour
                 break;
 
             case AIState.Meleeattack:
-                if (dist_to_player > 1)
+                if (dist_to_player > 2)
                 {
                     chasePlayer();
                     ai_state = AIState.ChasePlayer;
