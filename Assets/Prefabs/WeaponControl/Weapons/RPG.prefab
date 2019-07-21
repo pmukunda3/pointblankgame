@@ -83,7 +83,7 @@ MonoBehaviour:
   rocket: {fileID: 2940484417461131466}
   firePoint: {fileID: 6674129088261161101}
   fireRate: 0.5
-  fireSound: {fileID: 0}
+  fireSound: {fileID: 8300000, guid: 60cb593594324e54584e0a1450214c91, type: 3}
 --- !u!114 &2869302706275917739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   explosionEffect: {fileID: 5480518787208395930}
   blastRadius: 5
   blastForce: 1000
-  explosionSound: {fileID: 0}
+  explosionSound: {fileID: 8300000, guid: ec898338dfa1439419317625de624d59, type: 3}
 --- !u!1 &5230860174765804762
 GameObject:
   m_ObjectHideFlags: 0

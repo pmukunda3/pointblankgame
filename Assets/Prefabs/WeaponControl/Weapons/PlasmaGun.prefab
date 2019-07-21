@@ -48149,9 +48149,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18ca95832182d540a7266113b51953f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzleDuration: 0
-  fireRate: 0
-  gunshotSound: {fileID: 0}
+  muzzleDuration: 0.05
+  fireRate: 2
+  gunshotSound: {fileID: 8300000, guid: fcf351172faa7244a943b531cec7cddb, type: 3}
 --- !u!114 &4824100153610182934
 MonoBehaviour:
   m_ObjectHideFlags: 0
