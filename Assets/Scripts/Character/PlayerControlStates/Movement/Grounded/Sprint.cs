@@ -45,8 +45,9 @@ namespace PlayerControl {
                         rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     }
                     StickToGroundHelper(0.35f);
+                    player.Grounded();
                 }
-                else {
+                else if (!jumpInput) {
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }
@@ -61,7 +62,7 @@ namespace PlayerControl {
                 base.UseInput(moveInput, mouseInput, actions);
 
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
-                //if (actions.aim.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
             }
 
             private void OnSprintEvent() {

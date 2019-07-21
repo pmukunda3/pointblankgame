@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AirControlFromJump : MonoBehaviour, IMovementState {
+public class AirControlFromJump : MonoBehaviour, IMovementState, IJumpVerticalPush {
 
     public Vector3 airAccel;
     public Vector3 localVelocityLimit;
+
+    public AnimationCurve jumpVerticalPush;
 
     public MovementChange CalculateAcceleration(Vector2 input, Vector3 localVelocity, float timeStep) {
         Vector3 acceleration = Vector3.Scale(airAccel, new Vector3(input.x, 0f, input.y));
@@ -20,5 +22,9 @@ public class AirControlFromJump : MonoBehaviour, IMovementState {
 
     public float MaxSpeed(int direction) {
         throw new System.NotImplementedException();
+    }
+
+    public float VerticalVelocityPush(float time) {
+        return jumpVerticalPush.Evaluate(time);
     }
 }

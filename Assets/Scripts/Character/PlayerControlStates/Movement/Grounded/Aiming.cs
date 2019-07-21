@@ -15,6 +15,8 @@ namespace PlayerControl {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.aiming, this);
 
+                if (cameraState == null) cameraState = GameObject.FindGameObjectWithTag("thirdPersonCameraStates").GetComponent<CameraControl.State.Aiming>();
+
                 EventManager.StartListening<MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(OnAimingEvent));
             }
 
@@ -83,8 +85,9 @@ namespace PlayerControl {
                 if (CheckGrounded()) {
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                     StickToGroundHelper(0.35f);
+                    player.Grounded();
                 }
-                else {
+                else if (!jumpInput) {
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }
@@ -97,7 +100,7 @@ namespace PlayerControl {
 
             private void OnAimingEvent() {
                 jumpInput = false;
-                //animator.SetBool("sprint", false);
+                animator.SetBool("sprint", false);
                 animator.speed = 1.0f;
                 player.legsCollider.enabled = true;
                 this.moveInput = player.GetLatestMoveInput();

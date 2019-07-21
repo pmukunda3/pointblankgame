@@ -20,6 +20,9 @@ namespace CameraControl {
 
             currState = initState;
 
+            if (player == null) player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControl.PlayerController>();
+            if (cameraPivot == null) cameraPivot = GameObject.FindGameObjectWithTag("cameraPivot");
+
             //EventManager.StartListening<WeaponFirePrimary>(
             //    new UnityEngine.Events.UnityAction(WeaponFirePrimaryCallbackTest));
             //EventManager.StartListening<WeaponFireSecondary, float>(

@@ -56,7 +56,7 @@ public class RaycastWeaponController : MonoBehaviour, IWeaponFire
             lineRenderer.startColor = beamColor;
             lineRenderer.endColor = beamColor;
             lineRenderer.SetPosition(0, Vector3.zero);
-            if (Physics.Raycast(Beam.transform.position, Beam.transform.forward, out RaycastHit hit, range))
+            if (Physics.Raycast(Beam.transform.position, Beam.transform.forward, out RaycastHit hit, range, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
                 Exploder ex = hit.collider.gameObject.GetComponent<Exploder>();
                 if (ex != null)

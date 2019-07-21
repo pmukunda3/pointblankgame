@@ -28,7 +28,7 @@ public class Rocket : MonoBehaviour
         {
             exploder.Explode();
         }
-        if (Physics.Raycast(transform.position, transform.forward, out hit, velocity * Time.deltaTime))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, velocity * Time.deltaTime, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             transform.position = hit.point - impactOffset * transform.forward;
             exploder.Explode();

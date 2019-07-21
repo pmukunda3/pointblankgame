@@ -24,10 +24,10 @@ public class ClimbAnimationHelper : MonoBehaviour
     public void SetMatchTarget(Vector3 climbPoint, ClimbValidator.ClimbAnimation animation, float colliderRadius) {
         switch (animation) {
             case ClimbValidator.ClimbAnimation.Step:
-                animator.MatchTarget(climbPoint + colliderRadius * Vector3.up, rigidbody.rotation, AvatarTarget.RightFoot, new MatchTargetWeightMask(0.5f * Vector3.one, 1f), stepAnimStart, stepAnimEnd);
+                animator.MatchTarget(climbPoint + colliderRadius * Vector3.up, rigidbody.rotation, AvatarTarget.Root, new MatchTargetWeightMask(0.5f * Vector3.one, 1f), stepAnimStart, stepAnimEnd);
                 break;
             case ClimbValidator.ClimbAnimation.Low:
-                animator.MatchTarget(climbPoint + colliderRadius * Vector3.up, rigidbody.rotation, AvatarTarget.RightHand, new MatchTargetWeightMask(1.0f * new Vector3(0.0f, 1.0f, 1.0f), 1f), lowAnimStart, lowAnimEnd);
+                animator.MatchTarget(climbPoint + colliderRadius * Vector3.up, rigidbody.rotation, AvatarTarget.Root, new MatchTargetWeightMask(1.0f * new Vector3(0.0f, 1.0f, 1.0f), 1f), lowAnimStart, lowAnimEnd);
                 break;
             case ClimbValidator.ClimbAnimation.Mid:
                 animator.MatchTarget(climbPoint + colliderRadius * Vector3.up, rigidbody.rotation, AvatarTarget.RightHand, new MatchTargetWeightMask(1.0f * Vector3.one, 1f), midAnimStart, midAnimEnd);

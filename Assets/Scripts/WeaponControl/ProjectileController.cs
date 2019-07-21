@@ -29,7 +29,7 @@ public class ProjectileController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (Physics.Raycast(transform.position,transform.forward, out hit,velocity*Time.deltaTime))
+        if (Physics.Raycast(transform.position,transform.forward, out hit,velocity*Time.deltaTime, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             OnHit(hit);
         }

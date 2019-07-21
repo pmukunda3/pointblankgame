@@ -40,10 +40,11 @@ public class PushAway : MonoBehaviour {
             rigidbody.position + actualLocalCenter + (0.5f * playerPushAwayCollider.height) * Vector3.up,
             playerPushAwayCollider.radius,
             colliders,
-            player.raycastMask);
+            player.raycastMask,
+            QueryTriggerInteraction.Ignore);
         RaycastHit rcHit;
         for (int n = 0; n < numColliders; ++n) {
-            if (Physics.Raycast(rigidbody.position + actualLocalCenter, colliders[n].transform.position, out rcHit, 100.0f, player.raycastMask)) {
+            if (Physics.Raycast(rigidbody.position + actualLocalCenter, colliders[n].transform.position, out rcHit, 100.0f, player.raycastMask, QueryTriggerInteraction.Ignore)) {
                 Debug.DrawLine(rigidbody.position + actualLocalCenter, colliders[n].transform.position, Color.cyan);
                 rigidbody.AddForce(pushAwayScalar * rcHit.distance * -rcHit.normal);
             }
