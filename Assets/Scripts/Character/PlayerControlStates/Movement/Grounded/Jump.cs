@@ -89,6 +89,7 @@ namespace PlayerControl {
 
                 if (CheckGrounded()) {
                     animator.SetBool("grounded", true);
+                    player.Grounded();
                 }
                 else {
                     if (CheckGroundUnderJump(localRigidbodyVelocity)) {

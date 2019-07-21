@@ -62,6 +62,8 @@ namespace PlayerControl {
         public PlayerControlState currPlayerState;
         private PlayerControlState emptyState;
 
+        private Game game;
+
         private float aimPitch = 0f;
         private float aimYaw = 0f;
 
@@ -136,6 +138,10 @@ namespace PlayerControl {
             return aimYaw;
         }
 
+        public void Grounded() {
+            game.Grounded();
+        }
+
         public float LookToMoveAngle() {
             float angle = rigidbody.rotation.eulerAngles.y - aimYaw;
             if (angle > 180f) angle -= 360f;
@@ -161,6 +167,8 @@ namespace PlayerControl {
 
             currPlayerState = emptyState = gameObject.AddComponent<EmptyPlayerState>() as PlayerControlState;
             RegisterState(StateId.Player.empty, emptyState);
+
+            game = gameObject.GetComponent<Game>();
         }
 
         private void WeaponFirePrimaryCallbackTest() {
@@ -208,6 +216,8 @@ namespace PlayerControl {
             else {
                 mouseInput = Vector2.zero;
             }
+
+            if (Input.GetKeyDown(KeyCode.U)) EventManager.TriggerEvent<PlayerDeathEvent>();
 
             currPlayerState.UseInput(moveInput, mouseInput, userInput.actions);
         }

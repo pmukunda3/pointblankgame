@@ -5,7 +5,13 @@ using UnityEngine.UI;
 
 public class CharacterHealth : MonoBehaviour
 {
-    public float CurrHealth { get; set; }
+    public float CurrHealth {
+        get { return currHealth; }
+        set {
+            currHealth = value;
+            healthBar.value = CalculateHealth();
+        }
+    }
     public float MaxHealth {
         get { return maxHealth; }
         set {
@@ -17,11 +23,14 @@ public class CharacterHealth : MonoBehaviour
     public Slider healthBar;
 
     private float maxHealth = 20f;
+    private float currHealth;
+
+    private bool playerAlive = true;
 
     void Init()
     {
         //full health at start of game
-        CurrHealth = MaxHealth;
+        currHealth = MaxHealth;
         healthBar.value = CalculateHealth();  
     }
 
@@ -29,15 +38,15 @@ public class CharacterHealth : MonoBehaviour
     {
         CurrHealth -= damageValue;
         healthBar.value = CalculateHealth(); 
-        if(CurrHealth <= 0)
-        {
+        if (currHealth <= 0 && playerAlive) {
+            playerAlive = false;
             EventManager.TriggerEvent<PlayerControl.PlayerDeathEvent>();
         }
     }
 
     float CalculateHealth()
     {
-        return CurrHealth / MaxHealth; 
+        return currHealth / maxHealth; 
     }
     void Die()
     {

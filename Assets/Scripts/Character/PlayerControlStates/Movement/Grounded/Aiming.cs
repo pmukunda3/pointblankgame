@@ -85,6 +85,7 @@ namespace PlayerControl {
                 if (CheckGrounded()) {
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                     StickToGroundHelper(0.35f);
+                    player.Grounded();
                 }
                 else if (!jumpInput) {
                     animator.SetBool("grounded", false);

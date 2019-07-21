@@ -57,6 +57,7 @@ namespace PlayerControl {
                     //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                     StickToGroundHelper(0.45f);
+                    player.Grounded();
                 }
                 else if (!jumpInput) {
                     animator.SetBool("grounded", false);
