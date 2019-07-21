@@ -8,7 +8,7 @@ public class ProjectileController : MonoBehaviour
     public float velocity = 100f;
     public float range = 50f;
     public float impactOffset;
-
+    public float damage = 10f;
     private GameObject NewImpact;
     private RaycastHit hit;
     private float timeout;
@@ -29,7 +29,7 @@ public class ProjectileController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (Physics.Raycast(transform.position,transform.forward, out hit,velocity*Time.deltaTime))
+        if (Physics.Raycast(transform.position,transform.forward, out hit,velocity*Time.deltaTime, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             OnHit(hit);
         }
@@ -44,12 +44,12 @@ public class ProjectileController : MonoBehaviour
             ex.Explode();
         }
         Vector3 pos = hit.point + hit.normal * impactOffset;
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+        Quaternion rot = Quaternion.FromToRotation(Vector3.forward, hit.normal);
         NewImpact = Instantiate(Impact, pos, rot);
         NewImpact.transform.parent = null;
         NewImpact.SetActive(true);
         Destroy(gameObject);
         EventManager.TriggerEvent<HitEnemyEvent, GameObject, float, GameObject>(
-hit.collider.gameObject, 10, NewImpact);
+hit.collider.gameObject, damage, NewImpact);
     }
 }

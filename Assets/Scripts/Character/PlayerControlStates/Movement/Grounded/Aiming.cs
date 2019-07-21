@@ -15,6 +15,8 @@ namespace PlayerControl {
                 base.Start();
                 player.RegisterState(StateId.Player.MoveModes.Grounded.aiming, this);
 
+                if (cameraState == null) cameraState = GameObject.FindGameObjectWithTag("thirdPersonCameraStates").GetComponent<CameraControl.State.Aiming>();
+
                 EventManager.StartListening<MecanimBehaviour.AimingEvent>(new UnityEngine.Events.UnityAction(OnAimingEvent));
             }
 
@@ -55,7 +57,7 @@ namespace PlayerControl {
                 animator.SetLookAtWeight(1f);
                 animator.SetLookAtPosition(LookTarget);
 
-                LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+                LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponProperties>().LeftHandIKTarget;
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
                 animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
@@ -69,7 +71,7 @@ namespace PlayerControl {
                 }
                 else
                 { 
-                    RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+                    RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponProperties>().RightHandIKTarget;
                     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
                     animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
@@ -83,8 +85,9 @@ namespace PlayerControl {
                 if (CheckGrounded()) {
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                     StickToGroundHelper(0.35f);
+                    player.Grounded();
                 }
-                else {
+                else if (!jumpInput) {
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }

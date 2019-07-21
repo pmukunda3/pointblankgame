@@ -40,29 +40,10 @@ namespace PlayerControl {
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
-                MovementChange moveChange = freeRoamMovement.CalculateAcceleration(moveInput, localRigidbodyVelocity, Time.deltaTime);
+                Vector3 playerVelocity = moveSpeedMultiplier * animator.velocity;
 
-                Vector3 forwardVector;
-                if (localRigidbodyVelocity.sqrMagnitude > 1.0f && localAnimatorVelocity.sqrMagnitude > 1.0f
-                    && Vector3.Dot(localAnimatorVelocity.normalized, localRigidbodyVelocity.normalized) > 0.8f) {
-                    forwardVector = Vector3.Project(localAnimatorVelocity, localRigidbodyVelocity);
-                }
-                else {
-                    forwardVector = Vector3.Project(localAnimatorVelocity, Vector3.forward);
-                }
-
-                Vector3 newVelocity = forwardVector;
-                newVelocity.y = localRigidbodyVelocity.y;
-                newVelocity.x = localRigidbodyVelocity.x + moveChange.localAcceleration.x * Time.deltaTime;
-
-                rigidbody.velocity = rigidbody.rotation * newVelocity;
-
-                Debug.DrawRay(rigidbody.position + 0.7f * Vector3.up, localRigidbodyVelocity, Color.blue);
-                Debug.DrawRay(rigidbody.position + 0.8f * Vector3.up, localAnimatorVelocity, Color.cyan);
-                //Debug.Log("input: " + moveInput.ToString("F2") + ", local Rb Vel: " + localRigidbodyVelocity.ToString("F3") + ", local Accel: " + moveChange.localAcceleration.ToString("F3") + ", new Vel: " + newVelocity.ToString("F3"));
-
-                Debug.DrawRay(rigidbody.position + 0.5f * Vector3.up, rigidbody.velocity, Color.white);
-                Debug.DrawRay(rigidbody.position + 0.6f * Vector3.up, animator.velocity, Color.red);
+                playerVelocity.y = rigidbody.velocity.y;
+                rigidbody.velocity = playerVelocity;
             }
 
             public override void AnimatorIK() {
@@ -76,8 +57,9 @@ namespace PlayerControl {
                     //rigidbody.MoveRotation(Quaternion.AngleAxis(player.screenMouseRatio * player.mouseSensitivity * mouseInput.x * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     rigidbody.MoveRotation(Quaternion.Euler(0f, player.AimYaw(), 0f));
                     StickToGroundHelper(0.45f);
+                    player.Grounded();
                 }
-                else {
+                else if (!jumpInput) {
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }

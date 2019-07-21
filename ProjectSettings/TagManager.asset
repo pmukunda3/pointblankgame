@@ -7,6 +7,9 @@ TagManager:
   - climbTrigger
   - landTrigger
   - AI
+  - thirdPersonCameraStates
+  - weaponPivot
+  - cameraPivot
   layers:
   - Default
   - TransparentFX

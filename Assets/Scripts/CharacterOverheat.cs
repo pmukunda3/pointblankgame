@@ -20,19 +20,9 @@ public class CharacterOverheat : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddHeat(float heat)
     {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            DealDamage(6);
-        }
-
-    }
-
-    void DealDamage(float damageValue)
-    {
-        CurrHeat += damageValue;
+        CurrHeat += heat;
         overheatBar.value = CalculateOverheat();
         if (CurrHeat >= 20f)
         {

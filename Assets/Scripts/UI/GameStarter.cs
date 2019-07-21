@@ -5,10 +5,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
 public class GameStarter : MonoBehaviour
-{
+{ 
 
-    public void StartGame()
+public void StartGame()
     {
-        SceneManager.LoadScene("Prototype");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void AboutGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

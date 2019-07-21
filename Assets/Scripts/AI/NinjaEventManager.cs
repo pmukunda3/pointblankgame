@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class NinjaEventManager : MonoBehaviour
 {
     public Animator ai_animator;
+    private NavMeshAgent nav_agent;
     public float health = 100f;
     public float maxHealth = 100f;
     private float adjustment = 2.3f;
@@ -18,6 +19,7 @@ public class NinjaEventManager : MonoBehaviour
     private int healthBarHeight = 5;
     private int healthBarLeft = 110;
     private int barTop = 1;
+   
 
 
     // Use this for initialization
@@ -26,6 +28,8 @@ public class NinjaEventManager : MonoBehaviour
         myCamera = Camera.main;
         EventManager.StartListening<HitEnemyEvent, GameObject, float, GameObject>
         (new UnityEngine.Events.UnityAction<GameObject, float, GameObject>(GotHit));
+        EventManager.StartListening<RagdollEvent, GameObject>(
+        new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
     }
     void OnDisable()
     {
@@ -37,6 +41,7 @@ public class NinjaEventManager : MonoBehaviour
     private void Start()
     {
         myTransform = gameObject.GetComponent<Collider>().transform;
+        nav_agent = gameObject.GetComponent<NavMeshAgent>();
     }
 
     private void Update()
@@ -71,6 +76,18 @@ public class NinjaEventManager : MonoBehaviour
         }
     }
 
+    private void EnableRagDoll(GameObject obj)
+    {
+        if(obj == gameObject)
+        {
+            Debug.Log("Disable animation");
+            SetKinematic(false);
+            ai_animator.enabled = false;
+            nav_agent.enabled = false;
+            Destroy(gameObject, 2);
+        }
+
+    }
     // Update is called once per frame
     private void GotHit(GameObject hit_obj,float hit_point, GameObject impact)
     {
@@ -80,6 +97,7 @@ public class NinjaEventManager : MonoBehaviour
         if (hit_obj == gameObject)
         {
             health -= hit_point;
+
             if(health > 0)
             {
 
@@ -91,14 +109,16 @@ public class NinjaEventManager : MonoBehaviour
                 //gameObject.GetComponent<NavMeshAgent>().speed = 0.1f;
                 // trigger animation
                 ai_animator.SetTrigger("Dying");
-
+                
                 // enable ragdoll
                 //SetKinematic(false);
 
 
                 // add force
-                Rigidbody rb = GetComponent<Rigidbody>(); ;
-                rb.AddForce(impact.transform.position);
+                Rigidbody rb = GetComponent<Rigidbody>();
+                SetKinematic(true);
+
+                //rb.AddForce(impact.transform.position);
                 //rb.AddTorque(impact.transform.rotation);
 
 
