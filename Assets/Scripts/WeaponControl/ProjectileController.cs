@@ -44,7 +44,7 @@ public class ProjectileController : MonoBehaviour
             ex.Explode();
         }
         Vector3 pos = hit.point + hit.normal * impactOffset;
-        Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+        Quaternion rot = Quaternion.FromToRotation(Vector3.forward, hit.normal);
         NewImpact = Instantiate(Impact, pos, rot);
         NewImpact.transform.parent = null;
         NewImpact.SetActive(true);

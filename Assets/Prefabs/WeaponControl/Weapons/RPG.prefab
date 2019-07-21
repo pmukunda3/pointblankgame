@@ -81,8 +81,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rocketMesh: {fileID: 8121655203297811122}
   rocket: {fileID: 2940484417461131466}
-  FirePoint: {fileID: 6674129088261161101}
-  FireRate: 0.5
+  firePoint: {fileID: 6674129088261161101}
+  fireRate: 0.5
+  fireSound: {fileID: 0}
 --- !u!114 &2869302706275917739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed47ad4a982ef5f4d9e37c507dcef103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TwoHands: 1
+  twoHanded: 1
   LeftHandIKTarget: {fileID: 8578145304291322067}
   RightHandIKTarget: {fileID: 2567531314752120602}
 --- !u!1 &2940484417461131466
@@ -164,6 +165,7 @@ MonoBehaviour:
   explosionEffect: {fileID: 5480518787208395930}
   blastRadius: 5
   blastForce: 1000
+  explosionSound: {fileID: 0}
 --- !u!1 &5230860174765804762
 GameObject:
   m_ObjectHideFlags: 0
