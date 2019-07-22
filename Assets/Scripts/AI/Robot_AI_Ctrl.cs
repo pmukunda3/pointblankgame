@@ -1,11 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.AI;
 
 
@@ -118,7 +113,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
         //Weapon = WeaponCtrl.GetComponent<WeaponManager>();
 
         ai_animator.SetBool("Idle", true);
-        Patrol();
+        //Patrol();
     }
 
     // Update is called once per frame
@@ -143,6 +138,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 }
                 else
                 {
+                    Patrol();
                     ai_state = RobotState.Patrol;
                 }
 
