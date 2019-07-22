@@ -45,8 +45,9 @@ namespace PlayerControl {
                         rigidbody.MoveRotation(Quaternion.AngleAxis(Mathf.Clamp(extraRotation, -maxTurnSpeed, maxTurnSpeed) * Time.fixedDeltaTime, Vector3.up) * rigidbody.rotation);
                     }
                     StickToGroundHelper(0.35f);
+                    player.Grounded();
                 }
-                else {
+                else if (!jumpInput) {
                     animator.SetBool("grounded", false);
                     animator.SetTrigger("TRG_fall");
                 }

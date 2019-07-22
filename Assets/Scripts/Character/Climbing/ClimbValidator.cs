@@ -20,6 +20,7 @@ public class ClimbValidator : MonoBehaviour {
         public Vector3 highClimbCheckOffset;
 
         public AnimationCurve maxClimbHeight;
+        public AnimationCurve climbPitchFunc;
     }
 
     private struct Range {
@@ -101,24 +102,26 @@ public class ClimbValidator : MonoBehaviour {
         bool midClimb  = OverlapCapsuleInFront(climbSettings.midClimbRadius, climbSettings.midClimbLength, climbSettings.midClimbCheckOffset);
         bool highClimb = OverlapCapsuleInFront(climbSettings.highClimbRadius, climbSettings.highClimbLength, climbSettings.highClimbCheckOffset);
 
+        Quaternion finalAimDirection = player.AimDirection() * Quaternion.Euler(-climbSettings.climbPitchFunc.Evaluate(player.AimPitch() / 90f), 0f, 0f);
+
         if (lowClimb) {
-            range.low = pivot.localPosition.y + climbSettings.lowClimbCheckOffset.y - climbSettings.lowClimbRadius + (player.AimDirection() * Vector3.Scale(offsetMask, climbSettings.lowClimbCheckOffset)).y;
+            range.low = pivot.localPosition.y + climbSettings.lowClimbCheckOffset.y - climbSettings.lowClimbRadius + (finalAimDirection * Vector3.Scale(offsetMask, climbSettings.lowClimbCheckOffset)).y;
         }
         else if (midClimb) {
-            range.low = pivot.localPosition.y + climbSettings.midClimbCheckOffset.y - climbSettings.midClimbRadius + (player.AimDirection() * Vector3.Scale(offsetMask, climbSettings.midClimbCheckOffset)).y;
+            range.low = pivot.localPosition.y + climbSettings.midClimbCheckOffset.y - climbSettings.midClimbRadius + (finalAimDirection * Vector3.Scale(offsetMask, climbSettings.midClimbCheckOffset)).y;
         }
         else if (highClimb) {
-            range.low = pivot.localPosition.y + climbSettings.highClimbCheckOffset.y - climbSettings.highClimbRadius + (player.AimDirection() * Vector3.Scale(offsetMask, climbSettings.midClimbCheckOffset)).y;
+            range.low = pivot.localPosition.y + climbSettings.highClimbCheckOffset.y - climbSettings.highClimbRadius + (finalAimDirection * Vector3.Scale(offsetMask, climbSettings.midClimbCheckOffset)).y;
         }
 
         if (highClimb) {
-            range.high = pivot.localPosition.y + climbSettings.highClimbCheckOffset.y + climbSettings.highClimbRadius + (player.AimDirection() * Vector3.Scale(offsetMask, climbSettings.lowClimbCheckOffset)).y;
+            range.high = pivot.localPosition.y + climbSettings.highClimbCheckOffset.y + climbSettings.highClimbRadius + (finalAimDirection * Vector3.Scale(offsetMask, climbSettings.lowClimbCheckOffset)).y;
         }
         else if (midClimb) {
-            range.high = pivot.localPosition.y + climbSettings.midClimbCheckOffset.y + climbSettings.midClimbRadius + (player.AimDirection() * Vector3.Scale(offsetMask, climbSettings.midClimbCheckOffset)).y;
+            range.high = pivot.localPosition.y + climbSettings.midClimbCheckOffset.y + climbSettings.midClimbRadius + (finalAimDirection * Vector3.Scale(offsetMask, climbSettings.midClimbCheckOffset)).y;
         }
         else if (lowClimb) {
-            range.high = pivot.localPosition.y + climbSettings.lowClimbCheckOffset.y + climbSettings.lowClimbRadius + (player.AimDirection() * Vector3.Scale(offsetMask, climbSettings.highClimbCheckOffset)).y;
+            range.high = pivot.localPosition.y + climbSettings.lowClimbCheckOffset.y + climbSettings.lowClimbRadius + (finalAimDirection * Vector3.Scale(offsetMask, climbSettings.highClimbCheckOffset)).y;
         }
 
         return (lowClimb || midClimb || highClimb);
@@ -152,22 +155,23 @@ public class ClimbValidator : MonoBehaviour {
                     movementDirection * Vector3.forward,
                     out currentRaycastHit,
                     rayLength,
-                    player.raycastMask)) {
+                    player.raycastMask,
+                    QueryTriggerInteraction.Ignore)) {
                 Debug.DrawRay(currentRaycastHit.point, 0.15f * currentRaycastHit.normal, Color.green, 20f, false);
-                lastHit = currentRaycastHit;
 
                 if (lastRaycastDistance >= 0.0f && currentRaycastHit.distance - lastRaycastDistance != 0.0f) {
                     float surfaceAngleRad = Mathf.Atan2(heightStep, (currentRaycastHit.distance - lastRaycastDistance));
                     Debug.Log(surfaceAngleRad * Mathf.Rad2Deg);
 
                     if (surfaceAngleRad > 0f && surfaceAngleRad * Mathf.Rad2Deg < climbableSlopeAngle) {
-                        candidatePoints[highestSuccessfulIndex] = currentRaycastHit.point;
-                        candidateNormals[highestSuccessfulIndex] = currentRaycastHit.normal;
-                        Debug.DrawRay(currentRaycastHit.point, 0.04f * currentRaycastHit.normal, Color.red, 20f, false);
+                        candidatePoints[highestSuccessfulIndex] = lastHit.point;
+                        candidateNormals[highestSuccessfulIndex] = lastHit.normal;
+                        Debug.DrawRay(lastHit.point, 0.04f * lastHit.normal, Color.red, 20f, false);
                         ++highestSuccessfulIndex;
                     }
                 }
                 lastRaycastDistance = currentRaycastHit.distance;
+                lastHit = currentRaycastHit;
             }
             else {
                 if (lastRaycastDistance > 0.0f) {
@@ -198,7 +202,8 @@ public class ClimbValidator : MonoBehaviour {
                             Vector3.down,
                             out topCollider,
                             2.0f * heightStep,
-                            player.raycastMask)) {
+                            player.raycastMask,
+                            QueryTriggerInteraction.Ignore)) {
                     finalClimbCandidatePoints[finalPointIndex] = topCollider.point;
                     finalClimbCandidatePointsNormals[finalPointIndex] = candidateNormals[n];
                     ++finalPointIndex;
@@ -214,10 +219,11 @@ public class ClimbValidator : MonoBehaviour {
     }
 
     private bool OverlapCapsuleInFront(float radius, float length, Vector3 offset) {
+        Quaternion finalAimDirection = player.AimDirection() * Quaternion.Euler(-climbSettings.climbPitchFunc.Evaluate(player.AimPitch() / 90f), 0f, 0f);
         int collidersSize = Physics.OverlapCapsuleNonAlloc(
-            rigidbody.position + pivot.localPosition + (offset.y * Vector3.up) + player.AimDirection() * (Vector3.Scale(offsetMask, offset) + (length * 0.5f * Vector3.left)),
-            rigidbody.position + pivot.localPosition + (offset.y * Vector3.up) + player.AimDirection() * (Vector3.Scale(offsetMask, offset) + (length * 0.5f * Vector3.right)),
-            radius, overlapBuffer, player.raycastMask);
+            rigidbody.position + pivot.localPosition + (offset.y * Vector3.up) + finalAimDirection * (Vector3.Scale(offsetMask, offset) + (length * 0.5f * Vector3.left)),
+            rigidbody.position + pivot.localPosition + (offset.y * Vector3.up) + finalAimDirection * (Vector3.Scale(offsetMask, offset) + (length * 0.5f * Vector3.right)),
+            radius, overlapBuffer, player.raycastMask, QueryTriggerInteraction.Ignore);
 
         return (collidersSize != 0);
     }
@@ -225,7 +231,7 @@ public class ClimbValidator : MonoBehaviour {
     public bool drawGizmo = false;
     public void OnDrawGizmos() {
         if (drawGizmo && rigidbody != null) {
-            Quaternion movementDirection = player.AimDirection();
+            Quaternion movementDirection = player.AimDirection() * Quaternion.Euler(-climbSettings.climbPitchFunc.Evaluate(player.AimPitch() / 90f), 0f, 0f);
             Gizmos.color = Color.grey;
             Gizmos.DrawWireSphere(rigidbody.position + pivot.localPosition + (climbSettings.lowClimbCheckOffset.y * Vector3.up) + movementDirection * (Vector3.Scale(offsetMask, climbSettings.lowClimbCheckOffset) + (climbSettings.lowClimbLength * 0.5f * Vector3.left)),
                 climbSettings.lowClimbRadius);

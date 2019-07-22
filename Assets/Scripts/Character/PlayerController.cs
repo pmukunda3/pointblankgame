@@ -52,6 +52,8 @@ namespace PlayerControl {
 
         public CapsuleCollider legsCollider;
 
+        public bool screenControl = true;
+
         private new Rigidbody rigidbody;
         private Animator animator;
         private UserInput userInput;
@@ -60,7 +62,8 @@ namespace PlayerControl {
         public PlayerControlState currPlayerState;
         private PlayerControlState emptyState;
 
-        private bool screenControl = true;
+        private Game game;
+
         private float aimPitch = 0f;
         private float aimYaw = 0f;
 
@@ -135,6 +138,10 @@ namespace PlayerControl {
             return aimYaw;
         }
 
+        public void Grounded() {
+            game.Grounded();
+        }
+
         public float LookToMoveAngle() {
             float angle = rigidbody.rotation.eulerAngles.y - aimYaw;
             if (angle > 180f) angle -= 360f;
@@ -160,6 +167,8 @@ namespace PlayerControl {
 
             currPlayerState = emptyState = gameObject.AddComponent<EmptyPlayerState>() as PlayerControlState;
             RegisterState(StateId.Player.empty, emptyState);
+
+            game = gameObject.GetComponent<Game>();
         }
 
         private void WeaponFirePrimaryCallbackTest() {
@@ -204,27 +213,11 @@ namespace PlayerControl {
                 if (aimYaw < -180f) aimYaw += 360f;
                 else if (aimYaw > 180f) aimYaw -= 360f;
             }
-
-            if (Input.GetKeyDown(KeyCode.Escape)) {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-                screenControl = false;
+            else {
                 mouseInput = Vector2.zero;
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !screenControl) {
-                Cursor.lockState = CursorLockMode.Locked;
-                screenControl = true;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Backspace)) Debug.Break();
-
-            if (Input.GetKeyDown(KeyCode.Keypad1)) rigidbody.position = new Vector3(-32, 0, 22);
-            if (Input.GetKeyDown(KeyCode.Keypad2)) rigidbody.position = new Vector3(-12, 4, 40);
-            if (Input.GetKeyDown(KeyCode.Keypad3)) rigidbody.position = new Vector3(-12, 0, 32);
-            if (Input.GetKeyDown(KeyCode.Keypad4)) rigidbody.position = new Vector3(-12, 8, 32);
-            if (Input.GetKeyDown(KeyCode.Keypad5)) rigidbody.position = new Vector3(35, 8, 70);
-            if (Input.GetKeyDown(KeyCode.Keypad6)) rigidbody.position = new Vector3(48, 0, 70);
+            if (Input.GetKeyDown(KeyCode.U)) EventManager.TriggerEvent<PlayerDeathEvent>();
 
             currPlayerState.UseInput(moveInput, mouseInput, userInput.actions);
         }

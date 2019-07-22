@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 
     private void SetTarget()
     {
-        if (Physics.Raycast(Camera.position, Camera.forward, out RaycastHit hit, AimDistance))
+        if (Physics.Raycast(Camera.position, Camera.forward, out RaycastHit hit, AimDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             target = hit.point;
         }

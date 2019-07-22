@@ -95,7 +95,7 @@ public class LightningAnimator : MonoBehaviour
         float propMult = MaxBeamLength * (beamScale / 10f);
 
         // Raycast
-        if (Physics.Raycast(ray, out hitPoint, MaxBeamLength, layerMask))
+        if (Physics.Raycast(ray, out hitPoint, MaxBeamLength, layerMask, QueryTriggerInteraction.Ignore))
         {
             Exploder ex = hitPoint.collider.gameObject.GetComponent<Exploder>();
             if (ex != null)
