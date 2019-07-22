@@ -62,7 +62,13 @@ namespace PlayerControl {
                 base.UseInput(moveInput, mouseInput, actions);
 
                 if (!actions.sprint.active) animator.SetBool("sprint", false);
+                if (actions.primaryFire.down) animator.SetBool("aimMode", true);
                 if (actions.aim.down) animator.SetBool("aimMode", true);
+                if (actions.throwItem.down)
+                {
+                    animator.SetBool("aimMode", true);
+                    animator.SetTrigger("Throw");
+                }
             }
 
             private void OnSprintEvent() {
