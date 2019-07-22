@@ -4,25 +4,32 @@ using UnityEngine;
 using UnityEngine.Events;
 public class Exploder : MonoBehaviour
 {
-
     public GameObject explosionEffect;
-    public float blastRadius;
-    public float blastForce;
-    public bool exploded
-    {
-        get;
-        private set;
-    }
+    public float blastRadius, blastForce;
     public AudioClip explosionSound;
+    //public float soundRadius;
 
+    private bool exploded;
     private GameObject newExplosion;
+
+    private void MakeExplosionSound()
+    {
+        GameObject emptyGameObject = new GameObject();
+        AudioSource newAudioSource = emptyGameObject.AddComponent<AudioSource>();
+        newAudioSource.volume = 1f;
+        newAudioSource.spatialBlend = 0f;
+        //newAudioSource.spread = 45f;
+        //newAudioSource.minDistance = soundRadius;
+        newAudioSource.PlayOneShot(explosionSound);
+        Destroy(emptyGameObject, explosionSound.length + 1f);
+    }
 
     public void Explode()
     {
         if (!exploded)
         {
             exploded = true;
-            AudioSource.PlayClipAtPoint(explosionSound, transform.position, 1f);
+            MakeExplosionSound();
             Vector3 explosionPos = transform.position;
             Collider[] colliders = Physics.OverlapSphere(explosionPos, blastRadius, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             foreach (Collider hit in colliders)
@@ -46,10 +53,6 @@ public class Exploder : MonoBehaviour
 
                         rb.AddExplosionForce(blastForce, explosionPos, blastRadius, 0F);
                     }
-
-
-
-
                 }
             }
             newExplosion = Instantiate(explosionEffect, transform);

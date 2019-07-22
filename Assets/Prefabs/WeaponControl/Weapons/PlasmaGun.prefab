@@ -48151,7 +48151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzleDuration: 0.05
   fireRate: 2
-  gunshotSound: {fileID: 8300000, guid: fcf351172faa7244a943b531cec7cddb, type: 3}
+  gunshotSound: {fileID: 8300000, guid: 6db146c3dd03cb640887b65ae287689e, type: 3}
 --- !u!114 &4824100153610182934
 MonoBehaviour:
   m_ObjectHideFlags: 0

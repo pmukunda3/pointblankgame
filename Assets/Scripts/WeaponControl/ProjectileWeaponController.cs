@@ -10,6 +10,7 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
     private GameObject muzzle, projectile, newProjectile;
     private float clock,fireInterval;
     private UserInput userInput;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
         fireInterval = 1 / fireRate;
         muzzle.SetActive(false);
         userInput = gameObject.GetComponentInParent<UserInput>();
+        audioSource = GetComponentInParent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -39,7 +41,7 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
         if (clock >= 0f)
         {
             clock = -fireInterval;
-            AudioSource.PlayClipAtPoint(gunshotSound, muzzle.transform.position,1f);
+            audioSource.PlayOneShot(gunshotSound,1f);
             muzzle.SetActive(true);
             newProjectile = Instantiate(projectile, muzzle.transform);
             newProjectile.transform.parent = null;

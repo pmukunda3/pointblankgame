@@ -42546,4 +42546,4 @@ MonoBehaviour:
   explosionEffect: {fileID: 4272975600061566457}
   blastRadius: 5
   blastForce: 1000
-  explosionSound: {fileID: 8300000, guid: 52407aeb04aecc24eaf0ccbf0e7ca68d, type: 3}
+  explosionSound: {fileID: 8300000, guid: e476cfea44d9eaf43b2c72479efaa693, type: 3}

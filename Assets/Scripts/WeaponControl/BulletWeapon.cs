@@ -8,6 +8,7 @@ public class BulletWeapon : MonoBehaviour, IWeaponFire
     public AudioClip gunshotSound;
 
     private GameObject muzzle, projectile, newProjectile, cartridge, newCartridge;
+    private AudioSource audioSource;
     private Rigidbody rb;
     private float clock, fireInterval;
     
@@ -21,6 +22,7 @@ public class BulletWeapon : MonoBehaviour, IWeaponFire
         muzzle.SetActive(false);
         projectile = transform.Find("Projectile").gameObject;
         cartridge = transform.Find("Cartridge").gameObject;
+        audioSource = GetComponentInParent<AudioSource>();
     }
 
     void Update()
@@ -40,7 +42,7 @@ public class BulletWeapon : MonoBehaviour, IWeaponFire
         if (clock >= 0f)
         {
             clock = -fireInterval;
-            AudioSource.PlayClipAtPoint(gunshotSound, muzzle.transform.position,1f);
+            audioSource.PlayOneShot(gunshotSound,1f);
             muzzle.SetActive(true);
 
             newProjectile = Instantiate(projectile, muzzle.transform);

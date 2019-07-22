@@ -29372,7 +29372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed47ad4a982ef5f4d9e37c507dcef103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  twoHanded: 0
+  twoHanded: 1
   LeftHandIKTarget: {fileID: 4640524884779483659}
   RightHandIKTarget: {fileID: 8685534443790946159}
 --- !u!114 &8750797489854253062
@@ -29389,4 +29389,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzleDuration: 0.05
   fireRate: 10
-  gunshotSound: {fileID: 8300000, guid: 67adb195e9b0e644fbcecc0d6d1ff530, type: 3}
+  gunshotSound: {fileID: 8300000, guid: bf7afbd4b51d6854aaca566fd176f3d3, type: 3}
