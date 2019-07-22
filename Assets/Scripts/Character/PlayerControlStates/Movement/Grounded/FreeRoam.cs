@@ -35,8 +35,14 @@ namespace PlayerControl {
                 rigidbody.velocity = 0.955f * (Quaternion.AngleAxis(extraRotation, Vector3.up) * rigidbody.velocity);
 
                 if (actions.sprint.active) animator.SetBool("sprint", true);
-                if (actions.aim.down) animator.SetBool("aimMode", true);
                 if (actions.crouch.down) animator.SetBool("crouch", true);
+                if (actions.primaryFire.down) animator.SetBool("aimMode", true);
+                if (actions.aim.down) animator.SetBool("aimMode", true);
+                if (actions.throwItem.down)
+                {
+                    animator.SetBool("aimMode", true);
+                    animator.SetTrigger("Throw");
+                }
             }
 
             public override void AnimatorMove(Vector3 localAnimatorVelocity, Vector3 localRigidbodyVelocity) {
