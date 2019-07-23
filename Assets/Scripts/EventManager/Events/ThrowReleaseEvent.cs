@@ -2,4 +2,4 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public class ThrowEvent : UnityEvent { }
+public class ThrowReleaseEvent : UnityEvent { }

@@ -148,9 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e373fa94eaa66a4e8bc776ffaa41934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 100
-  range: 300
+  velocity: 50
+  range: 150
   impactOffset: 0.5
+  launcherAudio: {fileID: 0}
 --- !u!114 &2814840136856750968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,8 +188,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 500
+  MinDistance: 15
+  MaxDistance: 150
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

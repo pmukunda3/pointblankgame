@@ -5,8 +5,13 @@ using UnityEngine;
 public class ThrowEventReporter : MonoBehaviour
 {
     // Update is called once per frame
-    public void Throw()
+    public void ThrowStart()
     {
-        EventManager.TriggerEvent<ThrowEvent>();
+        EventManager.TriggerEvent<ThrowStartEvent>();
+    }
+
+    public void ThrowRelease()
+    {
+        EventManager.TriggerEvent<ThrowReleaseEvent>();
     }
 }

@@ -60,7 +60,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -407,6 +407,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.19
       objectReference: {fileID: 0}
+    - target: {fileID: 8974710109707731188, guid: e205738f35163c148adee16bc43b2707,
+        type: 3}
+      propertyPath: launcherAudio
+      value: 
+      objectReference: {fileID: 7946322810561131664}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e205738f35163c148adee16bc43b2707, type: 3}
 --- !u!4 &95499023583807706 stripped

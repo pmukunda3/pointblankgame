@@ -941,7 +941,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7946322810304888865, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+    - target: {fileID: 2927112481500272280, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
+        type: 3}
+      propertyPath: throwSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 7f3888e67d9312447abdcf044b6e4ada, type: 3}
+    - target: {fileID: 2898680457661631941, guid: 41cb56f8a69e4b041a35b8a8294fd3e3,
         type: 3}
       propertyPath: m_PlayOnAwake
       value: 0

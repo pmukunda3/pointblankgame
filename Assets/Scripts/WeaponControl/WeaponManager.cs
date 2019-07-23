@@ -16,31 +16,40 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
     }
 
     private int i, n;
+    private bool fireEnabled;
     private IWeaponFire fireInterface;
     private UnityAction aimOn, aimOff, midAir;
 
-    public void AimOff()
+    private void AimOff()
     {        
         AimedWeapons.SetActive(false);
         animator.SetBool("holdWeapon", true);
         UnaimedWeapons.SetActive(true);
     }
 
-    public void MidAir()
+    private void MidAir()
     {        
         AimedWeapons.SetActive(false);
         animator.SetBool("holdWeapon", false);
         UnaimedWeapons.SetActive(true);
     }
 
-    public void AimOn()
+    private void AimOn()
     {
         UnaimedWeapons.SetActive(false);
         animator.SetBool("holdWeapon", false);
         AimedWeapons.SetActive(true);
     }
 
+    private void DisableFire()
+    {
+        fireEnabled = false;
+    }
 
+    private void EnableFire()
+    {
+        fireEnabled = true;
+    }
 
     // Update is called once per frame
     public void ChangeWeapon()
@@ -65,20 +74,30 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
     }
 
     public void FireWeapon() {
-        fireInterface.FireWeapon();
+        if(fireEnabled)
+        {
+            fireInterface.FireWeapon();
+        }
     }
 
     public void FireWeaponDown() {
-        fireInterface.FireWeaponDown();
+        if (fireEnabled)
+        {
+            fireInterface.FireWeaponDown();
+        }
     }
 
     public void FireWeaponUp() {
-        fireInterface.FireWeaponUp();
+        if (fireEnabled)
+        {
+            fireInterface.FireWeaponUp();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        fireEnabled = true;
         aimOn = new UnityAction(AimOn);
         aimOff = new UnityAction(AimOff);
         midAir = new UnityAction(MidAir);
@@ -86,7 +105,9 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
         EventManager.StartListening<FreeRoamEvent>(aimOff);
         EventManager.StartListening<SprintEvent>(aimOff);
         EventManager.StartListening<JumpEvent>(midAir);
-        EventManager.StartListening<FallingEvent>(MidAir);
+        EventManager.StartListening<FallingEvent>(midAir);
+        EventManager.StartListening<ThrowStartEvent>(new UnityAction(DisableFire));
+        EventManager.StartListening<ThrowEndEvent>(new UnityAction(EnableFire));
 
         n = AimedWeapons.transform.childCount;
         for (i = 0; i < n; i++)

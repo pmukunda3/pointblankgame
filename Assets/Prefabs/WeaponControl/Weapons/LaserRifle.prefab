@@ -28812,7 +28812,7 @@ MonoBehaviour:
   velocity: 200
   range: 100
   impactOffset: 0.2
-  damage: 10
+  damage: 20
 --- !u!1 &5518778686432333620
 GameObject:
   m_ObjectHideFlags: 0
@@ -29332,8 +29332,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7752147750359397480}
-  - component: {fileID: 102603930733417118}
   - component: {fileID: 8750797489854253062}
+  - component: {fileID: 102603930733417118}
   m_Layer: 0
   m_Name: LaserRifle
   m_TagString: Untagged
@@ -29360,21 +29360,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &102603930733417118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8503817521950070069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed47ad4a982ef5f4d9e37c507dcef103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  twoHanded: 1
-  LeftHandIKTarget: {fileID: 4640524884779483659}
-  RightHandIKTarget: {fileID: 8685534443790946159}
 --- !u!114 &8750797489854253062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29390,3 +29375,18 @@ MonoBehaviour:
   muzzleDuration: 0.05
   fireRate: 10
   gunshotSound: {fileID: 8300000, guid: bf7afbd4b51d6854aaca566fd176f3d3, type: 3}
+--- !u!114 &102603930733417118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8503817521950070069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed47ad4a982ef5f4d9e37c507dcef103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  twoHanded: 1
+  LeftHandIKTarget: {fileID: 4640524884779483659}
+  RightHandIKTarget: {fileID: 8685534443790946159}
