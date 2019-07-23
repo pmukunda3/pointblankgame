@@ -19512,10 +19512,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Impact: {fileID: 2103780100573949181}
-  velocity: 100
+  velocity: 200
   range: 100
   impactOffset: 0.2
-  damage: 10
+  damage: 200
 --- !u!1 &911353159162518046
 GameObject:
   m_ObjectHideFlags: 0

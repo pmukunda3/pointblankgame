@@ -13,8 +13,10 @@ public class Thrower : MonoBehaviour
         private set;
     }
     public Animator animator;
+    public AudioClip throwSound;
 
     private GameObject newObject;
+    private AudioSource audioSource;
     private Rigidbody rb;
     private int i, n;
     private Vector3 IKTargetPosition;
@@ -23,14 +25,17 @@ public class Thrower : MonoBehaviour
 
     void Start()
     {
-        EventManager.StartListening<ThrowEvent>(new UnityAction(Throw));
+        //EventManager.StartListening<ThrowStartEvent>(new UnityAction(ThrowStart));
+        EventManager.StartListening<ThrowReleaseEvent>(new UnityAction(ThrowRelease));
+        audioSource = gameObject.GetComponent<AudioSource>();
         i = 0;
         n = transform.childCount;
         activeItem = transform.GetChild(i).gameObject;
     }
 
-    void Throw()
+    void ThrowRelease()
     {
+        audioSource.PlayOneShot(throwSound);
         newObject = Instantiate(activeItem, transform);
         newObject.transform.parent = null;
         newObject.SetActive(true);

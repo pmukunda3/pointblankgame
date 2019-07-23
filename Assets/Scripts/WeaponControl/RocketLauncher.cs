@@ -46,8 +46,7 @@ public class RocketLauncher : MonoBehaviour, IWeaponFire
         if (clock >= 0f)
         {
             clock = -fireInterval;
-            //Physics.Raycast(firePoint.position, firePoint.forward, out RaycastHit hitInfo, )
-            audioSource.PlayOneShot(fireSound, 1f);
+            audioSource.PlayOneShot(fireSound);
             rocketMesh.enabled = false;
             newRocket = Instantiate(rocket, firePoint.transform);
             newRocket.transform.parent = null;
