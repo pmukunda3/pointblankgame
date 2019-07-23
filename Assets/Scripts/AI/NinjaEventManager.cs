@@ -108,7 +108,7 @@ public class NinjaEventManager : MonoBehaviour
                 gameObject.GetComponent<NavMeshAgent>().enabled = false;
                 //gameObject.GetComponent<NavMeshAgent>().speed = 0.1f;
                 // trigger animation
-                ai_animator.SetTrigger("Die");
+                ai_animator.SetTrigger("Dying");
                 
                 // enable ragdoll
                 //SetKinematic(false);
