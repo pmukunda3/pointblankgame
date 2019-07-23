@@ -54,8 +54,7 @@ public class NinjaEventManager : MonoBehaviour
     private void OnGUI()
     {
         RaycastHit hit;
-        if(Physics.Raycast(myTransform.position, myTransform.forward, out hit) &&
-        health != maxHealth)
+        if(Physics.Raycast(myTransform.position, myTransform.forward, out hit) && health < maxHealth && health > 0)
         {
             GUI.color = Color.red;
             GUI.HorizontalScrollbar(new Rect(screenPosition.x - healthBarLeft / 2, Screen.height - screenPosition.y - barTop, 100, 0), 0, health, 0, maxHealth); //displays a healthbar
