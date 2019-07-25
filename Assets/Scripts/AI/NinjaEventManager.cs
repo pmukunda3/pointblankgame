@@ -40,6 +40,7 @@ public class NinjaEventManager : MonoBehaviour
     }
     private void Start()
     {
+        SetRagdoll(false);
         myTransform = gameObject.GetComponent<Collider>().transform;
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
     }
@@ -75,12 +76,30 @@ public class NinjaEventManager : MonoBehaviour
         }
     }
 
+    void SetRagdoll(bool newValue)
+    {
+        gameObject.GetComponent<Collider>().enabled = !newValue;
+        gameObject.GetComponent<Rigidbody>().isKinematic = newValue;
+        Transform root = transform.Find("Root");
+        Collider[] colliders = root.GetComponentsInChildren<Collider>();
+        foreach (Collider c in colliders)
+        {
+            c.enabled = newValue;
+        }
+        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in bodies)
+        {
+            rb.isKinematic = !newValue;
+        }
+    }
+
     private void EnableRagDoll(GameObject obj)
     {
         if(obj == gameObject)
         {
             Debug.Log("Disable animation");
-            SetKinematic(false);
+            //SetKinematic(false);
+            SetRagdoll(true);
             ai_animator.enabled = false;
             nav_agent.enabled = false;
             Destroy(gameObject, 2);
