@@ -28,8 +28,8 @@ public class NinjaEventManager : MonoBehaviour
         myCamera = Camera.main;
         EventManager.StartListening<HitEnemyEvent, GameObject, float, GameObject>
         (new UnityEngine.Events.UnityAction<GameObject, float, GameObject>(GotHit));
-        EventManager.StartListening<RagdollEvent, GameObject>(
-        new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
+        EventManager.StartListening<RagdollEvent, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
+        EventManager.StartListening<ExplosionDeathEvent, GameObject, Explosion>(new UnityEngine.Events.UnityAction<GameObject,Explosion>(ExplosionDeath));
     }
     void OnDisable()
     {
@@ -79,17 +79,26 @@ public class NinjaEventManager : MonoBehaviour
     void SetRagdoll(bool newValue)
     {
         gameObject.GetComponent<Collider>().enabled = !newValue;
-        gameObject.GetComponent<Rigidbody>().isKinematic = newValue;
         Transform root = transform.Find("Root");
         Collider[] colliders = root.GetComponentsInChildren<Collider>();
         foreach (Collider c in colliders)
         {
             c.enabled = newValue;
         }
-        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        Rigidbody[] bodies = root.GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rb in bodies)
         {
             rb.isKinematic = !newValue;
+        }
+    }
+
+    private void ApplyExplosionForce(Explosion exp)
+    {
+        Transform root = transform.Find("Root");
+        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in bodies)
+        {
+            rb.AddExplosionForce(exp.force,exp.point,exp.radius,exp.yOffset);
         }
     }
 
@@ -98,10 +107,22 @@ public class NinjaEventManager : MonoBehaviour
         if(obj == gameObject)
         {
             Debug.Log("Disable animation");
+            SetKinematic(false);
+            ai_animator.enabled = false;
+            nav_agent.enabled = false;
+            Destroy(gameObject, 2);
+        }
+    }
+
+    private void ExplosionDeath(GameObject obj, Explosion exp)
+    {
+        if (obj == gameObject)
+        {
             //SetKinematic(false);
             SetRagdoll(true);
             ai_animator.enabled = false;
             nav_agent.enabled = false;
+            ApplyExplosionForce(exp);
             Destroy(gameObject, 2);
         }
     }
@@ -116,13 +137,8 @@ public class NinjaEventManager : MonoBehaviour
         {
             health -= hit_point;
 
-            if(health > 0)
-            {
-
-            }
-            else
-            {
-                // disable nav
+            if(health <= 0)
+            { // disable nav
                 gameObject.GetComponent<NavMeshAgent>().enabled = false;
                 //gameObject.GetComponent<NavMeshAgent>().speed = 0.1f;
                 // trigger animation
