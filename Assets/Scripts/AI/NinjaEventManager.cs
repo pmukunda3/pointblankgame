@@ -28,7 +28,7 @@ public class NinjaEventManager : MonoBehaviour
         myCamera = Camera.main;
         EventManager.StartListening<HitEnemyEvent, GameObject, float, GameObject>
         (new UnityEngine.Events.UnityAction<GameObject, float, GameObject>(GotHit));
-        EventManager.StartListening<RagdollEvent, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
+        //EventManager.StartListening<RagdollEvent, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
         EventManager.StartListening<ExplosionDeathEvent, GameObject, Explosion>(new UnityEngine.Events.UnityAction<GameObject,Explosion>(ExplosionDeath));
     }
     void OnDisable()
@@ -92,6 +92,16 @@ public class NinjaEventManager : MonoBehaviour
         }
     }
 
+    private void ApplyForce(Vector3 force)
+    {
+        Transform root = transform.Find("Root");
+        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in bodies)
+        {
+            rb.AddForce(force);
+        }
+    }
+
     private void ApplyExplosionForce(Explosion exp)
     {
         Transform root = transform.Find("Root");
@@ -123,7 +133,7 @@ public class NinjaEventManager : MonoBehaviour
             ai_animator.enabled = false;
             nav_agent.enabled = false;
             ApplyExplosionForce(exp);
-            Destroy(gameObject, 2);
+            Destroy(gameObject, 5);
         }
     }
 
@@ -139,24 +149,29 @@ public class NinjaEventManager : MonoBehaviour
 
             if(health <= 0)
             { // disable nav
-                gameObject.GetComponent<NavMeshAgent>().enabled = false;
                 //gameObject.GetComponent<NavMeshAgent>().speed = 0.1f;
                 // trigger animation
-                ai_animator.SetTrigger("Dying");
-                
+                //ai_animator.SetTrigger("Dying");
+
                 // enable ragdoll
-                //SetKinematic(false);
+                //ai_animator.enabled = false;
+                //nav_agent.enabled = false;
+                //SetRagdoll(true);
 
 
-                // add force
-                Rigidbody rb = GetComponent<Rigidbody>();
-                SetKinematic(true);
+                //add force
+                ai_animator.enabled = false;
+                nav_agent.enabled = false;
+                SetRagdoll(true);
+                ApplyForce(25f * transform.forward);
+
+                //SetKinematic(true);
 
                 //rb.AddForce(impact.transform.position);
                 //rb.AddTorque(impact.transform.rotation);
 
 
-                Destroy(gameObject, 5);
+                Destroy(gameObject, 2);
             }
 
         }
