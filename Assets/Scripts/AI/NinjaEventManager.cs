@@ -148,28 +148,13 @@ public class NinjaEventManager : MonoBehaviour
             health -= hit_point;
 
             if(health <= 0)
-            { // disable nav
-                //gameObject.GetComponent<NavMeshAgent>().speed = 0.1f;
-                // trigger animation
-                //ai_animator.SetTrigger("Dying");
-
-                // enable ragdoll
-                //ai_animator.enabled = false;
-                //nav_agent.enabled = false;
-                //SetRagdoll(true);
-
-
-                //add force
+            {
                 ai_animator.enabled = false;
                 nav_agent.enabled = false;
                 SetRagdoll(true);
+
+                // To make enemy fall forward
                 ApplyForce(25f * transform.forward);
-
-                //SetKinematic(true);
-
-                //rb.AddForce(impact.transform.position);
-                //rb.AddTorque(impact.transform.rotation);
-
 
                 Destroy(gameObject, 2);
             }
