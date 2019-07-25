@@ -85,8 +85,8 @@ public class NinjaEventManager : MonoBehaviour
             nav_agent.enabled = false;
             Destroy(gameObject, 2);
         }
-
     }
+
     // Update is called once per frame
     private void GotHit(GameObject hit_obj,float hit_point, GameObject impact)
     {
