@@ -42547,7 +42547,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 4272975600061566457}
   blastRadius: 5
-  blastForce: 1000
+  blastForce: 100
   explosionSound: {fileID: 8300000, guid: e476cfea44d9eaf43b2c72479efaa693, type: 3}
 --- !u!82 &3705083133719866773
 AudioSource:

@@ -28,8 +28,8 @@ public class NinjaEventManager : MonoBehaviour
         myCamera = Camera.main;
         EventManager.StartListening<HitEnemyEvent, GameObject, float, GameObject>
         (new UnityEngine.Events.UnityAction<GameObject, float, GameObject>(GotHit));
-        EventManager.StartListening<RagdollEvent, GameObject>(
-        new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
+        //EventManager.StartListening<RagdollEvent, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(EnableRagDoll));
+        EventManager.StartListening<ExplosionDeathEvent, GameObject, Explosion>(new UnityEngine.Events.UnityAction<GameObject,Explosion>(ExplosionDeath));
     }
     void OnDisable()
     {
@@ -40,6 +40,7 @@ public class NinjaEventManager : MonoBehaviour
     }
     private void Start()
     {
+        SetRagdoll(false);
         myTransform = gameObject.GetComponent<Collider>().transform;
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
     }
@@ -54,8 +55,7 @@ public class NinjaEventManager : MonoBehaviour
     private void OnGUI()
     {
         RaycastHit hit;
-        if(Physics.Raycast(myTransform.position, myTransform.forward, out hit) &&
-        health != maxHealth)
+        if(Physics.Raycast(myTransform.position, myTransform.forward, out hit) && health < maxHealth && health > 0)
         {
             GUI.color = Color.red;
             GUI.HorizontalScrollbar(new Rect(screenPosition.x - healthBarLeft / 2, Screen.height - screenPosition.y - barTop, 100, 0), 0, health, 0, maxHealth); //displays a healthbar
@@ -76,6 +76,42 @@ public class NinjaEventManager : MonoBehaviour
         }
     }
 
+    void SetRagdoll(bool newValue)
+    {
+        gameObject.GetComponent<Collider>().enabled = !newValue;
+        Transform root = transform.Find("Root");
+        Collider[] colliders = root.GetComponentsInChildren<Collider>();
+        foreach (Collider c in colliders)
+        {
+            c.enabled = newValue;
+        }
+        Rigidbody[] bodies = root.GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in bodies)
+        {
+            rb.isKinematic = !newValue;
+        }
+    }
+
+    private void ApplyForce(Vector3 force)
+    {
+        Transform root = transform.Find("Root");
+        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in bodies)
+        {
+            rb.AddForce(force);
+        }
+    }
+
+    private void ApplyExplosionForce(Explosion exp)
+    {
+        Transform root = transform.Find("Root");
+        Rigidbody[] bodies = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in bodies)
+        {
+            rb.AddExplosionForce(exp.force,exp.point,exp.radius,exp.yOffset);
+        }
+    }
+
     private void EnableRagDoll(GameObject obj)
     {
         if(obj == gameObject)
@@ -86,8 +122,21 @@ public class NinjaEventManager : MonoBehaviour
             nav_agent.enabled = false;
             Destroy(gameObject, 2);
         }
-
     }
+
+    private void ExplosionDeath(GameObject obj, Explosion exp)
+    {
+        if (obj == gameObject)
+        {
+            //SetKinematic(false);
+            SetRagdoll(true);
+            ai_animator.enabled = false;
+            nav_agent.enabled = false;
+            ApplyExplosionForce(exp);
+            Destroy(gameObject, 5);
+        }
+    }
+
     // Update is called once per frame
     private void GotHit(GameObject hit_obj,float hit_point, GameObject impact)
     {
@@ -98,31 +147,16 @@ public class NinjaEventManager : MonoBehaviour
         {
             health -= hit_point;
 
-            if(health > 0)
+            if(health <= 0)
             {
+                ai_animator.enabled = false;
+                nav_agent.enabled = false;
+                SetRagdoll(true);
 
-            }
-            else
-            {
-                // disable nav
-                gameObject.GetComponent<NavMeshAgent>().enabled = false;
-                //gameObject.GetComponent<NavMeshAgent>().speed = 0.1f;
-                // trigger animation
-                ai_animator.SetTrigger("Dying");
-                
-                // enable ragdoll
-                //SetKinematic(false);
+                // To make enemy fall forward
+                ApplyForce(25f * transform.forward);
 
-
-                // add force
-                Rigidbody rb = GetComponent<Rigidbody>();
-                SetKinematic(true);
-
-                //rb.AddForce(impact.transform.position);
-                //rb.AddTorque(impact.transform.rotation);
-
-
-                Destroy(gameObject, 5);
+                Destroy(gameObject, 2);
             }
 
         }
