@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8425998364847046671}
+  - component: {fileID: 7876312076678579820}
   - component: {fileID: 4902552999308522391}
   - component: {fileID: 695502425770401216}
   m_Layer: 0
@@ -32,6 +33,32 @@ Transform:
   m_Father: {fileID: 7532137028054054735}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1773428102 &7876312076678579820
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8658328748383942268}
+  m_Enabled: 1
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0.79, y: 1.36, z: 0}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffsets:
+  - {x: -0.009632111, y: 0.00093996525, z: -0.034172058}
+  m_RotationOffsets:
+  - {x: 0, y: 180, z: 180}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 0
+  m_Sources:
+  - sourceTransform: {fileID: 8967802515801597204}
+    weight: 1
 --- !u!135 &4902552999308522391
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1910,6 +1937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4376491570007459822}
+  - component: {fileID: 4712184216079279294}
   - component: {fileID: 4244199648883381002}
   m_Layer: 0
   m_Name: Left
@@ -1932,6 +1960,32 @@ Transform:
   m_Father: {fileID: 7532137028054054735}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1773428102 &4712184216079279294
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9182480542059755256}
+  m_Enabled: 1
+  m_Weight: 1
+  m_TranslationAtRest: {x: -0.79, y: 1.36, z: 0}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffsets:
+  - {x: 0.009632111, y: -0.00094151497, z: 0.034172058}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 0
+  m_Sources:
+  - sourceTransform: {fileID: 8968252441200954948}
+    weight: 1
 --- !u!135 &4244199648883381002
 SphereCollider:
   m_ObjectHideFlags: 0
