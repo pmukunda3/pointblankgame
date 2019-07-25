@@ -1,11 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.AI;
 
 
@@ -39,9 +34,11 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     public GameObject player;
     private RobotState ai_state;
-    
 
-
+    void OnEnable ()
+	{ 
+	    EventManager.StartListening<RobotDropOff, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(SetDropLocationReached));
+    }
 
 
     private void Patrol()
@@ -81,7 +78,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     }
 
-    private void SetDropLocationReached()
+    private void SetDropLocationReached(GameObject obj)
     {
         dropLocationReached = true;
 
@@ -118,7 +115,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
         //Weapon = WeaponCtrl.GetComponent<WeaponManager>();
 
         ai_animator.SetBool("Idle", true);
-        Patrol();
+        //Patrol();
     }
 
     // Update is called once per frame
@@ -143,6 +140,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 }
                 else
                 {
+                    Patrol();
                     ai_state = RobotState.Patrol;
                 }
 
