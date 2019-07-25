@@ -34,9 +34,11 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     public GameObject player;
     private RobotState ai_state;
-    
 
-
+    void OnEnable ()
+	{ 
+	    EventManager.StartListening<RobotDropOff, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(SetDropLocationReached));
+    }
 
 
     private void Patrol()
@@ -76,7 +78,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     }
 
-    private void SetDropLocationReached()
+    private void SetDropLocationReached(GameObject obj)
     {
         dropLocationReached = true;
 
