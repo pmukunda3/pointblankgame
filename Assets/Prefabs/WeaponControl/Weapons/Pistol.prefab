@@ -569,6 +569,7 @@ MonoBehaviour:
   maxEjectAngle: 45
   minEjectVel: 100
   maxEjectVel: 200
+  heatPerShot: 3
   gunshotSound: {fileID: 8300000, guid: 4175a2028e3fa40499c5dc27d5814c23, type: 3}
 --- !u!114 &8927023888066511423
 MonoBehaviour:

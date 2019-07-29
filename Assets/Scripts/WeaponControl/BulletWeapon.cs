@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletWeapon : MonoBehaviour, IWeaponFire
 {
-    public float muzzleDuration, fireRate, minEjectAngle, maxEjectAngle, minEjectVel, maxEjectVel;
+    public float muzzleDuration, fireRate, minEjectAngle, maxEjectAngle, minEjectVel, maxEjectVel, heatPerShot;
     public AudioClip gunshotSound;
 
     private GameObject muzzle, projectile, newProjectile, cartridge, newCartridge;
@@ -54,7 +54,7 @@ public class BulletWeapon : MonoBehaviour, IWeaponFire
             rb = newCartridge.GetComponent<Rigidbody>();
             rb.AddRelativeForce(Random.Range(minEjectVel, maxEjectVel) * (Quaternion.Euler(0, 0, Random.Range(minEjectAngle, maxEjectAngle)) * Vector3.right));
             newCartridge.transform.parent = null;
-       
+            EventManager.TriggerEvent<WeaponHeatEvent, float>(heatPerShot);
         }
     }
 
