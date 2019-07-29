@@ -49,6 +49,9 @@ MonoBehaviour:
   UnaimedWeapons: {fileID: 0}
   AimedWeapons: {fileID: 0}
   animator: {fileID: 0}
+  heatDecayRate: 3
+  maxHeat: 100
+  overheatRef: {fileID: 0}
 --- !u!82 &7946322810561131664
 AudioSource:
   m_ObjectHideFlags: 0
