@@ -256,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d0c03f39285a4fcbb3df95919bf718c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHeat: 1000
   overheatBar: {fileID: 7769706973193188507}
 --- !u!1 &7769706973205663324
 GameObject:

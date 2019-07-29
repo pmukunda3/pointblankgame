@@ -1,11 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.AI;
 
 
@@ -16,6 +11,7 @@ public enum RobotState
     Patrol,
     Meleeattack,
     DeadWait,
+    InVehicle,
     Destroy
 
 };
@@ -25,19 +21,30 @@ public class Robot_AI_Ctrl : MonoBehaviour
     // Start is called before the first frame update
     public NavMeshAgent nav_agent;
     public GameObject[] patrol_points;
-    private Animator ai_animator;
+    public Animator ai_animator;
     public float lifetime;
     private int DeathwaitCnt = 0;
+    public float MarginFromPlayerXY = 1.5f;
+    public float AttackEnableDistance = 10.0f;
+    public GameObject WeaponCtrl;
+    public ProjectileWeaponController Weapon;
+    public bool RobotInVehicle = false;
+    private bool dropLocationReached =false;
+    public float minDistanceFromPetrolPoints = 3;
 
 
     public GameObject player;
     private RobotState ai_state;
 
-
+    void OnEnable ()
+	{ 
+	    EventManager.StartListening<RobotDropOff, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(SetDropLocationReached));
+    }
 
 
     private void Patrol()
     {
+
         nav_agent.SetDestination(patrol_points[curr_point].transform.position);
 
 
@@ -45,7 +52,8 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     private void chasePlayer()
     {
-        nav_agent.SetDestination(player.transform.position);
+        Vector3 offset = new Vector3(MarginFromPlayerXY, 0, MarginFromPlayerXY);
+        nav_agent.SetDestination(player.transform.position-offset);
     }
 
     private void meleeattack(Animator ai_animator)
@@ -58,18 +66,63 @@ public class Robot_AI_Ctrl : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void shoot()
+    {
+        Weapon.FireWeapon();
+        EventManager.TriggerEvent<WeaponFirePrimary>();
+
+    }
+
+    private void SetRobotInvehicle()
+    {
+        RobotInVehicle = true;
+
+    }
+
+    private void SetDropLocationReached(GameObject obj)
+    {
+        dropLocationReached = true;
+
+    }
+
+    //    public override void AnimatorIK()
+    //    {
+    //LookTarget = cameraState.target;
+    //animator.SetLookAtWeight(1f);
+    //animator.SetLookAtPosition(LookTarget);
+
+    //        LeftHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().LeftHandIKTarget;
+    //animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+    //animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHandIKTarget.position);
+    //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+    //animator.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandIKTarget.rotation);
+
+    //        RightHandIKTarget = weaponManager.activeWeapon.GetComponent<WeaponIK>().RightHandIKTarget;
+    //    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+    //    animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandIKTarget.position);
+    //    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+    //    animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandIKTarget.rotation);
+
+    //  }
+
+
+
+
     private void Start()
     {
-        ai_animator = gameObject.GetComponent<Animator>();
+        //ai_animator = gameObject.GetComponent<Animator>();
         nav_agent = gameObject.GetComponent<NavMeshAgent>();
-        ai_animator.SetBool("Idle", false);
-        Patrol();
+
+        //Weapon = WeaponCtrl.GetComponent<WeaponManager>();
+
+        ai_animator.SetBool("Idle", true);
+        //Patrol();
     }
 
     // Update is called once per frame
     void Update()
     {
-        ai_animator.SetBool("Idle", false);
+        //ai_animator.SetBool("Idle", true);
         float dist_to_player = Vector3.Distance(nav_agent.transform.position,
     player.transform.position);
 
@@ -81,22 +134,44 @@ public class Robot_AI_Ctrl : MonoBehaviour
         switch (ai_state)
         {
             case RobotState.Idle:
-                ai_state = RobotState.Patrol;
+                ai_animator.SetBool("Idle", true);
+                if (RobotInVehicle == true)
+                {
+                    ai_state = RobotState.InVehicle;
+                }
+                else
+                {
+                    Patrol();
+                    ai_state = RobotState.Patrol;
+                }
+
+                break;
+
+            case RobotState.InVehicle:
+                ai_animator.SetBool("Idle", true);
+                if (dropLocationReached == true)
+                {
+                    ai_state = RobotState.Idle;
+                }
                 break;
 
             case RobotState.Patrol:
                 ai_animator.SetBool("Idle", false);
 
-                if (dist_to_player < 5)
+                if (dist_to_player < AttackEnableDistance)
                 {
                     ai_state = RobotState.ChasePlayer;
+                    transform.LookAt(player.transform.position);
                 }
 
                 else
                 {
-                    if (nav_agent.remainingDistance <= 0.5)
+                    //Debug.Log(nav_agent.remainingDistance);
+                    if (nav_agent.remainingDistance <= minDistanceFromPetrolPoints)
                     {
-                        curr_point = (curr_point + 1) % patrol_points.Length;
+
+                        //curr_point = (curr_point + 1) % patrol_points.Length;
+                        curr_point = Random.Range(0, patrol_points.Length);
                         Patrol();
                     }
                     //
@@ -105,15 +180,16 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
             case RobotState.ChasePlayer:
                 ai_animator.SetBool("Idle", false);
-                if (dist_to_player > 8)
+                if (dist_to_player > AttackEnableDistance+0.5)
                 {
                     Patrol();
                     ai_state = RobotState.Patrol;
                 }
-                else if (dist_to_player < 1)
+                else if (dist_to_player < MarginFromPlayerXY+2)
                 {
                     meleeattack(ai_animator);
                     ai_state = RobotState.Meleeattack;
+                    transform.LookAt(player.transform.position);
                 }
                 else
                 {
@@ -123,7 +199,8 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
             case RobotState.Meleeattack:
                 ai_animator.SetBool("Idle", false);
-                if (dist_to_player > 1)
+                transform.LookAt(player.transform.position);
+                if (dist_to_player > MarginFromPlayerXY + 2.1)
                 {
                     chasePlayer();
                     ai_state = RobotState.ChasePlayer;
@@ -131,7 +208,9 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 else
                 {
                     meleeattack(ai_animator);
-                    ai_animator.SetFloat("Shoot", 1-dist_to_player);
+                    ai_animator.SetFloat("Shoot", 0.5f);
+                    shoot();
+
                 }
                 break;
 
@@ -155,7 +234,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
                 break;
 
         }
-        Debug.Log(dist_to_player);
+        //Debug.Log(dist_to_player);
         Debug.Log(ai_state);
         //update animation
         ai_animator.SetFloat("Forward", nav_agent.velocity.magnitude / nav_agent.speed);

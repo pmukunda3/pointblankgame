@@ -33,7 +33,7 @@ public class ProjectileController : MonoBehaviour
         {
             OnHit(hit);
         }
-        transform.Translate(0, 0, velocity * Time.deltaTime);
+        transform.Translate(0,0,velocity * Time.deltaTime);
     }
 
     void OnHit(RaycastHit hit)
@@ -45,9 +45,12 @@ public class ProjectileController : MonoBehaviour
         }
         Vector3 pos = hit.point + hit.normal * impactOffset;
         Quaternion rot = Quaternion.FromToRotation(Vector3.forward, hit.normal);
-        NewImpact = Instantiate(Impact, pos, rot);
-        NewImpact.transform.parent = null;
-        NewImpact.SetActive(true);
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Static Level Geometry"))
+        {
+            NewImpact = Instantiate(Impact, pos, rot);
+            NewImpact.transform.parent = null;
+            NewImpact.SetActive(true);
+        }
         Destroy(gameObject);
         EventManager.TriggerEvent<HitEnemyEvent, GameObject, float, GameObject>(
 hit.collider.gameObject, damage, NewImpact);

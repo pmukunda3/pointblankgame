@@ -14,46 +14,80 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
         get;
         private set;
     }
+    public float heatDecayRate, maxHeat;
+    public CharacterOverheat overheatRef;
 
-    private int i, n;
+    private int currWeaponIndex, numWeapons;
+    private float[] heatValues;
+    private bool fireEnabled;
     private IWeaponFire fireInterface;
     private UnityAction aimOn, aimOff, midAir;
 
-    public void AimOff()
-    {        
+    public void FireWeapon()
+    {
+        if(fireEnabled && heatValues[currWeaponIndex] < maxHeat)
+        {
+            fireInterface.FireWeapon();
+        }
+    }
+
+    public void FireWeaponDown()
+    {
+        if (fireEnabled && heatValues[currWeaponIndex] < maxHeat)
+        {
+            fireInterface.FireWeaponDown();
+        }
+    }
+
+    public void FireWeaponUp()
+    {
+        if (fireEnabled && heatValues[currWeaponIndex] < maxHeat)
+        {
+            fireInterface.FireWeaponUp();
+        }
+    }
+
+    private void AimOff()
+    {
         AimedWeapons.SetActive(false);
         animator.SetBool("holdWeapon", true);
         UnaimedWeapons.SetActive(true);
     }
 
-    public void MidAir()
-    {        
+    private void MidAir()
+    {
         AimedWeapons.SetActive(false);
         animator.SetBool("holdWeapon", false);
         UnaimedWeapons.SetActive(true);
     }
 
-    public void AimOn()
+    private void AimOn()
     {
         UnaimedWeapons.SetActive(false);
         animator.SetBool("holdWeapon", false);
         AimedWeapons.SetActive(true);
     }
 
-
-
-    // Update is called once per frame
-    public void ChangeWeapon()
+    private void DisableFire()
     {
-        UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(false);
-        activeWeapon.SetActive(false);
-        i = ++i % n;
-        UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(true);
-        activeWeapon = AimedWeapons.transform.GetChild(i).gameObject;
-        activeWeapon.SetActive(true);
-        fireInterface = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+        fireEnabled = false;
+    }
 
-        if (activeWeapon.GetComponent<WeaponProperties>().twoHanded)
+    private void EnableFire()
+    {
+        fireEnabled = true;
+    }
+
+    private void AddHeat(float heat)
+    {
+        heatValues[currWeaponIndex] += heat;
+    }
+
+    private void UpdateWeaponProperties()
+    {
+        fireInterface = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+        WeaponProperties wp = activeWeapon.GetComponent<WeaponProperties>();
+        if (wp.twoHanded)
         {
             animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 1f);
         }
@@ -61,19 +95,17 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
         {
             animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 0f);
         }
-
     }
 
-    public void FireWeapon() {
-        fireInterface.FireWeapon();
-    }
-
-    public void FireWeaponDown() {
-        fireInterface.FireWeaponDown();
-    }
-
-    public void FireWeaponUp() {
-        fireInterface.FireWeaponUp();
+    public void ChangeWeapon()
+    {
+        UnaimedWeapons.transform.GetChild(currWeaponIndex).gameObject.SetActive(false);
+        activeWeapon.SetActive(false);
+        currWeaponIndex = ++ currWeaponIndex % numWeapons;
+        UnaimedWeapons.transform.GetChild(currWeaponIndex).gameObject.SetActive(true);
+        activeWeapon = AimedWeapons.transform.GetChild(currWeaponIndex).gameObject;
+        activeWeapon.SetActive(true);
+        UpdateWeaponProperties();
     }
 
     // Start is called before the first frame update
@@ -86,27 +118,37 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
         EventManager.StartListening<FreeRoamEvent>(aimOff);
         EventManager.StartListening<SprintEvent>(aimOff);
         EventManager.StartListening<JumpEvent>(midAir);
-        EventManager.StartListening<FallingEvent>(MidAir);
+        EventManager.StartListening<FallingEvent>(midAir);
+        EventManager.StartListening<ThrowStartEvent>(new UnityAction(DisableFire));
+        EventManager.StartListening<ThrowEndEvent>(new UnityAction(EnableFire));
+        EventManager.StartListening<WeaponHeatEvent, float>(new UnityAction<float>(AddHeat));
 
-        n = AimedWeapons.transform.childCount;
-        for (i = 0; i < n; i++)
+        fireEnabled = true;
+        numWeapons = AimedWeapons.transform.childCount;
+        heatValues = new float[numWeapons];
+        overheatRef.MaxHeat = maxHeat;
+        for (int i = 0; i < numWeapons; i++)
         {
-            UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(false);
-            AimedWeapons.transform.GetChild(i).gameObject.SetActive(false);
+            heatValues[i] = 0;
+            UnaimedWeapons.transform.GetChild(currWeaponIndex).gameObject.SetActive(false);
+            AimedWeapons.transform.GetChild(currWeaponIndex).gameObject.SetActive(false);
         }
-        i = 0;
-        UnaimedWeapons.transform.GetChild(i).gameObject.SetActive(true);
-        activeWeapon = AimedWeapons.transform.GetChild(i).gameObject;
+        currWeaponIndex = 0;
+        UnaimedWeapons.transform.GetChild(currWeaponIndex).gameObject.SetActive(true);
+        activeWeapon = AimedWeapons.transform.GetChild(currWeaponIndex).gameObject;
         activeWeapon.SetActive(true);
-        fireInterface = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+        UpdateWeaponProperties();
+    }
 
-        if (activeWeapon.GetComponent<WeaponProperties>().twoHanded)
+    void Update()
+    {
+        for (int i = 0; i < numWeapons; i++)
         {
-            animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 1f);
+            if (heatValues[i] > 0)
+            {
+                heatValues[i] -= heatDecayRate * Time.deltaTime;
+            }
         }
-        else
-        {
-            animator.SetLayerWeight(animator.GetLayerIndex("Weapon Carry"), 0f);
-        }
+        overheatRef.CurrHeat = heatValues[currWeaponIndex];
     }
 }

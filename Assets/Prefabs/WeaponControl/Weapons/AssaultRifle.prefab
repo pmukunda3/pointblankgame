@@ -5587,7 +5587,8 @@ MonoBehaviour:
   maxEjectAngle: 45
   minEjectVel: 100
   maxEjectVel: 200
-  gunshotSound: {fileID: 8300000, guid: ba7b41f0ffe196e4bbc50e8da2e758e3, type: 3}
+  heatPerShot: 3
+  gunshotSound: {fileID: 8300000, guid: 500bbc002b8bedd44ab87acf2490f34e, type: 3}
 --- !u!114 &861766507599096399
 MonoBehaviour:
   m_ObjectHideFlags: 0

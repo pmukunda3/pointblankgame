@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GameStartMenu/GameStartMenu.unity
     guid: fe74352f022644a0cab3b99c24b60bf1
+  - enabled: 0
+    path: Assets/Scenes/StoryMenu/StoryMenu.unity
+    guid: 6b8f9add4a8cd4ef9b5d76e76504e5cf
+  - enabled: 0
+    path: Assets/Scenes/Prototype/Prototype_Menu.unity
+    guid: edb25bdc274274acd9f79d14c2ac4365
   - enabled: 0
     path: Assets/Scenes/StoryMenu/StoryMenu.unity
     guid: 6b8f9add4a8cd4ef9b5d76e76504e5cf
