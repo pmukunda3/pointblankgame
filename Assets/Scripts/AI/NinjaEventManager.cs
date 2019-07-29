@@ -128,7 +128,7 @@ public class NinjaEventManager : MonoBehaviour
     {
         if (obj == gameObject)
         {
-            //SetKinematic(false);
+            health = 0;
             SetRagdoll(true);
             ai_animator.enabled = false;
             nav_agent.enabled = false;

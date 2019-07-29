@@ -14,26 +14,30 @@ public class CharacterOverheat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MaxHeat = 20f;
         CurrHeat = 0;
         overheatBar.value = CalculateOverheat();
+    }
 
+    void Update()
+    {
+        overheatBar.value = CalculateOverheat();
     }
 
     public void AddHeat(float heat)
     {
         CurrHeat += heat;
         overheatBar.value = CalculateOverheat();
-        if (CurrHeat >= 20f)
-        {
-            Die();
-        }
+        //if (CurrHeat >= 20f)
+        //{
+        //    Die();
+        //}
     }
 
     float CalculateOverheat()
     {
         return CurrHeat / MaxHeat;
     }
+
     void Die()
     {
         CurrHeat = 0f;
