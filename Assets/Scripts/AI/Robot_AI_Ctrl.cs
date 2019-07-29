@@ -30,6 +30,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
     public ProjectileWeaponController Weapon;
     public bool RobotInVehicle = false;
     private bool dropLocationReached =false;
+    public float minDistanceFromPetrolPoints = 3;
 
 
     public GameObject player;
@@ -165,8 +166,10 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
                 else
                 {
-                    if (nav_agent.remainingDistance <= 0.5)
+                    //Debug.Log(nav_agent.remainingDistance);
+                    if (nav_agent.remainingDistance <= minDistanceFromPetrolPoints)
                     {
+
                         //curr_point = (curr_point + 1) % patrol_points.Length;
                         curr_point = Random.Range(0, patrol_points.Length);
                         Patrol();

@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype/Prototype_Menu.unity
     guid: edb25bdc274274acd9f79d14c2ac4365
   - enabled: 0
+    path: Assets/Scenes/StoryMenu/StoryMenu.unity
+    guid: 6b8f9add4a8cd4ef9b5d76e76504e5cf
+  - enabled: 0
     path: Assets/Scenes/Prototype/Prototype.unity
     guid: 76c93d0556f32fb499c9fba3b03122ee
   - enabled: 0

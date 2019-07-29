@@ -28514,9 +28514,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18ca95832182d540a7266113b51953f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzleDuration: 0
-  fireRate: 0
-  gunshotSound: {fileID: 0}
+  muzzleDuration: 2
+  fireRate: 5
+  gunshotSound: {fileID: 8300000, guid: b68666aadbf1e4147848504750ee4292, type: 3}
 --- !u!1 &3672568370392218649
 GameObject:
   m_ObjectHideFlags: 0
@@ -28682,7 +28682,7 @@ GameObject:
   - component: {fileID: 3672568370392703039}
   - component: {fileID: 4056173088691235670}
   m_Layer: 0
-  m_Name: laser_impulse_projectile_001
+  m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28886,7 +28886,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7689312181566705556}
   m_Layer: 0
-  m_Name: laser_impulse_muzzle_001
+  m_Name: Muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29142,7 +29142,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nav_agent: {fileID: 2565799841916038493}
-  patrol_points: []
+  patrol_points:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   ai_animator: {fileID: 8653004482193348441}
   lifetime: 0
   MarginFromPlayerXY: 3
@@ -29150,6 +29157,7 @@ MonoBehaviour:
   WeaponCtrl: {fileID: 0}
   Weapon: {fileID: 6513515327901126076}
   RobotInVehicle: 0
+  minDistanceFromPetrolPoints: 3
   player: {fileID: 0}
 --- !u!54 &4237604496143139697
 Rigidbody:
@@ -29189,18 +29197,18 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8737516025429912833}
   m_Enabled: 1
-  m_AgentTypeID: 1479372276
+  m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 1.5
+  m_Acceleration: 5
   avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 3
+  m_AngularSpeed: 60
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: -1.6
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!1 &8737557117276554849
