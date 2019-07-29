@@ -37,6 +37,11 @@ public class BulletWeapon : MonoBehaviour, IWeaponFire
         }
     }
 
+    public float GetHeatPerShot()
+    {
+        return heatPerShot;
+    }
+
     public void FireWeapon()
     {
         if (clock >= 0f)

@@ -19,13 +19,19 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
 
     private int currWeaponIndex, numWeapons;
     private float[] heatValues;
+    private float heatPerShot;
     private bool fireEnabled;
     private IWeaponFire fireInterface;
     private UnityAction aimOn, aimOff, midAir;
 
+    public float GetHeatPerShot()
+    {
+        return 0;
+    }
+
     public void FireWeapon()
     {
-        if(fireEnabled && heatValues[currWeaponIndex] < maxHeat)
+        if(fireEnabled && heatValues[currWeaponIndex] <= maxHeat - heatPerShot)
         {
             fireInterface.FireWeapon();
         }
@@ -33,7 +39,7 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
 
     public void FireWeaponDown()
     {
-        if (fireEnabled && heatValues[currWeaponIndex] < maxHeat)
+        if (fireEnabled && heatValues[currWeaponIndex] <= maxHeat - heatPerShot)
         {
             fireInterface.FireWeaponDown();
         }
@@ -41,7 +47,7 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
 
     public void FireWeaponUp()
     {
-        if (fireEnabled && heatValues[currWeaponIndex] < maxHeat)
+        if (fireEnabled && heatValues[currWeaponIndex] <= maxHeat - heatPerShot)
         {
             fireInterface.FireWeaponUp();
         }
@@ -86,6 +92,7 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
     private void UpdateWeaponProperties()
     {
         fireInterface = activeWeapon.GetComponent<IWeaponFire>() as IWeaponFire;
+        heatPerShot = fireInterface.GetHeatPerShot();
         WeaponProperties wp = activeWeapon.GetComponent<WeaponProperties>();
         if (wp.twoHanded)
         {
