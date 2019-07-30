@@ -70,7 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906895211666414299}
   - component: {fileID: 5906895211666414298}
-  - component: {fileID: 5906895211666414277}
+  - component: {fileID: 5777635189711872799}
   m_Layer: 0
   m_Name: SpawnPointsRobot_WAREHOUSE
   m_TagString: Untagged
@@ -109,7 +109,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8637295, y: 3.3639374, z: 11.802353}
   m_Center: {x: 8.364444, y: 1.1819687, z: 0.6455765}
---- !u!114 &5906895211666414277
+--- !u!114 &5777635189711872799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,11 +118,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5906895211666414276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 297eed05ab63244a89f3fc120b64ed90, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e9310fea438248b6a0c89b5b0402d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ninjaPrefab: {fileID: 0}
-  col: {fileID: 5906895211666414298}
+  col: {fileID: 0}
 --- !u!1 &5906895212063424025
 GameObject:
   m_ObjectHideFlags: 0
