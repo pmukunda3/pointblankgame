@@ -39,6 +39,7 @@ public class SpawningFromTrigger : MonoBehaviour
             {
                 SpawnNinja(t.position);
             }
+            col.enabled = false;
         }
     }
 }
