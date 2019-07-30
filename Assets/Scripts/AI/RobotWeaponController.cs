@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RobotWeaponController : MonoBehaviour, IWeaponFire
+public class RobotWeaponController : MonoBehaviour
 {
     public float muzzleDuration, fireRate;
     public AudioClip gunshotSound;
