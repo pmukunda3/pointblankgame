@@ -25,7 +25,7 @@ public class FlyingCarTrigger : MonoBehaviour {
 
     public void OnTriggerEnter(Collider other) {
         if (triggerable) {
-            callback?.Invoke();
+            StartCoroutine(WaitToTrigger(Random.value * maxTime + minTime));
             triggerable = false;
         }
     }

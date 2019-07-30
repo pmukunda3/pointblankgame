@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContinuousWeaponController : MonoBehaviour, IWeaponFire
+public class ContinuousWeaponController : MonoBehaviour //, IWeaponFire
 {
     public GameObject beam;
 
@@ -17,6 +17,8 @@ public class ContinuousWeaponController : MonoBehaviour, IWeaponFire
     {
         userInput = gameObject.GetComponentInParent<UserInput>();      
     }
+
+
 
     public void FireWeapon() {
         // do nothing

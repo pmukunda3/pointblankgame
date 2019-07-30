@@ -8,6 +8,7 @@ public class RocketLauncher : MonoBehaviour, IWeaponFire
     public GameObject rocket;
     public Transform firePoint;
     public float fireRate;
+    public float heatPerShot;
     public AudioClip fireSound;
 
     private float clock;
@@ -36,6 +37,11 @@ public class RocketLauncher : MonoBehaviour, IWeaponFire
         }
     }
 
+    public float GetHeatPerShot()
+    {
+        return heatPerShot;
+    }
+
     public void FireWeapon()
     {
         // do nothing
@@ -51,6 +57,7 @@ public class RocketLauncher : MonoBehaviour, IWeaponFire
             newRocket = Instantiate(rocket, firePoint.transform);
             newRocket.transform.parent = null;
             newRocket.SetActive(true);
+            EventManager.TriggerEvent<WeaponHeatEvent, float>(heatPerShot);
         }
     }
 

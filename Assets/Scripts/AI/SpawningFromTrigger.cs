@@ -15,17 +15,20 @@ public class SpawningFromTrigger : MonoBehaviour
     {
         col = gameObject.GetComponent<BoxCollider>();
         Transform[] temp = gameObject.GetComponentsInChildren<Transform>();
-        this.SpawnPoints = new Transform[temp.Length - 1];
-        for(int i = 0; i < this.SpawnPoints.Length; ++i)
-        {
-            this.SpawnPoints[i] = temp[i + 1];
-        }
+        this.SpawnPoints = temp;
+        //this.SpawnPoints = new Transform[temp.Length - 1];
+        //for(int i = 0; i < this.SpawnPoints.Length; ++i)
+        //{
+        //    this.SpawnPoints[i] = temp[i + 1];
+        //}
 
     }
-    private void SpawnNinja(Vector3 position)
+    private void SpawnNinja(Transform t)
     {
-        GameObject a = Instantiate(ninjaPrefab) as GameObject;
-        a.transform.position = position;
+        Debug.Log("spawning");
+        GameObject a = Instantiate(ninjaPrefab,t) as GameObject;
+        //a.transform.position = position;  
+        //a.transform.localPosition = position;
 
     }
 
@@ -37,7 +40,7 @@ public class SpawningFromTrigger : MonoBehaviour
             Debug.Log("Player enter");
             foreach(Transform t in this.SpawnPoints)
             {
-                SpawnNinja(t.position);
+                SpawnNinja(t);
             }
             col.enabled = false;
         }

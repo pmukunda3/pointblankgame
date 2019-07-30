@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaycastWeaponController : MonoBehaviour, IWeaponFire
+public class RaycastWeaponController : MonoBehaviour //, IWeaponFire
 {
     public GameObject Beam;
     public GameObject Impact;
