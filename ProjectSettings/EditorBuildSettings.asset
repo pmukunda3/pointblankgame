@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/alpha_level0.unity
     guid: fc635d175edb5de47aeb758377912532
+  - enabled: 1
+    path: Assets/Scenes/GameMenus/GameEndMenu.unity
+    guid: 6d3d3f2e8e2512a4a82649c48c821cb8
   m_configObjects: {}
