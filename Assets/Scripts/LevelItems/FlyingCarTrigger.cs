@@ -10,6 +10,8 @@ public class FlyingCarTrigger : MonoBehaviour {
         Collider
     }
 
+    public LayerMask triggerLayer;
+
     public TriggerType triggerType;
 
     public float minTime;
@@ -24,7 +26,7 @@ public class FlyingCarTrigger : MonoBehaviour {
     }
 
     public void OnTriggerEnter(Collider other) {
-        if (triggerable) {
+        if (triggerable && ((1 << other.gameObject.layer) & triggerLayer) != 0) {
             StartCoroutine(WaitToTrigger(Random.value * maxTime + minTime));
             triggerable = false;
         }
