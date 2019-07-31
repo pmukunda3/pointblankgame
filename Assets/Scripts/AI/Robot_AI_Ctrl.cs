@@ -41,7 +41,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     void OnEnable ()
 	{ 
-	   // EventManager.StartListening<RobotDropOff, GameObject>(new UnityEngine.Events.UnityAction<GameObject>(SetDropLocationReached));
+	    EventManager.StartListening<RobotDropOff, int>(new UnityEngine.Events.UnityAction<int>(SetDropLocationReached));
     }
 
 
@@ -83,10 +83,12 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     }
 
-    private void SetDropLocationReached(GameObject obj)
+    private void SetDropLocationReached(int j)
     {
+        RobotInVehicle = true;
         nav_agent.enabled = true;
         dropLocationReached = true;
+        Debug.Log("Robot Is alone");
 
     }
 
@@ -122,7 +124,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
         //Weapon = WeaponCtrl.GetComponent<WeaponManager>();
 
         ai_state = RobotState.Idle;
-        //nav_agent.enabled = false;
+        nav_agent.enabled = false;
         ai_animator.SetBool("Idle", true);
         //Patrol();
     }
@@ -132,13 +134,20 @@ public class Robot_AI_Ctrl : MonoBehaviour
     {
         if (RoboEvtMgr.health > 0)
         {
-
             //ai_animator.SetBool("Idle", true);
-            float dist_to_player = Vector3.Distance(nav_agent.transform.position,
-        player.transform.position);
+            float dist_to_player = 100.0f;
 
-            float dist_to_patrol = Vector3.Distance(nav_agent.transform.position,
-        patrol_points[curr_point].transform.position);
+            float dist_to_patrol = 100.0f;
+
+            if (RobotInVehicle == false)
+            {
+                //ai_animator.SetBool("Idle", true);
+                dist_to_player = Vector3.Distance(nav_agent.transform.position,
+            player.transform.position);
+
+                dist_to_patrol = Vector3.Distance(nav_agent.transform.position,
+            patrol_points[curr_point].transform.position);
+            }
 
             ai_animator.SetFloat("Shoot", 0);
 
