@@ -46,8 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   throwVelocity: 15
+  throwInterval: 15
   animator: {fileID: 0}
-  throwSound: {fileID: 8300000, guid: 88f5b66eb5d5430429aeeefd024c04f7, type: 3}
+  throwSound: {fileID: 8300000, guid: 7f3888e67d9312447abdcf044b6e4ada, type: 3}
+  userInput: {fileID: 0}
+  grenadeUI: {fileID: 0}
 --- !u!82 &5286788708174072880
 AudioSource:
   m_ObjectHideFlags: 0

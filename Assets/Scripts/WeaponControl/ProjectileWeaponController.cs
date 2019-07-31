@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
 {
-    public float muzzleDuration, fireRate;
+    public float muzzleDuration, fireRate, heatPerShot;
     public AudioClip gunshotSound;
 
     private GameObject muzzle, projectile, newProjectile;
@@ -37,6 +37,16 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
         }
     }
 
+    void OnDisable()
+    {
+        muzzle.SetActive(false);
+    }
+
+    public float GetHeatPerShot()
+    {
+        return heatPerShot;
+    }
+
     public void FireWeapon() {
         if (clock >= 0f)
         {
@@ -46,6 +56,7 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
             newProjectile = Instantiate(projectile, muzzle.transform);
             newProjectile.transform.parent = null;
             newProjectile.SetActive(true);
+            EventManager.TriggerEvent<WeaponHeatEvent, float>(heatPerShot);
         }
     }
 

@@ -28983,7 +28983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6613150048318372644
 Transform:
   m_ObjectHideFlags: 0
@@ -29374,6 +29374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzleDuration: 0.05
   fireRate: 10
+  heatPerShot: 5
   gunshotSound: {fileID: 8300000, guid: bf7afbd4b51d6854aaca566fd176f3d3, type: 3}
 --- !u!114 &102603930733417118
 MonoBehaviour:
