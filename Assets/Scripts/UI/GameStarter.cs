@@ -16,10 +16,10 @@ public class GameStarter : MonoBehaviour
         SceneManager.LoadScene("StoryMenu");
     }
 
-    //public void RestartGame()
-    //{
-    //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    //}
+    public void RestartGame()
+    {
+        SceneManager.LoadScene("alpha_level0");
+    }
 
     public void MainMenu()
     {
@@ -28,6 +28,6 @@ public class GameStarter : MonoBehaviour
 
     public void AboutGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
