@@ -40,7 +40,10 @@ public class SpawningFromTrigger : MonoBehaviour
             Debug.Log("Player enter");
             foreach(Transform t in this.SpawnPoints)
             {
-                SpawnNinja(t);
+                for (int i = 0; i < 5; i++)
+                {
+                    SpawnNinja(t);
+                }
             }
             col.enabled = false;
         }

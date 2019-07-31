@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class GameStarter : MonoBehaviour
 {
-    public string sceneName; 
     public void StartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -14,8 +13,7 @@ public class GameStarter : MonoBehaviour
 
     public void RestartGame()
     {
-        Debug.Log(sceneName);
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void AboutGame()

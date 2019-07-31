@@ -83,7 +83,7 @@ MonoBehaviour:
   rocket: {fileID: 2940484417461131466}
   firePoint: {fileID: 6674129088261161101}
   fireRate: 0.5
-  heatPerShot: 50
+  heatPerShot: 100
   fireSound: {fileID: 8300000, guid: 8f42d00921110ae46ab56e6efdc3cf79, type: 3}
 --- !u!114 &2869302706275917739
 MonoBehaviour:

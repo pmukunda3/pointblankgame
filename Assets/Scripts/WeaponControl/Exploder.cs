@@ -58,6 +58,11 @@ public class Exploder : MonoBehaviour
                     ex.Explode();
                     continue;
                 }
+                if (hit.gameObject.layer == LayerMask.NameToLayer("Player Character"))
+                {
+                    EventManager.TriggerEvent<PlayerControl.PlayerDamageEvent,int>(100);
+                    continue;
+                }
                 if (hit.gameObject.CompareTag("AI"))
                 {
                     EventManager.TriggerEvent<ExplosionDeathEvent, GameObject, Explosion>(hit.gameObject, explosion);

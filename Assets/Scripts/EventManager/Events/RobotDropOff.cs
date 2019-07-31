@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 // the third param is the impact game object, which contain the 
 // hit point and hit rotation
-public class RobotDropOff : UnityEvent<GameObject> { 
+public class RobotDropOff : UnityEvent<int> { 
 
 }
 
