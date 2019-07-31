@@ -37,6 +37,11 @@ public class ProjectileWeaponController : MonoBehaviour, IWeaponFire
         }
     }
 
+    void OnDisable()
+    {
+        muzzle.SetActive(false);
+    }
+
     public float GetHeatPerShot()
     {
         return heatPerShot;

@@ -126,6 +126,7 @@ public class WeaponManager : MonoBehaviour, IWeaponFire
         EventManager.StartListening<SprintEvent>(aimOff);
         EventManager.StartListening<JumpEvent>(midAir);
         EventManager.StartListening<FallingEvent>(midAir);
+        EventManager.StartListening<PlayerDeathEvent>(midAir);
         EventManager.StartListening<ThrowStartEvent>(new UnityAction(DisableFire));
         EventManager.StartListening<ThrowEndEvent>(new UnityAction(EnableFire));
         EventManager.StartListening<WeaponHeatEvent, float>(new UnityAction<float>(AddHeat));
