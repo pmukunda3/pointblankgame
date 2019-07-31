@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2389576955110675209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 42.287544, y: 5.743699, z: 17.145811}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2389576956467706501}
@@ -102,49 +102,7 @@ MonoBehaviour:
     existing: 1
   mode2D: 0
   closed: 0
-  points:
-  - controlType: 1
-    positionLocal: {x: 1.3698807, y: -6.2917147, z: 12.9561825}
-    controlFirstLocal: {x: -2.8319092, y: -0, z: 9.643447}
-    controlSecondLocal: {x: 2.8319092, y: 0, z: -9.643447}
-    pointTransform: {fileID: 0}
-    curve: {fileID: 2389576955110675208}
-    fieldsValues: []
-  - controlType: 1
-    positionLocal: {x: -7.0594635, y: -4.3797674, z: -9.600084}
-    controlFirstLocal: {x: 0.54236984, y: -0.34501553, z: 2.9618282}
-    controlSecondLocal: {x: -0.54236984, y: 0.34501553, z: -2.9618282}
-    pointTransform: {fileID: 0}
-    curve: {fileID: 2389576955110675208}
-    fieldsValues: []
-  - controlType: 1
-    positionLocal: {x: -11.265076, y: -2.849826, z: -18.898724}
-    controlFirstLocal: {x: 3.754097, y: 0.068196535, z: -0.10020447}
-    controlSecondLocal: {x: -3.754097, y: -0.068196535, z: 0.10020447}
-    pointTransform: {fileID: 0}
-    curve: {fileID: 2389576955110675208}
-    fieldsValues: []
-  - controlType: 1
-    positionLocal: {x: -25.298906, y: -5.743699, z: -7.595998}
-    controlFirstLocal: {x: 3.4622612, y: 0.27278614, z: -0.25865936}
-    controlSecondLocal: {x: -3.4622612, y: -0.27278614, z: 0.25865936}
-    pointTransform: {fileID: 0}
-    curve: {fileID: 2389576955110675208}
-    fieldsValues: []
-  - controlType: 1
-    positionLocal: {x: -22.152512, y: -5.743699, z: 6.5319347}
-    controlFirstLocal: {x: 4.9989433, y: 0, z: -7.6684685}
-    controlSecondLocal: {x: -4.9989433, y: -0, z: 7.6684685}
-    pointTransform: {fileID: 0}
-    curve: {fileID: 2389576955110675208}
-    fieldsValues: []
-  - controlType: 1
-    positionLocal: {x: -57.627186, y: -5.743699, z: 12.120493}
-    controlFirstLocal: {x: 4.4127045, y: 0, z: -0.5206871}
-    controlSecondLocal: {x: -4.4127045, y: -0, z: 0.5206871}
-    pointTransform: {fileID: 0}
-    curve: {fileID: 2389576955110675208}
-    fieldsValues: []
+  points: []
   pointsComponents: []
   pointsGameObjects: []
   fields: []
@@ -323,7 +281,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 0.5
   MinDistance: 20
-  MaxDistance: 1000
+  MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
