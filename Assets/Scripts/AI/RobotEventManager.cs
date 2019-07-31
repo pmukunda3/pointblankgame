@@ -56,7 +56,7 @@ public class RobotEventManager : MonoBehaviour
     private void OnGUI()
     {
         RaycastHit hit;
-        if (Physics.Raycast(myTransform.position, myTransform.forward, out hit) && (health != maxHealth) && (health > -0.1))
+        if (Physics.Raycast(myTransform.position, myTransform.forward, out hit) && (health != maxHealth) && (health > 0))
         {
             GUI.color = Color.red;
             GUI.HorizontalScrollbar(new Rect(screenPosition.x - healthBarLeft / 2, Screen.height - screenPosition.y - barTop, 100, 0), 0, health, 0, maxHealth); //displays a healthbar
@@ -158,8 +158,8 @@ public class RobotEventManager : MonoBehaviour
 
 
             // add force
-            Rigidbody rb = GetComponent<Rigidbody>();
-            rb.AddForce(impact.transform.position);
+            //Rigidbody rb = GetComponent<Rigidbody>();
+            //rb.AddForce(impact.transform.position);
             //rb.AddTorque(impact.transform.rotation);
 
 
