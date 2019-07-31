@@ -8,12 +8,22 @@ public class GameStarter : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("alpha_level0");
     }
 
-    public void RestartGame()
+    public void LoadStory()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("StoryMenu");
+    }
+
+    //public void RestartGame()
+    //{
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    //}
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("GameStartMenu");
     }
 
     public void AboutGame()
