@@ -38,7 +38,7 @@ public class RobotVehicleCtrl : MonoBehaviour
         trigger.SetCallback(new UnityAction(StartAnimating));
         VhState = VehicleState.Idle;
         rg = gameObject.GetComponent<Rigidbody>();
-        //VhState = VehicleState.GoToDrop;
+        VhState = VehicleState.GoToDrop;
     }
 
     private void StartAnimating()
@@ -95,7 +95,6 @@ public class RobotVehicleCtrl : MonoBehaviour
                     
                 }
                 clock += Time.deltaTime;
-                Debug.Log(clock);
                 break;
 
             case VehicleState.GoToDropUpFromDn:

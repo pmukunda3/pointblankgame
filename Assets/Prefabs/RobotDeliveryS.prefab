@@ -128,8 +128,8 @@ MonoBehaviour:
   trigger: {fileID: 8048140680626221634}
   End: {fileID: 2354306386740822449}
   DropDown: {fileID: 2354306386774656917}
-  DropWaitDurr: 1
-  traverseTime: 6
+  DropWaitDurr: 0.5
+  traverseTime: 10
 --- !u!1 &3972272563742951795
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,7 +735,7 @@ PrefabInstance:
     - target: {fileID: 4476635852171344602, guid: dee23453c0acc4a149ab8a47bf94ef4c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3618006415179244719, guid: dee23453c0acc4a149ab8a47bf94ef4c,
         type: 3}
@@ -815,7 +815,7 @@ PrefabInstance:
     - target: {fileID: 6353910973718134142, guid: dee23453c0acc4a149ab8a47bf94ef4c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6294975140137596270, guid: dee23453c0acc4a149ab8a47bf94ef4c,
         type: 3}
@@ -855,7 +855,7 @@ PrefabInstance:
     - target: {fileID: 7217470556977213877, guid: dee23453c0acc4a149ab8a47bf94ef4c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7217470556977213877, guid: dee23453c0acc4a149ab8a47bf94ef4c,
         type: 3}

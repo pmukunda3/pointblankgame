@@ -37,7 +37,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
 
     public GameObject player;
-    private RobotState ai_state;
+    public RobotState ai_state;
 
     void OnEnable ()
 	{ 
@@ -85,7 +85,7 @@ public class Robot_AI_Ctrl : MonoBehaviour
 
     private void SetDropLocationReached(int j)
     {
-        RobotInVehicle = true;
+        RobotInVehicle = false;
         nav_agent.enabled = true;
         dropLocationReached = true;
         Debug.Log("Robot Is alone");
@@ -172,12 +172,15 @@ public class Robot_AI_Ctrl : MonoBehaviour
                     ai_animator.SetBool("Idle", true);
                     if (dropLocationReached == true)
                     {
-                        ai_state = RobotState.Idle;
+                        ai_state = RobotState.Patrol;
+                        nav_agent.enabled = true;
                     }
                     break;
 
                 case RobotState.Patrol:
+                    nav_agent.enabled = true;
                     ai_animator.SetBool("Idle", false);
+                    Debug.Log(dist_to_patrol);
 
                     if (dist_to_player < AttackEnableDistance)
                     {

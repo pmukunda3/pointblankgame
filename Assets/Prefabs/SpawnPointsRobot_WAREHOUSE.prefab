@@ -121,8 +121,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9310fea438248b6a0c89b5b0402d00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: {fileID: 0}
-  SpawnPoints: []
+  col: {fileID: 5906895211666414298}
+  SpawnPoints:
+  - {fileID: 5906895213088115628}
+  - {fileID: 5906895212063424030}
+  - {fileID: 5906895211295710775}
+  - {fileID: 5906895211211231241}
   Robot: {fileID: 8737516025429912833, guid: f237a413e5eac46eebb88c0ae134db8e, type: 3}
   patrol_points:
   - {fileID: 0}
