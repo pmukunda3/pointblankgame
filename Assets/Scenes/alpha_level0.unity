@@ -111,7 +111,7 @@ NavMeshSettings:
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
-    minRegionArea: 2
+    minRegionArea: 0.4
     manualCellSize: 0
     cellSize: 0.16666667
     manualTileSize: 0
@@ -7089,7 +7089,7 @@ PrefabInstance:
         type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1955827996}
     - target: {fileID: 8487354046787860024, guid: 49d6fd9e25ee441c587b123daa96d935,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -13526,10 +13526,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6504825874070461241, guid: 00e706dd76214724d89449a10a3f6db3,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6507875527310608039, guid: 00e706dd76214724d89449a10a3f6db3,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6504443512063064644, guid: 00e706dd76214724d89449a10a3f6db3,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6504443513363787753, guid: 00e706dd76214724d89449a10a3f6db3,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00e706dd76214724d89449a10a3f6db3, type: 3}
