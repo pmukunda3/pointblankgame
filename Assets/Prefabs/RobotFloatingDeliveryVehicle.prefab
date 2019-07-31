@@ -66,6 +66,12 @@ MonoBehaviour:
   - {fileID: 7217470556977213878}
   - {fileID: 8849121336270876254}
   - {fileID: 5465585876390145792}
+  PatrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  Player: {fileID: 0}
 --- !u!82 &718392331107697279
 AudioSource:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class SpawningRobot : MonoBehaviour
     {
         Debug.Log("spawning");
         GameObject a = Instantiate(Robot) as GameObject;
-        Debug.Log(psition);
+        //Debug.Log(psition);
         psition.x = psition.x - 2.1f;
         psition.z = psition.z - 1.12f;
         Robot_AI_Ctrl rob = a.gameObject.GetComponent<Robot_AI_Ctrl>();
@@ -39,7 +39,7 @@ public class SpawningRobot : MonoBehaviour
         a.transform.position = psition;
         a.transform.localPosition = psition;
         a.transform.parent = null;
-        Debug.Log(a.transform);
+        //Debug.Log(a.transform);
         a.SetActive(true);
 
 
