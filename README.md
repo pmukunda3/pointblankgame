@@ -1,4 +1,8 @@
-# Point Blank: Alpha 
+# Point Blank
+
+# Video Game Design Project
+- Game PointBlank:. Created fully three dimensional game with real time character/game-object control, Sci-fi themed third person shooter game. Player navigates an abandoned futuristic city and fights off robots and ninjas using different types of weapons and bombs.
+- Tools: Unity Game engine, Visual Studio, C#, VFX and Assets Pack
 
 How to Play: 
 
